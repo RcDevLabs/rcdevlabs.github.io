@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta name="generator" content="RcDev Labs">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Começando AGORA com Gulp e pré-processadores. Parte 1: Suas primeiras Tasks | RcDev Labs</title>
+
+  <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="/css/awe.css">
+  <link rel="stylesheet" type="text/css" href="/css/social-likes.css">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="/js/imgLiquid-min.js"></script>
+  <script src="/js/social-likes.min.js"></script>
+</head>
+
+<body>
+  <div class="main-container">
+    
+
+<div class="box profile">
+  <div class="heading" style="background: #3e5354 url(/rcdevlabs.jpg) no-repeat;">
+    <div class="profile-img">
+      <a href="http://rcdevlabs.github.io/"><img src="https://avatars3.githubusercontent.com/u/2955932?v=3&s=460" width="154" height="150" alt="image description"></a>
+    </div>
+    <strong class="user"><a href="/">RcDev Labs</a></strong>
+    <span class="locate">Curitiba, Brasil</span>
+  </div>
+  <div class="setting">
+    <a href="http://rcdevlabs.github.io/" class="btn-profile">GitHub</a>
+   <!-- <a href="/" class="btn-photos">Photos</a> -->
+   <div class="search">
+  <form class="theSearch" action=""
+    method="get"
+    data-action="https://google.com.br/search?q=site:rcdevlabs.github.io"
+    accept-charset="utf-8"
+    data-js="google-search-form">
+    <input type="search" name="q" results="0" placeholder="Pesquise no blog" data-js="google-search-input">
+  </form>
+</div>
+    <a href="http://twitter.com/romulo_ctba" class="btn-follow">Twitter</a>
+    <a href="http://rcdevlabs.github.io/atom.xml" class="btn-follow">RSS</a>
+  </div>
+</div>
+
+    
+<div class="two-columns post-page">
+  <div class="content">
+
+    <div class="post box nocover">
+      <em class="date"><span>13</span>Feb</em>
+      <h2 class="post-title"><a href="/2015/02/13/comecando-agora-com-gulp-e-preprocessadores-parte-1-suas-primeiras-tasks/">Começando AGORA com Gulp e pré-processadores. Parte 1: Suas primeiras Tasks</a></h2>
+      <div class="post-content"><img src="/2015/02/13/comecando-agora-com-gulp-e-preprocessadores-parte-1-suas-primeiras-tasks/iniciando-com-gulp-e-preprocessadores-como.jpg" title="Como começar a usar GULP e pré-processadores">
+<p>Tem ouvido muito falar em Gulp, Jade, Sass, Stylus, Less, YAML, EJS, etc, mas não sabe por onde começar? Seus problemas acabaram. Venha passear no território do workflow automatizado e vicie-se completamente.</p>
+<p>Quem me iniciou no gulpjs foi o <a href="http://blog.da2k.com.br/" target="_blank" rel="noopener">@fdaciuk</a>, em uma palestra sobre gulp no WordCamp SP 2014. Hoje, tenho o prazer de apresentar pra vcs algumas dicas para começar JÁ a facilitar sua vida.</p>
+<p><strong>Neste artigo veremos o básico do GulpJS, e como trabalhar de forma automágica com pré-processadores (stylus e jade, mas é muito semelhante para usar com quaisquer outros que prefira)</strong></p>
+<p>(o resultado/exemplo está <a href="https://github.com/romuloctba/blog-inciando-gulp-preprocessadores" target="_blank" rel="noopener">neste repositório do github</a>)</p>
+<h3 id="Pre-Requisitos-para-Comecar"><a href="#Pre-Requisitos-para-Comecar" class="headerlink" title="Pré-Requisitos para Começar:"></a>Pré-Requisitos para Começar:</h3><ul>
+<li><p><a href="http://nodejs.org" target="_blank" rel="noopener">NodeJS</a></p>
+</li>
+<li><p>Gulp instalado globalmente:</p>
+</li>
+</ul>
+<p>Abra o terminal (com o nodejs já instalado) e rode:<br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g gulp</span><br></pre></td></tr></table></figure></p>
+<p>Isso deve deixar  disponível o comando <code>gulp</code> no terminal.</p>
+<h2 id="Vamos-comecar"><a href="#Vamos-comecar" class="headerlink" title="Vamos começar?"></a>Vamos começar?</h2><p>Primeiro, crie uma pasta para seu projeto. Já deixe o console aberto nela também :P</p>
+<p>Vamos criar o arquivo <code>package.json</code>, a base de todo projeto NodeJs.</p>
+<figure class="highlight json"><figcaption><span>[package.json][crie o arquivo na pasta de seu projeto]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"gulp-primeiro"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"gulp"</span>: <span class="string">"^3.8.11"</span>,</span><br><span class="line">    <span class="attr">"gulp-connect-multi"</span>: <span class="string">"^1.0.8"</span>,</span><br><span class="line">    <span class="attr">"gulp-jade"</span>: <span class="string">"^0.11.0"</span>,</span><br><span class="line">    <span class="attr">"gulp-stylus"</span>: <span class="string">"^2.0.0"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Note as <code>devDependencies</code>: gulp (este é o local, já instalamos o global, antes), gulp-connect-multi (servidor/livereload), gulp-jade e gulp-stylus.</p>
+<p>Você acha pacotes maneiros de gulp, se precisar em <a href="http://npmjs.com" target="_blank" rel="noopener">npmjs.com</a>, buscando por ‘gulp’ ou em <a href="http://gulpjs.com/plugins/" target="_blank" rel="noopener">GulpJS.com/plugins</a>.</p>
+<p>Com o console, rode:</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure>
+<h2 id="Como-criar-uma-task-no-GulpJs"><a href="#Como-criar-uma-task-no-GulpJs" class="headerlink" title="Como criar uma task no GulpJs"></a>Como criar uma task no GulpJs</h2><p>Na pasta do seu projeto, crie um arquivo chamado <code>gulpfile.js</code></p>
+<figure class="highlight javascript"><figcaption><span>[gulpfile.js]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>);</span><br><span class="line"> </span><br><span class="line">gulp.task(<span class="string">'teste'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"teste de task do GulpJS"</span>);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+<p>Salve e, no terminal execute: </p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp teste</span><br></pre></td></tr></table></figure>
+<p>Viu que bacana? </p>
+<p>Saca a sintaxe: <strong><em>gulp.task(nome, função)</em></strong>.</p>
+<h2 id="Usando-Jade-com-Gulp-Js"><a href="#Usando-Jade-com-Gulp-Js" class="headerlink" title="Usando Jade com Gulp Js"></a>Usando Jade com Gulp Js</h2><p>Ainda no <code>gulpfile.js</code>, ao final do arquivo, insira:</p>
+<figure class="highlight javascript"><figcaption><span>[gulpfile.js]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line">  <span class="keyword">var</span> jade = <span class="built_in">require</span>(<span class="string">'gulp-jade'</span>);</span><br><span class="line"></span><br><span class="line">  gulp.task(<span class="string">'jade'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  gulp.src(<span class="string">'src/jade/**/**.jade'</span>)</span><br><span class="line">    .pipe(jade())</span><br><span class="line">    .pipe(gulp.dest(<span class="string">'build'</span>));</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+<p>Pontos importantes:</p>
+<ul>
+<li><p><strong><code>gulp.src()</code></strong> informa ao gulp qual arquivo ele vai usar, em formato de globs. <code>&#39;src/jade/**/**.jade&#39;</code> significa todos arquivos .jade dentro de src/jade/ e subdiretórios.</p>
+</li>
+<li><p><strong><code>.pipe()</code></strong> o pipe executa algo com o gulp.src(). Note como podemos usar vários <code>.pipe()</code> em sequência, e como não há <code>;</code> até acabarmos.</p>
+</li>
+<li><p><strong><code>jade()</code></strong> executa o módulo jade. Usado sempre dentro de um .pipe()</p>
+</li>
+<li><p><strong><code>gulp.dest()</code></strong> após o <code>.pipe(jade())</code>, usamos o <code>pipe(gulp.dest(nomeDaPasta))</code> para enviar o resultado para a pasta <code>/build</code></p>
+</li>
+</ul>
+<p>Vamos criar um arquivo <code>index.jade</code> dentro da pasta <code>/src/jade</code> e testar logo nossa task ^_^y</p>
+<figure class="highlight plain"><figcaption><span>[index.jade][Crie dentro da pasta jade]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">doctype html</span><br><span class="line">html(lang=&quot;pt_BR&quot;)</span><br><span class="line">  head</span><br><span class="line">    title= &quot;Título da página&quot;</span><br><span class="line">  body</span><br><span class="line">    h1 Teste de arquivo Jade!</span><br></pre></td></tr></table></figure>
+<p>Salve, abra o terminal na <strong>pasta raiz do projeto</strong> e rode:</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp jade</span><br></pre></td></tr></table></figure>
+<p><strong>Veja o resultado: Na pasta <code>/build</code>, que foi criada na raíz do projeto</strong>, há um arquivo <code>index.html</code>, que é o seu <code>index.jade</code> compilado.</p>
+<h2 id="Criando-um-server-com-LiveReload-no-Gulp-JS"><a href="#Criando-um-server-com-LiveReload-no-Gulp-JS" class="headerlink" title="Criando um server com LiveReload no Gulp JS"></a>Criando um server com LiveReload no Gulp JS</h2><p>Vamos criar uma nova task, chamada de <code>server</code>. Ao final do <code>gulpfile.js</code>, insira:</p>
+<figure class="highlight javascript"><figcaption><span>[gulpfile.js]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"><span class="keyword">var</span> connect = <span class="built_in">require</span>(<span class="string">'gulp-connect-multi'</span>)();</span><br><span class="line">  </span><br><span class="line">gulp.task(<span class="string">'server'</span>, connect.server(&#123;</span><br><span class="line">  root: [<span class="string">'build'</span>],</span><br><span class="line">  port: <span class="number">1337</span>,</span><br><span class="line">  livereload: <span class="literal">true</span>,</span><br><span class="line">  open: &#123; <span class="attr">browser</span>: <span class="string">'chrome'</span> &#125;</span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure>
+<p>Pontos importantes:</p>
+<p>Note que essa task não tem <code>gulp.src</code>, nem <code>gulp.dest</code>. O que fazemos é chamar <code>connect.server()</code>, com alguns parâmetros: root, port, livereload e open.</p>
+<p>Agora salve o arquivo, e rode<br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp server</span><br></pre></td></tr></table></figure></p>
+<p>Maneiro né? Pra funcionar, você precisa ter executado a task jade antes. Podemos inseri-la como dependencia, mas faremos isso mais tarde.</p>
+<p>Aperte <code>ctrl+c</code> no terminal para encerrar o servidor.</p>
+<h2 id="Usando-Pre-processador-CSS-Stylus-com-Gulp-Js"><a href="#Usando-Pre-processador-CSS-Stylus-com-Gulp-Js" class="headerlink" title="Usando Pré-processador CSS (Stylus) com Gulp Js"></a>Usando Pré-processador CSS (Stylus) com Gulp Js</h2><p>Criemos nossa task. Ela deve pegar os arquivos .stylus, gerar o css e salvar na pasta ./build</p>
+<figure class="highlight javascript"><figcaption><span>[gulpfile.js]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"><span class="keyword">var</span> stylus = <span class="built_in">require</span>(<span class="string">'gulp-stylus'</span>);</span><br><span class="line">  </span><br><span class="line">gulp.task(<span class="string">'stylus'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  gulp.src(<span class="string">'src/stylus/**/**.styl'</span>)</span><br><span class="line">    .pipe(stylus())</span><br><span class="line">    .pipe(gulp.dest(<span class="string">'build/css'</span>))</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>Crie uma pasta <code>src/stylus</code> e, dentro, um arquivo <code>main.styl</code></p>
+<p>insira:<br><figure class="highlight stylus"><figcaption><span>[main.styl][crie dentro da pasta stylus]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$bgcolor = red;</span><br><span class="line">$maincolor = blue;</span><br><span class="line">  </span><br><span class="line">body</span><br><span class="line">  <span class="attribute">background</span> <span class="variable">$bgcolor</span></span><br><span class="line">  <span class="attribute">color</span> <span class="variable">$maincolor</span></span><br></pre></td></tr></table></figure></p>
+<p>Salve, abra o terminal na pasta raíz e rode</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp stylus</span><br></pre></td></tr></table></figure>
+<p>Yay!! Agora, dentro da pasta <code>build/css</code> temos o arquivo <em>main.css</em>, devidamente compilado do Stylus :D</p>
+<p>Agora, não seria bacana se pudessemos deixar o servidor rodando e atualizar a página, compilar stylus e compilar jade sem ficar executando tasks o tempo todo?</p>
+<p>SIM, SERIA MUITO LEGAL!</p>
+<h2 id="Usando-LiveReload-com-GulpJs-para-atualizar-quando-houver-alteracao-em-algum-arquivo"><a href="#Usando-LiveReload-com-GulpJs-para-atualizar-quando-houver-alteracao-em-algum-arquivo" class="headerlink" title="Usando LiveReload com GulpJs para atualizar quando houver alteração em algum arquivo"></a>Usando LiveReload com GulpJs para atualizar quando houver alteração em algum arquivo</h2><p>Pra isso, precisaremos de:</p>
+<ol>
+<li><p>task com funções .watch() pra cada tipo de arquivo (.jade e .styl)</p>
+</li>
+<li><p>task que execute as tasks jade, stylus, server e watch, em sequencia</p>
+</li>
+<li><p>inserir a função .reload() ao final de cada task</p>
+</li>
+</ol>
+<p>Então vamos lá:</p>
+<h3 id="1-Criando-watch-no-gulp"><a href="#1-Criando-watch-no-gulp" class="headerlink" title="1. Criando watch no gulp"></a>1. Criando watch no gulp</h3><p>Edite o arquivo <code>gulpfile.js</code>, inserindo ao final dele:</p>
+<figure class="highlight javascript"><figcaption><span>[gulpfile.js]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"> gulp.task(<span class="string">'watch'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> 	gulp.watch([<span class="string">'src/jade/**/**.jade'</span>], [<span class="string">'jade'</span>]);</span><br><span class="line"> 	gulp.watch([<span class="string">'src/stylus/**/**.styl'</span>], [<span class="string">'stylus'</span>]);</span><br><span class="line"> &#125;)</span><br></pre></td></tr></table></figure>
+<p>Acima, usamos <code>gulp.watch()</code>, onde o primeiro parâmetro é um(alguns) GLOB(s) dos arquivos à serem monitorados e o segundo parâmetro, a(s) task(s) à executar</p>
+<h3 id="2-Criando-uma-task-padrao-para-unificar-tudo"><a href="#2-Criando-uma-task-padrao-para-unificar-tudo" class="headerlink" title="2. Criando uma task padrao para unificar tudo"></a>2. Criando uma task padrao para unificar tudo</h3><p>Edite o arquivo <code>gulpfile.js</code>, inserindo ao final dele:</p>
+<figure class="highlight javascript"><figcaption><span>[gulpfile.js]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line">gulp.task(<span class="string">'default'</span>, [<span class="string">'jade'</span>, <span class="string">'stylus'</span>, <span class="string">'server'</span>, <span class="string">'watch'</span>]);</span><br></pre></td></tr></table></figure>
+<p>Se você cria uma task com o nome ‘default’, como acima, ela é chamada quando rodar o comando <code>gulp</code> pelo terminal.</p>
+<p>Nesta, definimos que ela irá rodar as tasks jade, stylus, server e watch.</p>
+<h3 id="3-Inserindo-reload-ao-final-das-tasks-jade-e-stylus"><a href="#3-Inserindo-reload-ao-final-das-tasks-jade-e-stylus" class="headerlink" title="3. Inserindo reload() ao final das tasks jade e stylus"></a>3. Inserindo <code>reload()</code> ao final das tasks <code>jade</code> e <code>stylus</code></h3><p>Editando o arquivo <code>gulpfile.js</code>, deixaremos as 2 tasks assim:</p>
+<p>Task <strong>jade</strong><br><figure class="highlight javascript"><figcaption><span>[gulpfile.js]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line">gulp.task(<span class="string">'jade'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  gulp.src(<span class="string">'src/jade/**/**.jade'</span>)</span><br><span class="line">    .pipe(jade())</span><br><span class="line">    .pipe(gulp.dest(<span class="string">'build'</span>))</span><br><span class="line">    .pipe(connect.reload()); <span class="comment">//linha adicionada</span></span><br><span class="line">  &#125;);</span><br><span class="line">(...)</span><br></pre></td></tr></table></figure></p>
+<p>Task <strong>stylus</strong><br><figure class="highlight javascript"><figcaption><span>[gulpfile.js]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">gulp.task(<span class="string">'stylus'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  gulp.src(<span class="string">'src/stylus/**/**.styl'</span>)</span><br><span class="line">    .pipe(stylus())</span><br><span class="line">    .pipe(gulp.dest(<span class="string">'build/css'</span>))</span><br><span class="line">    .pipe(connect.reload()); <span class="comment">//linha adicionada</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>Ok, vamos ver que legal!<br>Rode, no terminal</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp</span><br></pre></td></tr></table></figure>
+<p>Deve abrir seu navegador, com a página sem estilos.</p>
+<p>Deixe rodando a task, e vamos editar o arquivo <code>index.jade</code>.</p>
+<p><strong>Deixe a janela do navegador com o conteúdo visível atraz do seu editor</strong></p>
+<p>Vamos inserir uma linha logo abaixo de <code>title= &quot;Título da página&quot;</code></p>
+<figure class="highlight plain"><figcaption><span>[index.jade][insira linha abaixo da title....]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">title= &quot;Título da página&quot;</span><br><span class="line">link(href=&apos;css/main.css&apos;, rel=&apos;stylesheet&apos;)</span><br></pre></td></tr></table></figure>
+<p>Salve o arquivo e…. tcharãaaa, veja como atualizou sozinha sua página. Experimente editar o <code>main.styl</code>, mudando as cores das variáveis por exemplo (de blue para white), e salve.</p>
+<blockquote>
+<p>Seja bem vindo ao GulpJs. Automate all the things o/</p>
+</blockquote>
+<p>(o resultado/exemplo está <a href="https://github.com/romuloctba/blog-inciando-gulp-preprocessadores" target="_blank" rel="noopener">neste repositório do github</a>)</p>
+<p>Ah! Vale lembrar que, pra facilitar, declaramos os <code>require</code> logo antes de cada task.</p>
+<p>O ideal mesmo é que sejam declarados todos ao começo do arquivo.</p>
+<p>Ficaria mais ou menos assim, ó:</p>
+<figure class="highlight javascript"><figcaption><span>[exemplo de gulpfile.js]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>)</span><br><span class="line">  , jade = <span class="built_in">require</span>(<span class="string">'gulp-jade'</span>)</span><br><span class="line">  , stylus = <span class="built_in">require</span>(<span class="string">'gulp-stylus'</span>)</span><br><span class="line">  , connect = <span class="built_in">require</span>(<span class="string">'gulp-connect-multi'</span>)();</span><br></pre></td></tr></table></figure>
+<h2 id="Desafio-Licao-de-casa"><a href="#Desafio-Licao-de-casa" class="headerlink" title="Desafio/Lição de casa"></a>Desafio/Lição de casa</h2><p>Este desafio é só pra quem teve a <strong>primeira</strong> experiência com o GulpJs neste post, hein. Se você já manja, não adianta ;P</p>
+<p>Note que nosso gulpfile faz:</p>
+<ul>
+<li>Processa e gera html de arquivos jade</li>
+<li>processa e gera css de arquivos styl</li>
+</ul>
+<p>massss… falta uma task para lidar com os arquivos não processados (imagens, por exemplo).</p>
+<p><em>O desafio/tarefa de casa</em> é criar uma task E um watch para os arquivos não processados. Essa task deve <strong>apenas</strong> copiar eles para a pasta <code>build</code> e chamar o <code>connect.reload()</code> ao final.</p>
+<p><code>dica: insira arquivos dentro de alguma pasta, como src/assets</code></p>
+<h1 id="No-proximo-post-de-GulpJS…"><a href="#No-proximo-post-de-GulpJS…" class="headerlink" title="No próximo post de GulpJS…."></a>No próximo post de GulpJS….</h1><p>No próximo post de GulpJS veremos tarefas úteis para JS (que não abordamos aqui) e outras tarefas de otimização para <code>distribuir</code> seu projeto. </p>
+<p>Gostou? Entendeu? Curtiu? Usou? Deixe seu comentário!!</p>
+<p>Dúvidas?</p>
+</div>
+
+      <div class="bottom-panel">
+        <ul class="social-likes" data-url="/2015/02/13/comecando-agora-com-gulp-e-preprocessadores-parte-1-suas-primeiras-tasks/">
+          <li class="facebook" title="like"></li>
+          <li class="twitter" title="twitte"></li>
+          <li class="plusone" title="google"></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="widget post-comment">
+      <h2 class="title">Comments</h2>
+      <section id="comments">
+        <div id="disqus_thread">
+          <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+      </session>
+    </div>
+    
+  </div>
+
+  <div class="widgetarea">
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Artigos Recentes</h3>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2019/05/01/realidade-aumentada-facil-e-rapida-com-ar-js-gincana-de-pascoa-com-ar/">Realidade Aumentada facil e rapida com AR.js - Gincana de Pascoa com AR</a></h3>
+        <span class="link-date">01 May 2019</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2018/12/03/ambiente-docker-para-desenvolvimento-nodejs-rapidinha/">Ambiente Docker para desenvolvimento NodeJS - Rapidinha</a></h3>
+        <span class="link-date">03 Dec 2018</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/11/07/removendo-linhas-extras-irritantes-em-arquivos-transferidos-via-ftp/">Removendo linhas extras irritantes em arquivos transferidos via FTP</a></h3>
+        <span class="link-date">07 Nov 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/">Testando o pré-release do Ionic Material: Material Design em seu App Híbrido</a></h3>
+        <span class="link-date">26 Jun 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/25/porque-meu-app-nao-carrega-dados-externos-lidando-com-cors-e-origins-externas/">Porque meu APP não carrega dados externos? (Lidando com CORS e Origins Externas)</a></h3>
+        <span class="link-date">25 Jun 2015</span>
+      </div>
+    </li>
+  
+</ul>
+
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Blogs & Links</h3>
+
+	<li><a href=https://www.hastedesign.com.br/blog/>Haste Design Blog</a></li>
+	
+	<li><a href=https://forma.hastedesign.com.br/blog/>Forma Haste Blog</a></li>
+	
+	<li><a href=http://blog.da2k.com.br/>Da2k Blog | @fdaciuk</a></li>
+	
+	<li><a href=http://nomadev.com.br/>Novadev | @osuissa</a></li>
+	
+	<li><a href=http://www.vitorbritto.com.br/blog/>Vitor Britto | @vitorbritto</a></li>
+	
+	<li><a href=http://udgwebdev.com/>UnderGround WebDev</a></li>
+	
+	<li><a href=https://andrebaltieri.wordpress.com/>@andrebaltieri</a></li>
+	
+	<li><a href=http://jcemer.com/>@jcemer</a></li>
+	
+</ul>
+
+
+    
+      
+
+
+<div class="tags widget">
+  <h3 class="title">Tags</h3>
+  <div style="text-align:center">
+    
+    <a class="button" href="/tags/1postperday/">1postperday</a>
+    
+    <a class="button" href="/tags/javascript/">Javascript</a>
+    
+    <a class="button" href="/tags/gulp/">Gulp</a>
+    
+    <a class="button" href="/tags/serie-google-maps/">Série Google Maps</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJS</a>
+    
+    <a class="button" href="/tags/workflow/">Workflow</a>
+    
+    <a class="button" href="/tags/rest/">REST</a>
+    
+    <a class="button" href="/tags/stylus/">Stylus</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJs</a>
+    
+    <a class="button" href="/tags/api/">API</a>
+    
+    <a class="button" href="/tags/app/">APP</a>
+    
+    <a class="button" href="/tags/rapidinha/">Rapidinha</a>
+    
+    <a class="button" href="/tags/mobile/">Mobile</a>
+    
+    <a class="button" href="/tags/static-generators/">Static Generators</a>
+    
+    <a class="button" href="/tags/docker/">Docker</a>
+    
+  </div>
+  
+  <div class="load-more">
+    <a class="various" href="#fbox-tagcloud">Ver Todas</a>
+  </div>
+  
+</div>
+
+
+<div class="tagcloud" id="fbox-tagcloud" style="margin:10px; display:none; overflow: hidden"><a href="/tags/1postperday/" style="font-size: 24px;">1postperday</a> <a href="/tags/api/" style="font-size: 14px;">API</a> <a href="/tags/app/" style="font-size: 14px;">APP</a> <a href="/tags/angularjs/" style="font-size: 12px;">AngularJs</a> <a href="/tags/app/" style="font-size: 12px;">App</a> <a href="/tags/autenticacao/" style="font-size: 12px;">Autenticação</a> <a href="/tags/cors/" style="font-size: 12px;">CORS</a> <a href="/tags/css/" style="font-size: 12px;">CSS</a> <a href="/tags/css/" style="font-size: 12px;">Css</a> <a href="/tags/docker/" style="font-size: 12px;">Docker</a> <a href="/tags/expressjs/" style="font-size: 12px;">ExpressJs</a> <a href="/tags/gulp/" style="font-size: 20px;">Gulp</a> <a href="/tags/html/" style="font-size: 12px;">Html</a> <a href="/tags/hibridos/" style="font-size: 12px;">Híbridos</a> <a href="/tags/ionic/" style="font-size: 12px;">Ionic</a> <a href="/tags/ionic-framewokr/" style="font-size: 12px;">Ionic Framewokr</a> <a href="/tags/jwt/" style="font-size: 12px;">JWT</a> <a href="/tags/javascript/" style="font-size: 22px;">Javascript</a> <a href="/tags/material-design/" style="font-size: 12px;">Material Design</a> <a href="/tags/mobile/" style="font-size: 14px;">Mobile</a> <a href="/tags/nodejs/" style="font-size: 16px;">NodeJS</a> <a href="/tags/nodejs/" style="font-size: 14px;">NodeJs</a> <a href="/tags/php/" style="font-size: 12px;">PHP</a> <a href="/tags/phonegap/" style="font-size: 12px;">Phonegap</a> <a href="/tags/produtividade/" style="font-size: 12px;">Produtividade</a> <a href="/tags/pre-processadores/" style="font-size: 12px;">Pré-Processadores</a> <a href="/tags/rest/" style="font-size: 16px;">REST</a> <a href="/tags/rapidinha/" style="font-size: 14px;">Rapidinha</a> <a href="/tags/realtime/" style="font-size: 12px;">Realtime</a> <a href="/tags/svg/" style="font-size: 12px;">SVG</a> <a href="/tags/socket-io/" style="font-size: 12px;">Socket.io</a> <a href="/tags/spritesheet/" style="font-size: 12px;">SpriteSheet</a> <a href="/tags/static-generators/" style="font-size: 12px;">Static Generators</a> <a href="/tags/stylus/" style="font-size: 14px;">Stylus</a> <a href="/tags/serie-google-maps/" style="font-size: 18px;">Série Google Maps</a> <a href="/tags/wordcamp/" style="font-size: 12px;">WordCamp</a> <a href="/tags/wordpress/" style="font-size: 12px;">WordPress</a> <a href="/tags/workshop/" style="font-size: 12px;">WorkShop</a> <a href="/tags/workflow/" style="font-size: 16px;">Workflow</a> <a href="/tags/workspace/" style="font-size: 12px;">Workspace</a> <a href="/tags/dicas-sublime-ftp/" style="font-size: 12px;">dicas, sublime, ftp</a> <a href="/tags/erros/" style="font-size: 12px;">erros</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 12px;">python</a> <a href="/tags/rapidinha/" style="font-size: 12px;">rapidinha</a></div>
+
+    
+      <div class="widget maillist">
+  <h3 class="title">Receba novos posts por e-mail</h3>
+<!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
+<div id="mc_embed_signup">
+<form action="//github.us7.list-manage.com/subscribe/post?u=e1c4a7465492a27974a725fdb&amp;id=2d0762fdb8" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+	<label for="mce-EMAIL"></label>
+	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="seu@email.com.br" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_e1c4a7465492a27974a725fdb_2d0762fdb8" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Inscrever" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+<!--End mc_embed_signup-->
+</div>
+    
+
+  </div>
+</div>
+
+
+  </div>
+  <div class="footer">
+  <div class="container">
+    
+    &copy; 2022 romuloctba All Rights Reserved
+    
+  </div>
+  <div class="container">
+      <div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Declaração</h2>
+    <div>
+        <p>
+            A informação publicada neste veiculo NÃO necessariamente reflete a opnião de qualquer pessoa que não seja o autor.
+            <br> Clientes ou empregadores do autor não tem parte na autoria ou co-autoria de artigos.
+            <br> Todo código ou exemplo de dados mostrado é criado especificamente para estudo, e jamais será cópia ou oriundo de dados reais de produção.
+        </p>
+    </div>
+</div>
+      
+<div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Disclaimer</h2>
+    <div>
+        <p>
+            The information here published is NOT necessarly the opinion of anyone but the author. <br>
+            Author's clients or employers are not part of this site, nor do they participate in the authoring or co-authoring of the content in any ways.<br>
+            All code or data samples here shown are created for study purposes and are not from nor copies from real production data.
+        </p>
+    </div>
+</div>
+      
+
+  </div>
+  <!-- end footer -->
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54535787-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <!-- disqus -->
+
+<script>
+  var disqus_shortname = 'rcdevlabs';
+  
+  var disqus_url = 'http://rcdevlabs.github.io/2015/02/13/comecando-agora-com-gulp-e-preprocessadores-parte-1-suas-primeiras-tasks/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+  $('.imgLiquid').imgLiquid({fill:true, fadeInTime:500});
+});
+</script>
+
+
+<!-- fancybox -->
+<link rel="stylesheet" href="/package/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/package/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript">
+(function($){
+  $(".fancybox").fancybox();
+  $(".various").fancybox({
+    maxWidth  : 800,
+    maxHeight : 600,
+    fitToView : false,
+    width   : '70%',
+    height    : '70%',
+    autoSize  : true,
+    closeClick  : false,
+    openEffect  : 'none',
+    closeEffect : 'none'
+  });
+})(jQuery);
+(function( $ ) {
+    $(function() {
+        $( '[data-js="google-search-form"]' ).on( 'submit', function( e ) {
+            e.preventDefault();
+            var inputVal = $( '[data-js="google-search-input"]' ).val();
+            window.location.href = $( this ).attr( 'data-action' ) + ' ' + inputVal;
+        });
+    });
+})( jQuery );
+$(function() {
+
+    var $sidebar   = $(".widget.maillist"), 
+        $window    = $(window),
+        offset     = $sidebar.offset(),
+        topPadding = 55;
+
+    $window.scroll(function() {
+        if ($window.scrollTop() > offset.top) {
+            $sidebar.stop().animate({
+                marginTop: $window.scrollTop() - offset.top + topPadding
+            }, 100);
+        } else {
+            $sidebar.stop().animate({
+                marginTop: 0
+            });
+        }
+    });
+    
+});
+</script>
+
+</body>
+</html>

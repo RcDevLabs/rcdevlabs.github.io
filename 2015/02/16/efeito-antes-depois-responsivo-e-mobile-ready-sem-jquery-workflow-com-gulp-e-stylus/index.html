@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta name="generator" content="RcDev Labs">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Efeito antes-depois responsivo e sem JQuery. Workflow com Gulp e Stylus Opcional | RcDev Labs</title>
+
+  <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="/css/awe.css">
+  <link rel="stylesheet" type="text/css" href="/css/social-likes.css">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="/js/imgLiquid-min.js"></script>
+  <script src="/js/social-likes.min.js"></script>
+</head>
+
+<body>
+  <div class="main-container">
+    
+
+<div class="box profile">
+  <div class="heading" style="background: #3e5354 url(/rcdevlabs.jpg) no-repeat;">
+    <div class="profile-img">
+      <a href="http://rcdevlabs.github.io/"><img src="https://avatars3.githubusercontent.com/u/2955932?v=3&s=460" width="154" height="150" alt="image description"></a>
+    </div>
+    <strong class="user"><a href="/">RcDev Labs</a></strong>
+    <span class="locate">Curitiba, Brasil</span>
+  </div>
+  <div class="setting">
+    <a href="http://rcdevlabs.github.io/" class="btn-profile">GitHub</a>
+   <!-- <a href="/" class="btn-photos">Photos</a> -->
+   <div class="search">
+  <form class="theSearch" action=""
+    method="get"
+    data-action="https://google.com.br/search?q=site:rcdevlabs.github.io"
+    accept-charset="utf-8"
+    data-js="google-search-form">
+    <input type="search" name="q" results="0" placeholder="Pesquise no blog" data-js="google-search-input">
+  </form>
+</div>
+    <a href="http://twitter.com/romulo_ctba" class="btn-follow">Twitter</a>
+    <a href="http://rcdevlabs.github.io/atom.xml" class="btn-follow">RSS</a>
+  </div>
+</div>
+
+    
+<div class="two-columns post-page">
+  <div class="content">
+
+    <div class="post box nocover">
+      <em class="date"><span>16</span>Feb</em>
+      <h2 class="post-title"><a href="/2015/02/16/efeito-antes-depois-responsivo-e-mobile-ready-sem-jquery-workflow-com-gulp-e-stylus/">Efeito antes-depois responsivo e sem JQuery. Workflow com Gulp e Stylus Opcional</a></h2>
+      <div class="post-content"><p><img src="/efeito-antes-e-depois-sem-jquery-com-gulp-stylus.jpg" alt="efeito-antes-e-depois-sem-jquery-com-gulp-stylus.jpg"></p>
+<p>Sabe aquele efeito antes e depois interativo, bastante usado em sites como G1? Ele é bem simples e envolve alguns conceitos muito úteis, vamos fazer um?</p>
+<p>Mas calma. Se você está aqui pelo #1postperday, sabe que não posso postar qualquer coisa. Tem que ser maneiro.</p>
+<p>Nosso pequeno plugin, além de bonitinho, será reutilizável e carregará automaticamente, quantas instâncias do efeito na mesma página forem necessárias.</p>
+<p>Além disso, vamos usar stylus e gulp em nosso workflow. Você pode fazer com css direto e sem livereload, mas aí eu te pergunto: Pra quê?</p>
+<h2 id="Analisando-a-demanda"><a href="#Analisando-a-demanda" class="headerlink" title="Analisando a demanda"></a>Analisando a demanda</h2><ul>
+<li><p><strong>Necessidade</strong>: Plugin reutilizável de efeito antes-e-depois interativo: usuário deve poder analisar e interagir com o efeito.</p>
+</li>
+<li><p><strong>Requisitos</strong>: Mobile-ready e responsivo, leve e sem libraries externas (ex: jquery) em produção. Deve ser possível criar novas instâncias somente pelo markup. O markup deve ser mínimo.</p>
+</li>
+</ul>
+<hr>
+
+<h1 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h1><p>A idéia é que fique assim ao final. Você pode incrementar, mas mantive o mais simples e básico possível, já que o objetivo é <em>entender</em> o processo, e não duplicar pra sair usando por aí sem saber. (Se fosse assim, usavamos JQuery hehe)</p>
+<p></p><p data-height="466" data-theme-id="12356" data-slug-hash="wBybMq" data-default-tab="result" data-user="romuloctba" class="codepen">See the Pen <a href="http://codepen.io/romuloctba/pen/wBybMq/" target="_blank" rel="noopener">Antes e Depois SEM Jquery </a> by Romulo_Ctba (<a href="http://codepen.io/romuloctba" target="_blank" rel="noopener">@romuloctba</a>) on <a href="http://codepen.io" target="_blank" rel="noopener">CodePen</a>.</p><p></p>
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+<p>Curtiu? Vamos lá?</p>
+<p>Ah, o resultado final está também (com gulp e stylus) <a href="https://github.com/romuloctba/post-antes-e-depois-responsivo-sem-jquery" target="_blank" rel="noopener">neste repositório do github</a></p>
+<hr>
+
+<h2 id="Planejando-o-Workflow-Porque-usar-Stylus-e-Gulp"><a href="#Planejando-o-Workflow-Porque-usar-Stylus-e-Gulp" class="headerlink" title="Planejando o Workflow / Porque usar Stylus e Gulp"></a>Planejando o Workflow / Porque usar Stylus e Gulp</h2><p>Se você não quiser usar GULP, pule direto para <strong>Criando os arquivos e pastas</strong> mais abaixo. Veja o conteúdo do CSS no codepen acima, clicando em ‘compile css’, mas eu recomendo que faça essa parte, pois é bem maneira.</p>
+<ul>
+<li><p>Criaremos nosso código em um pasta chamada <code>/src</code>, dentro do diretório do nosso projeto.</p>
+</li>
+<li><p>Escreveremos o Css usando Stylus, dentro da pasta <code>/src/stylus</code></p>
+</li>
+<li><p>O Javascript, na pasta <code>/src/javascript</code></p>
+</li>
+<li><p>Usaremos o Gulp para compilar o stylus em CSS e copiar tudo (css, html e imagens) para uma pasta chamda <code>/build</code>.<br>Nela, ficará o conteúdo final de nosso projeto.<br>Ela ficará no diretório de nosso projeto, ao lado da <code>/src</code>.</p>
+</li>
+<li><p>AH, os arquivos css compilados ficarão na pasta <code>/build/css</code>. A pasta <code>/stylus</code> só existe em nosso source</p>
+</li>
+</ul>
+<p>A vantagem disso é que podemos criar tarefas de gulp para minificar o css e o javascript, bem como otimizar imagens e uma infinidade de outras coisas que podem ser muito úteis, de forma automática.</p>
+<hr>
+
+<h2 id="Preparando-o-Workflow"><a href="#Preparando-o-Workflow" class="headerlink" title="Preparando o Workflow"></a>Preparando o Workflow</h2><p>Vamos criar algumas tarefas do Gulp para nos ajudar com o Stylus, e também para o liveReload.</p>
+<p>Se você ainda não tem, instale o <a href="http://nodejs.org" target="_blank" rel="noopener">NodeJS</a> e, depois, abra seu terminal e rode:<br><figure class="highlight console"><figcaption><span>[talvez você precise ser administrador ou rodar como sudo]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g gulp</span><br></pre></td></tr></table></figure></p>
+<p>Agora, crie uma pasta para seu projeto. Nela, um novo arquivo, chamado <code>package.json</code>. Ele contém informações básicas sobre nosso projeto para o NodeJs.</p>
+<figure class="highlight json"><figcaption><span>package.json - crie na pasta do projeto</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"antes-depois-sem-jquery"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"gulp"</span>: <span class="string">"^3.8.10"</span>,</span><br><span class="line">    <span class="attr">"gulp-connect-multi"</span>: <span class="string">"^1.0.8"</span>,</span><br><span class="line">    <span class="attr">"gulp-stylus"</span>: <span class="string">"^1.3.4"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Nele declaramos as <code>devDependencies</code>, ou seja: dependências que não serão usadas em produção, apenas enquanto estamos desenvolvendo.<br>Elas são: Gulp (local, pois já instalamos o global), <code>gulp-connect-multi</code> (será o servidor com liveReload) e <code>gulp-stylus</code> que vai transformar Stylus em Css.</p>
+<p>Com o terminal, acesse a pasta do projeto e rode:</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure>
+<h2 id="Criando-nossas-tarefas-para-o-Gulp"><a href="#Criando-nossas-tarefas-para-o-Gulp" class="headerlink" title="Criando nossas tarefas para o Gulp"></a>Criando nossas tarefas para o Gulp</h2><p>Precisaremos criar 3 tarefinhas:  stylus, arquivos e servidor. Vamos lá:</p>
+<h3 id="Gulp-task-stylus"><a href="#Gulp-task-stylus" class="headerlink" title="Gulp task stylus"></a>Gulp task <code>stylus</code></h3><p>Crie um arquivo chamado <code>gulpfile.js</code> na pasta do seu projeto. Nele, insira:</p>
+<figure class="highlight javascript"><figcaption><span>gulpfile.js [crie o arquivo, e insira:]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>)</span><br><span class="line">,	stylus = <span class="built_in">require</span>(<span class="string">'gulp-stylus'</span>)</span><br><span class="line">, connect = <span class="built_in">require</span>(<span class="string">'gulp-connect-multi'</span>)();</span><br><span class="line"></span><br><span class="line">gulp.task(<span class="string">'stylus'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  gulp.src(<span class="string">'src/stylus/*.styl'</span>)</span><br><span class="line">    .pipe(stylus(&#123;</span><br><span class="line">     compress: <span class="literal">true</span></span><br><span class="line">   &#125;))</span><br><span class="line">    .pipe(gulp.dest(<span class="string">'./build/css'</span>))</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+<p>Nesta task, pegamos todos os arquivos <em>.styl</em> da pasta <code>.src/stylus/</code> e aplicando, com o .pipe(), p método <code>stylus</code>.<br>A opção <code>compress:true</code> vai permitir que ele minifique o css enquanto copia, com o <code>gulp.dest()</code> para a pasta <code>/build/css.</code></p>
+<h3 id="Gulp-task-arquivos"><a href="#Gulp-task-arquivos" class="headerlink" title="Gulp task arquivos"></a>Gulp task <code>arquivos</code></h3><p>´Tudo o que ela faz é copiar arquivos. Ela vai copiar tudo, menos o que estiver na pasta <code>src/stylus</code>. Insira ao final do gulpfile:</p>
+<figure class="highlight javascript"><figcaption><span>gulpfile.js [insira ao final do arquivo]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gulp.task(<span class="string">'arquivos'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  gulp.src([<span class="string">'./src/**/**'</span>, <span class="string">'!src/stylus'</span>])</span><br><span class="line">    .pipe(gulp.dest(<span class="string">'./build'</span>))</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="Gulp-task-servidor"><a href="#Gulp-task-servidor" class="headerlink" title="Gulp task servidor"></a>Gulp task <code>servidor</code></h3><p>Vamos inciar o <code>gulp-connect-multi</code>, com a opção <code>liveReload</code> como true. A opção <code>root</code> é a pasta principal. No caso, a pasta <code>build</code>.</p>
+<figure class="highlight javascript"><figcaption><span>gulpfile.js [insira ao final do arquivo]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">gulp.task(<span class="string">'servidor'</span>, connect.server(&#123;</span><br><span class="line"> 	root: [<span class="string">'build'</span>],</span><br><span class="line"> 	port: <span class="number">1337</span>,</span><br><span class="line"> 	livereload: <span class="literal">true</span>,</span><br><span class="line"> 	open: &#123;</span><br><span class="line">    browser: <span class="string">'chrome'</span> <span class="comment">//ou firefox ou safari... se for OSX é 'Google Chrome'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;))</span><br></pre></td></tr></table></figure>
+<h3 id="Task-padrao-para-fazer-tudo"><a href="#Task-padrao-para-fazer-tudo" class="headerlink" title="Task padrão, para fazer tudo:"></a>Task padrão, para fazer tudo:</h3><p>Faremos a  task <code>default</code> executar todas as outras, por isso, crie:</p>
+<figure class="highlight javascript"><figcaption><span>gulpfile.js [insira ao final do arquivo]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp.task(<span class="string">'default'</span>, [<span class="string">'stylus'</span>, <span class="string">'arquivos'</span>, <span class="string">'servidor'</span>]);</span><br></pre></td></tr></table></figure>
+<p>Com as tasks prontas, podemos criar nosso código fonte.</p>
+<hr>
+
+<h2 id="Criando-os-arquivos-e-pastas"><a href="#Criando-os-arquivos-e-pastas" class="headerlink" title="Criando os arquivos e pastas"></a>Criando os arquivos e pastas</h2><p>Vamos criar nossa estrutura. Dentro da pasta do seu projeto, crie uma pasta chamada <strong>src</strong>.</p>
+<p>Dentro dela, 3 pastas: <code>img</code>, <code>js</code> e <code>stylus</code>. </p>
+<h3 id="Agora-sim-Vamos-‘comecar’"><a href="#Agora-sim-Vamos-‘comecar’" class="headerlink" title="Agora sim! Vamos ‘começar’."></a><strong>Agora sim! Vamos ‘começar’.</strong></h3><h2 id="Arquivo-src-index-html"><a href="#Arquivo-src-index-html" class="headerlink" title="Arquivo src/index.html"></a>Arquivo <strong>src/index.html</strong></h2><p>Crie o arquivo index.html dentro da pasta <code>src</code> com a seguinte estrutura básica:</p>
+<figure class="highlight html"><figcaption><span>index.html [Crie na pasta src e insira:]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"pt-BR"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Antes e Depois com Gulp, Stylus e SEM JQuery.<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"css/main.css"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- conteudo irá aqui --&gt;</span></span><br><span class="line">  </span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"js/main.js"</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Acima nada mais é do que o ‘esqueleto’ do nosso HTML, incluindo os arquivos <code>css/main.css</code> e <code>js/main.js</code>. </p>
+<p>Um dos requisitos da nossa demanda era o markup mínimo.<br>Pois assim será, insira após o comentário:</p>
+<figure class="highlight html"><figcaption><span>index.html [Insira após o comentário]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line">  <span class="comment">&lt;!-- conteudo irá aqui --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"antesDepois"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"img1.jpg"</span> <span class="attr">alt</span>=<span class="string">"imagem 1"</span> <span class="attr">class</span>=<span class="string">"antes"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"depois"</span> <span class="attr">data-src</span>=<span class="string">"img2.jpg"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">(...)</span><br></pre></td></tr></table></figure>
+<p><strong>Substitua <code>img1.jpg</code> e <code>img2.jpg</code> pelo nome das suas imagens</strong>.<br>Se quiser, <strong>pode usar as minhas imagens</strong>, salve elas na pasta <code>src/img</code>. Pegue elas aqui: <a href="http://imgur.com/a/Hcc8R" target="_blank" rel="noopener">http://imgur.com/a/Hcc8R</a> .</p>
+<p>Olhem como o markup é mínimo! Um div com a classe <code>.antesDepois</code> é o nosso container. Dentro dele, uma <code>img</code>, que será o antes, e um <code>div</code> com o atributo <code>data-src</code> apontando uma outra imagem, que será o depois.</p>
+<p>Com JS, pegaremos este atributo e adicionaremos como <code>background</code> do div, fazendo a mágica acontecer.</p>
+<p>Mas, pra isso, precisamos  dum pouco de CSS:</p>
+<h2 id="Arquivo-src-stylus-main-styl"><a href="#Arquivo-src-stylus-main-styl" class="headerlink" title="Arquivo src/stylus/main.styl"></a>Arquivo <strong>src/stylus/main.styl</strong></h2><p>Crie o arquivo <code>main.styl</code> dentro da pasta <code>src/stylus/</code></p>
+<figure class="highlight stylus"><figcaption><span>main.styl [crie o arquivo e insira o conteúdo]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">.antesDepois</span><br><span class="line">  <span class="attribute">display</span> block</span><br><span class="line">  <span class="attribute">position</span> relative</span><br><span class="line">  <span class="attribute">width</span> <span class="number">100%</span></span><br><span class="line">  <span class="attribute">max-width</span> <span class="number">100%</span> !important</span><br><span class="line">  <span class="attribute">cursor</span> col-resize </span><br><span class="line">  img</span><br><span class="line">    <span class="attribute">max-width</span> <span class="number">100%</span> !important</span><br><span class="line">  .depois</span><br><span class="line">    <span class="attribute">position</span> absolute</span><br><span class="line">    <span class="attribute">top</span> <span class="number">0</span></span><br><span class="line">    <span class="attribute">left</span> <span class="number">0</span></span><br><span class="line">    <span class="attribute">width</span> <span class="number">45%</span></span><br><span class="line">    <span class="attribute">height</span> <span class="number">99%</span></span><br><span class="line">    <span class="attribute">background-size</span> cover</span><br><span class="line">    <span class="attribute">border-right</span> <span class="number">1px</span> solid <span class="number">#fff</span></span><br></pre></td></tr></table></figure>
+<p>Tudo bem simples: A classe do container é <code>.antesDepois</code>. Estamos definindo posicionamento relativo e largura 100%. e <code>!important</code> no <code>max-width</code>, pois não queremos que ele passe de 100% de largura.</p>
+<p>O <code>cursor col-resize</code> é pra dar um charminho.</p>
+<p>Também colocamos <code>max-width: 100% !important</code> para o img DENTRO DO .antesDepois. Apenas as imgs de dentro dele terão essa regra.</p>
+<p>A classe <code>.depois</code> é quem faz a mágica.<br>Definimos um posicionamento absoluto, com 45% de largura e 99% de altura.<br>O Background-size vai ser cover, e uma bordinha branca pra ficar legal.</p>
+<p>Note que o backgorund será incluído agora:</p>
+<h2 id="Arquivo-src-js-main-js"><a href="#Arquivo-src-js-main-js" class="headerlink" title="Arquivo src/js/main.js"></a>Arquivo <strong>src/js/main.js</strong></h2><p>O nosso Javascript não usa Jquery. </p>
+<p>Criaremos uma função IIFE, ou seja: Uma função auto-executável, que vai pegar todos os elementos da classe <code>.antesDepois</code> e executar um loop <code>for</code> com eles, gerando cada uma das instâncias que houver no HTML.</p>
+<p>A sintaxe de uma função IIFE é assim: <code>(function(){})()</code> e seu conteúdo vai dentro dos {}.</p>
+<figure class="highlight javascript"><figcaption><span>main.js [Crie na pasta js e insira:]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"><span class="keyword">var</span> containers = <span class="built_in">document</span>.getElementsByClassName(<span class="string">'antesDepois'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (i=<span class="number">0</span>, qtd=containers.length; i &lt; qtd; i++) &#123;</span><br><span class="line">  </span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'Criada Instância '</span> + i);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">var</span> container = <span class="built_in">document</span>.getElementsByClassName(<span class="string">'antesDepois'</span>)[i]</span><br><span class="line">    , antes = container.getElementsByClassName(<span class="string">'antes'</span>)[<span class="number">0</span>]</span><br><span class="line">    , depois = container.getElementsByClassName(<span class="string">'depois'</span>)[<span class="number">0</span>]</span><br><span class="line">    , depoisImg = depois.getAttribute(<span class="string">'data-src'</span>);</span><br><span class="line">  </span><br><span class="line">  depois.style.backgroundImage = <span class="string">"url('"</span>+depoisImg+<span class="string">"')"</span>;</span><br><span class="line">  container.addEventListener(<span class="string">"mousemove"</span>, comparaPosicao, <span class="literal">false</span>);</span><br><span class="line">  container.addEventListener(<span class="string">"touchstart"</span>,comparaPosicao,<span class="literal">false</span>);</span><br><span class="line"> 	container.addEventListener(<span class="string">"touchmove"</span>,comparaPosicao,<span class="literal">false</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
+<p>Note a <code>var containers</code>: O método <code>getElementsByCLassName()</code> pega <strong>TODOS</strong> os elementos com a classe <code>antesDepois</code> e coloca-os em um Array.<br>Com isso, podemos fazer um loop <code>FOR</code>, que vai interagir, executando em cada um dos itens do array.</p>
+<p>Em nosso for, colocamos o <code>containers.length</code> em uma variável. Isso é tipo um ‘cache’ pra melhorar a performance ao iterar um array.</p>
+<p>Em cada um dos loops, pegaremos o item da vez no array <code>container</code>.</p>
+<p>Daí as variáveis <code>antes, depois e depoisImg</code> vêm com o mesmo método <code>getElementsByClassName()</code>, só que dessa vez o método é executado dentro do <code>container</code>, e não do <code>document</code>.</p>
+<p>Portanto, só os ementos que estiverem dentro de <code>container</code>, que representa o item atual do FOR.</p>
+<p>Por último, no trecho acima, temos o método <code>.style()</code>, em que inserimos um <code>background-image</code>, cuja url pegamos com <code>getAttribute(&#39;data-src&#39;)</code> logo antes.</p>
+<p>Daí, os 3 <code>addEventListeners</code> que vão monitorar, respectivamente por um Mousemove, TouchStart e TouchMove, <strong>sempre dentro do <code>container</code></strong>.</p>
+<p>Quando disparar o evento, vão chamar a função <code>comparaPosicao()</code>, que criaremos agora:</p>
+<p>Insira, ao final do <code>main.js</code>:</p>
+<figure class="highlight javascript"><figcaption><span>main.js [insira, ao final do arquivo:]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">comparaPosicao</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> retangulo = <span class="keyword">this</span>.getBoundingClientRect();</span><br><span class="line">  <span class="keyword">var</span> posicao = ((e.pageX - retangulo.left) / <span class="keyword">this</span>.offsetWidth)*<span class="number">100</span>;</span><br><span class="line">  <span class="keyword">if</span> (posicao &lt;= <span class="number">100</span>) &#123;</span><br><span class="line">    <span class="keyword">this</span>.getElementsByClassName(<span class="string">'depois'</span>)[<span class="number">0</span>].style.width= posicao+<span class="string">"%"</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>A função recebe um evento (e) como parâmetro. Aì usamos <code>this.getBoundingClientRect()</code> que nos dá um retângulo do container. A palavra chave <code>this</code>, no caso, refere-se à variavel <code>container</code>, onde a função foi chamada pelo ´eventListener`.</p>
+<p>A <code>var posicao</code> é uma continha que pega o eixo X de dentro do retangulo (pageX - retangulo.left) e divide pelo <code>offsetWidth</code>, ou seja: largura do <code>container</code>. Isso dá um número decimal, fazemos ele * 100 e temos em quantos % da largura nosso mouse está.</p>
+<p>Se a <code>var posicao</code> for menor ou igual a 100, pegaremos o elemento com a classe <code>.depois</code> de dentro do container atual (this) e definiremos sua largura (width) com a posição do mouse. Se ela for maior, significa que o mouse ou touch está fora do <code>container.</code></p>
+<blockquote>
+<blockquote>
+<p>Ufa, terminamos.</p>
+</blockquote>
+</blockquote>
+<h2 id="Testando-e-Rodando"><a href="#Testando-e-Rodando" class="headerlink" title="Testando e Rodando."></a>Testando e Rodando.</h2><p>Com o seu terminal, acesse a pasta d oprojeto e rode o comendo:<br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp</span><br></pre></td></tr></table></figure></p>
+<p>Se tudo der certo, seu navegador abrirá em <a href="http://localhost:1337" target="_blank" rel="noopener">http://localhost:1337</a> com tudo funcionando!! :)</p>
+<p>Ah, o resultado final está também (com gulp e stylus) <a href="https://github.com/romuloctba/post-antes-e-depois-responsivo-sem-jquery" target="_blank" rel="noopener">neste repositório do github</a></p>
+<hr>
+
+<h2 id="Conclusao"><a href="#Conclusao" class="headerlink" title="Conclusão"></a>Conclusão</h2><p>Apesar da preparação para o Workflow ter deixado o artigo um pouco longo, vimos que o código é bastante simples, sem precisar de JQuery.</p>
+<p>Espero que possa passar à quem ainda tem medo, a coragem necessária pra largar mão - quando possível - desse framework tão bom, mas tão usado desnecessariamente.</p>
+<p>É isso aí! Muito obrigado pela visita, volte sempre e fique a vontade :D</p>
+</div>
+
+      <div class="bottom-panel">
+        <ul class="social-likes" data-url="/2015/02/16/efeito-antes-depois-responsivo-e-mobile-ready-sem-jquery-workflow-com-gulp-e-stylus/">
+          <li class="facebook" title="like"></li>
+          <li class="twitter" title="twitte"></li>
+          <li class="plusone" title="google"></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="widget post-comment">
+      <h2 class="title">Comments</h2>
+      <section id="comments">
+        <div id="disqus_thread">
+          <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+      </session>
+    </div>
+    
+  </div>
+
+  <div class="widgetarea">
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Artigos Recentes</h3>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2019/05/01/realidade-aumentada-facil-e-rapida-com-ar-js-gincana-de-pascoa-com-ar/">Realidade Aumentada facil e rapida com AR.js - Gincana de Pascoa com AR</a></h3>
+        <span class="link-date">01 May 2019</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2018/12/03/ambiente-docker-para-desenvolvimento-nodejs-rapidinha/">Ambiente Docker para desenvolvimento NodeJS - Rapidinha</a></h3>
+        <span class="link-date">03 Dec 2018</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/11/07/removendo-linhas-extras-irritantes-em-arquivos-transferidos-via-ftp/">Removendo linhas extras irritantes em arquivos transferidos via FTP</a></h3>
+        <span class="link-date">07 Nov 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/">Testando o pré-release do Ionic Material: Material Design em seu App Híbrido</a></h3>
+        <span class="link-date">26 Jun 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/25/porque-meu-app-nao-carrega-dados-externos-lidando-com-cors-e-origins-externas/">Porque meu APP não carrega dados externos? (Lidando com CORS e Origins Externas)</a></h3>
+        <span class="link-date">25 Jun 2015</span>
+      </div>
+    </li>
+  
+</ul>
+
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Blogs & Links</h3>
+
+	<li><a href=https://www.hastedesign.com.br/blog/>Haste Design Blog</a></li>
+	
+	<li><a href=https://forma.hastedesign.com.br/blog/>Forma Haste Blog</a></li>
+	
+	<li><a href=http://blog.da2k.com.br/>Da2k Blog | @fdaciuk</a></li>
+	
+	<li><a href=http://nomadev.com.br/>Novadev | @osuissa</a></li>
+	
+	<li><a href=http://www.vitorbritto.com.br/blog/>Vitor Britto | @vitorbritto</a></li>
+	
+	<li><a href=http://udgwebdev.com/>UnderGround WebDev</a></li>
+	
+	<li><a href=https://andrebaltieri.wordpress.com/>@andrebaltieri</a></li>
+	
+	<li><a href=http://jcemer.com/>@jcemer</a></li>
+	
+</ul>
+
+
+    
+      
+
+
+<div class="tags widget">
+  <h3 class="title">Tags</h3>
+  <div style="text-align:center">
+    
+    <a class="button" href="/tags/1postperday/">1postperday</a>
+    
+    <a class="button" href="/tags/javascript/">Javascript</a>
+    
+    <a class="button" href="/tags/gulp/">Gulp</a>
+    
+    <a class="button" href="/tags/serie-google-maps/">Série Google Maps</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJS</a>
+    
+    <a class="button" href="/tags/workflow/">Workflow</a>
+    
+    <a class="button" href="/tags/rest/">REST</a>
+    
+    <a class="button" href="/tags/stylus/">Stylus</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJs</a>
+    
+    <a class="button" href="/tags/api/">API</a>
+    
+    <a class="button" href="/tags/app/">APP</a>
+    
+    <a class="button" href="/tags/rapidinha/">Rapidinha</a>
+    
+    <a class="button" href="/tags/mobile/">Mobile</a>
+    
+    <a class="button" href="/tags/static-generators/">Static Generators</a>
+    
+    <a class="button" href="/tags/docker/">Docker</a>
+    
+  </div>
+  
+  <div class="load-more">
+    <a class="various" href="#fbox-tagcloud">Ver Todas</a>
+  </div>
+  
+</div>
+
+
+<div class="tagcloud" id="fbox-tagcloud" style="margin:10px; display:none; overflow: hidden"><a href="/tags/1postperday/" style="font-size: 24px;">1postperday</a> <a href="/tags/api/" style="font-size: 14px;">API</a> <a href="/tags/app/" style="font-size: 14px;">APP</a> <a href="/tags/angularjs/" style="font-size: 12px;">AngularJs</a> <a href="/tags/app/" style="font-size: 12px;">App</a> <a href="/tags/autenticacao/" style="font-size: 12px;">Autenticação</a> <a href="/tags/cors/" style="font-size: 12px;">CORS</a> <a href="/tags/css/" style="font-size: 12px;">CSS</a> <a href="/tags/css/" style="font-size: 12px;">Css</a> <a href="/tags/docker/" style="font-size: 12px;">Docker</a> <a href="/tags/expressjs/" style="font-size: 12px;">ExpressJs</a> <a href="/tags/gulp/" style="font-size: 20px;">Gulp</a> <a href="/tags/html/" style="font-size: 12px;">Html</a> <a href="/tags/hibridos/" style="font-size: 12px;">Híbridos</a> <a href="/tags/ionic/" style="font-size: 12px;">Ionic</a> <a href="/tags/ionic-framewokr/" style="font-size: 12px;">Ionic Framewokr</a> <a href="/tags/jwt/" style="font-size: 12px;">JWT</a> <a href="/tags/javascript/" style="font-size: 22px;">Javascript</a> <a href="/tags/material-design/" style="font-size: 12px;">Material Design</a> <a href="/tags/mobile/" style="font-size: 14px;">Mobile</a> <a href="/tags/nodejs/" style="font-size: 16px;">NodeJS</a> <a href="/tags/nodejs/" style="font-size: 14px;">NodeJs</a> <a href="/tags/php/" style="font-size: 12px;">PHP</a> <a href="/tags/phonegap/" style="font-size: 12px;">Phonegap</a> <a href="/tags/produtividade/" style="font-size: 12px;">Produtividade</a> <a href="/tags/pre-processadores/" style="font-size: 12px;">Pré-Processadores</a> <a href="/tags/rest/" style="font-size: 16px;">REST</a> <a href="/tags/rapidinha/" style="font-size: 14px;">Rapidinha</a> <a href="/tags/realtime/" style="font-size: 12px;">Realtime</a> <a href="/tags/svg/" style="font-size: 12px;">SVG</a> <a href="/tags/socket-io/" style="font-size: 12px;">Socket.io</a> <a href="/tags/spritesheet/" style="font-size: 12px;">SpriteSheet</a> <a href="/tags/static-generators/" style="font-size: 12px;">Static Generators</a> <a href="/tags/stylus/" style="font-size: 14px;">Stylus</a> <a href="/tags/serie-google-maps/" style="font-size: 18px;">Série Google Maps</a> <a href="/tags/wordcamp/" style="font-size: 12px;">WordCamp</a> <a href="/tags/wordpress/" style="font-size: 12px;">WordPress</a> <a href="/tags/workshop/" style="font-size: 12px;">WorkShop</a> <a href="/tags/workflow/" style="font-size: 16px;">Workflow</a> <a href="/tags/workspace/" style="font-size: 12px;">Workspace</a> <a href="/tags/dicas-sublime-ftp/" style="font-size: 12px;">dicas, sublime, ftp</a> <a href="/tags/erros/" style="font-size: 12px;">erros</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 12px;">python</a> <a href="/tags/rapidinha/" style="font-size: 12px;">rapidinha</a></div>
+
+    
+      <div class="widget maillist">
+  <h3 class="title">Receba novos posts por e-mail</h3>
+<!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
+<div id="mc_embed_signup">
+<form action="//github.us7.list-manage.com/subscribe/post?u=e1c4a7465492a27974a725fdb&amp;id=2d0762fdb8" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+	<label for="mce-EMAIL"></label>
+	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="seu@email.com.br" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_e1c4a7465492a27974a725fdb_2d0762fdb8" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Inscrever" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+<!--End mc_embed_signup-->
+</div>
+    
+
+  </div>
+</div>
+
+
+  </div>
+  <div class="footer">
+  <div class="container">
+    
+    &copy; 2022 romuloctba All Rights Reserved
+    
+  </div>
+  <div class="container">
+      <div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Declaração</h2>
+    <div>
+        <p>
+            A informação publicada neste veiculo NÃO necessariamente reflete a opnião de qualquer pessoa que não seja o autor.
+            <br> Clientes ou empregadores do autor não tem parte na autoria ou co-autoria de artigos.
+            <br> Todo código ou exemplo de dados mostrado é criado especificamente para estudo, e jamais será cópia ou oriundo de dados reais de produção.
+        </p>
+    </div>
+</div>
+      
+<div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Disclaimer</h2>
+    <div>
+        <p>
+            The information here published is NOT necessarly the opinion of anyone but the author. <br>
+            Author's clients or employers are not part of this site, nor do they participate in the authoring or co-authoring of the content in any ways.<br>
+            All code or data samples here shown are created for study purposes and are not from nor copies from real production data.
+        </p>
+    </div>
+</div>
+      
+
+  </div>
+  <!-- end footer -->
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54535787-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <!-- disqus -->
+
+<script>
+  var disqus_shortname = 'rcdevlabs';
+  
+  var disqus_url = 'http://rcdevlabs.github.io/2015/02/16/efeito-antes-depois-responsivo-e-mobile-ready-sem-jquery-workflow-com-gulp-e-stylus/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+  $('.imgLiquid').imgLiquid({fill:true, fadeInTime:500});
+});
+</script>
+
+
+<!-- fancybox -->
+<link rel="stylesheet" href="/package/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/package/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript">
+(function($){
+  $(".fancybox").fancybox();
+  $(".various").fancybox({
+    maxWidth  : 800,
+    maxHeight : 600,
+    fitToView : false,
+    width   : '70%',
+    height    : '70%',
+    autoSize  : true,
+    closeClick  : false,
+    openEffect  : 'none',
+    closeEffect : 'none'
+  });
+})(jQuery);
+(function( $ ) {
+    $(function() {
+        $( '[data-js="google-search-form"]' ).on( 'submit', function( e ) {
+            e.preventDefault();
+            var inputVal = $( '[data-js="google-search-input"]' ).val();
+            window.location.href = $( this ).attr( 'data-action' ) + ' ' + inputVal;
+        });
+    });
+})( jQuery );
+$(function() {
+
+    var $sidebar   = $(".widget.maillist"), 
+        $window    = $(window),
+        offset     = $sidebar.offset(),
+        topPadding = 55;
+
+    $window.scroll(function() {
+        if ($window.scrollTop() > offset.top) {
+            $sidebar.stop().animate({
+                marginTop: $window.scrollTop() - offset.top + topPadding
+            }, 100);
+        } else {
+            $sidebar.stop().animate({
+                marginTop: 0
+            });
+        }
+    });
+    
+});
+</script>
+
+</body>
+</html>

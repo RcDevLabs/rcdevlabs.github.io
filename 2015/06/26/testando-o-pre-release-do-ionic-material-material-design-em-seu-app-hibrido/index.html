@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta name="generator" content="RcDev Labs">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Testando o pré-release do Ionic Material: Material Design em seu App Híbrido | RcDev Labs</title>
+
+  <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="/css/awe.css">
+  <link rel="stylesheet" type="text/css" href="/css/social-likes.css">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="/js/imgLiquid-min.js"></script>
+  <script src="/js/social-likes.min.js"></script>
+</head>
+
+<body>
+  <div class="main-container">
+    
+
+<div class="box profile">
+  <div class="heading" style="background: #3e5354 url(/rcdevlabs.jpg) no-repeat;">
+    <div class="profile-img">
+      <a href="http://rcdevlabs.github.io/"><img src="https://avatars3.githubusercontent.com/u/2955932?v=3&s=460" width="154" height="150" alt="image description"></a>
+    </div>
+    <strong class="user"><a href="/">RcDev Labs</a></strong>
+    <span class="locate">Curitiba, Brasil</span>
+  </div>
+  <div class="setting">
+    <a href="http://rcdevlabs.github.io/" class="btn-profile">GitHub</a>
+   <!-- <a href="/" class="btn-photos">Photos</a> -->
+   <div class="search">
+  <form class="theSearch" action=""
+    method="get"
+    data-action="https://google.com.br/search?q=site:rcdevlabs.github.io"
+    accept-charset="utf-8"
+    data-js="google-search-form">
+    <input type="search" name="q" results="0" placeholder="Pesquise no blog" data-js="google-search-input">
+  </form>
+</div>
+    <a href="http://twitter.com/romulo_ctba" class="btn-follow">Twitter</a>
+    <a href="http://rcdevlabs.github.io/atom.xml" class="btn-follow">RSS</a>
+  </div>
+</div>
+
+    
+<div class="two-columns post-page">
+  <div class="content">
+
+    <div class="post box nocover">
+      <em class="date"><span>26</span>Jun</em>
+      <h2 class="post-title"><a href="/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/">Testando o pré-release do Ionic Material: Material Design em seu App Híbrido</a></h2>
+      <div class="post-content"><img src="/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido.jpg" title="testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido">
+<p>O Ionic Framework é uma das soluções preferidas dos caras legais para projetos de Apps Híbridos ou multi-dispositivos.<br>Outro que tá suuuper na moda também é o tal do Material Design. Hoje, teremos um <em>mix</em> dos dois, com Ionic Material!</p>
+<p>Vamos juntos passear por um <strong>demo</strong> muito bacana do Ionic Material e entender como utilizar esse cara que parece tão promissor!</p>
+<p>Neste artigo, passearemos juntos pelo código do projeto Demo, prestando atenção especial à alguns itens básicos que nos farão entender o funcionamento e proposta do Ionic Material.</p>
+<p>&nbsp;</p>
+<h3 id="Material-Design-O-que-e-de-onde-veio-para-que-serve"><a href="#Material-Design-O-que-e-de-onde-veio-para-que-serve" class="headerlink" title="Material Design: O que é, de onde veio, para que serve?"></a>Material Design: O que é, de onde veio, para que serve?</h3><hr>
+<p>Aqueeeeele design concept muito louco do Google que tem a a <em>pequena</em> pretensão de guiar a próxima geração de User Interfaces de Apps Móveis parece estar agradando, e ganhando adeptos em vários segmentos.</p>
+<p>Foi anunciada em Junho de 2014, na Google I/O e poderia ser utilizada em dispositivos com Android lançados após 2009, com uso da v7 app compat library, existente nos aparelhos lançados desde aquele ano.</p>
+<p>Criada pelo <em>Design team</em> do Google, teve <a href="https://en.wikipedia.org/wiki/Mat%C3%ADas_Duarte" target="_blank" rel="noopener">Matias Duarte</a> como Lead Designer e mentor do projeto.</p>
+<p>&nbsp;</p>
+<h3 id="Ionic-Framework-O-que-faz-como-faz-e-para-que-faz"><a href="#Ionic-Framework-O-que-faz-como-faz-e-para-que-faz" class="headerlink" title="Ionic Framework: O que faz, como faz e para que faz?"></a>Ionic Framework: O que faz, como faz e para que faz?</h3><hr>
+<p>Lançado em 2013, é um dos Frameworks mais populares para desenvolvimento de Aplicativos Móveis híbridos. Com a missão de integrar-se ao máximo com a plataforma nativa, busca sempre o <strong>native-feel</strong>.</p>
+<p>Utiliza AngularJs como framework principal para tratamento dos dados, o que permite utilizar-se de aceleração por Hardware, ao invés de manipulação do DOM direta.</p>
+<p>Além disso, o CSS é pensado e cuidado para melhor desempenho móvel. Ao final, utiliza-se do Phonegap/Cordova para empacotar a aplicação, seja para iOS, Android ou WindowsPhone.</p>
+<p>Além das bibliotecas css e javascript do Ionic para o desenvolvimento, contamos também o uma <strong>cli interface</strong> de linha de comando muito bacana e útil.</p>
+<p>Ele nos oferece ferramentas para publicação, teste, criação de icones e splash screens, push notifications e muito mais, atravéz da sua linha de comando.</p>
+<p>Pra instalar o Ionic Framework é necessário ter o <a href="http://nodejs.org" target="_blank" rel="noopener">NodeJs</a> e executar os comando <code>npm install -g cordova</code>, depois  <code>npm install -g ionic</code>.</p>
+<p>&nbsp;</p>
+<h3 id="Maos-a-obra-Usando-o-Ionic-Material"><a href="#Maos-a-obra-Usando-o-Ionic-Material" class="headerlink" title="Mãos à obra: Usando o Ionic Material"></a>Mãos à obra: Usando o Ionic Material</h3><hr>
+<p>O Ionic Material está disponível no <a href="http://ionicmaterial.com" target="_blank" rel="noopener">site oficial</a>, atualmente em versão pré-release.</p>
+<p>Depois você pode curtir o site e exemplos nele disponíveis, mas, agora, <strong>clique em <a href="https://github.com/zachsoft/Ionic-Material/archive/master.zip" target="_blank" rel="noopener">Download</a></strong> para baixar o source</p>
+<p>Dentro do arquivo <em>.zip</em>, vamos abrir a pasta <code>ionic-material-master/demo</code>.<br>Extraia o conteúdo dela para uma pasta onde iremos trabalhar.</p>
+<p>Acesse a pasta para onde extraiu o conteúdo da <code>ionic-material-master/demo</code>. </p>
+<p>Com o terminal, nela, vamos instalar as dependencias com o npm<br><figure class="highlight plain"><figcaption><span>~dev/exemplo-ionic-material</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install</span><br></pre></td></tr></table></figure></p>
+<p>Agora, rodamos o servidor do ionic com o <code>ionic serve</code></p>
+<figure class="highlight plain"><figcaption><span>~dev/exemplo-ionic-material</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ionic serve</span><br></pre></td></tr></table></figure>
+<p>Após alguns segundos, o Ionic deve abrir o servidor de desenvolvimento na url <a href="http://localhost:8100/" target="_blank" rel="noopener">http://localhost:8100/</a>. </p>
+<p><strong>Caso abra a página em branco, com erro no Console</strong>, é por que a versão do <em>demo</em> do Ionic Material estava com problema (até hoje 26-06-2015).<br>Pra resolver é bem fácil: Extraia o conteúdo da pasta <code>/dist</code> do arquivo Ionic-Material-master.zip para <code>exemplo-ionic-material/lib/ionic-material</code> no seu projeto.</p>
+<p>Isso deve, automagicamente, recarregar a página - desta vez com tudo em ordem:</p>
+<p><img src="demo-ionic-material.jpg" alt="demo-ionic-material"></p>
+<p>&nbsp;</p>
+<h3 id="Analisando-o-Codigo-do-Ionic-Material"><a href="#Analisando-o-Codigo-do-Ionic-Material" class="headerlink" title="Analisando o Código do Ionic Material"></a>Analisando o Código do Ionic Material</h3><hr>
+<p>Bom, o Ionic Material ainda está em fase de pré-lançamento. Imagino que tenham lançado para não <em>perder o timing</em>, já que Material Design tá suuuuper na moda.</p>
+<p>Mas, independente da usabilidade do framework, a questão é que não há documentação no momento.</p>
+<p>Por isso é tão importante o projeto demo, para que tenhamos acesso à um pouco do código.</p>
+<p>Vou listar abaixo algumas diretivas e classes que achei interessantes ao experimentar este demo.</p>
+<p>&nbsp;</p>
+<h4 id="Custom-CSS-e-Mudando-a-fonte-padrao-do-Ionic-Material"><a href="#Custom-CSS-e-Mudando-a-fonte-padrao-do-Ionic-Material" class="headerlink" title="Custom CSS e Mudando a fonte padrão do Ionic Material"></a>Custom CSS e Mudando a fonte padrão do Ionic Material</h4><hr>
+<p>Bom, para todos os efeitos, temos um projeto Ionic normal, que conta com as funcionalidades adicionais do Ionic Material.</p>
+<p>Vamos conferir isso, alterando a fonte padrão do App.</p>
+<p>Edite o arquivo <code>exemplo-ionic-material/www/css/style.css</code>, adicionando o seguinte:</p>
+<figure class="highlight css"><figcaption><span>~dev/exemplo-ionic-material/www/css/style.css</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">import</span> url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:<span class="number">300</span>,<span class="number">700</span>);</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">body</span>, <span class="selector-tag">h1</span>, <span class="selector-tag">h2</span>, <span class="selector-tag">h3</span>, <span class="selector-tag">h4</span>, <span class="selector-tag">h5</span>, <span class="selector-tag">button</span>, <span class="selector-tag">label</span>, <span class="selector-tag">input</span>, <span class="selector-tag">span</span>&#123;</span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">'Open Sans Condensed'</span>, sans-serif;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Salve. O LiveReload do Ionic já deve carregar a fonte nova no app.<br>Note que o CSS do Ionic é bastante específico em algumas partes, e que as alterações na fonte das Tabs, por exemplo, precisariam da classe <code>.tab-item</code>.</p>
+<p>Vamos alterar a fonte da tab e dos itens do menu:</p>
+<figure class="highlight css"><figcaption><span>~dev/exemplo-ionic-material/www/css/style.css</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"><span class="selector-class">.title</span>, <span class="selector-class">.tab-item</span>, <span class="selector-class">.item-content</span>&#123;</span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">'Open Sans Condensed'</span>, sans-serif;</span><br><span class="line">    <span class="attribute">font-weight</span>: bolder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Até aí, nada novo. Fariamos isso (ou quase :P) com um app Ionic Framework normalmente.</p>
+<p>Vamos para um elemento mais ‘específico’ do material design: o Hero Header, com sua animação elegante e fade-in rotativo da imagem de perfil:</p>
+<p>&nbsp;</p>
+<h2 id="Hero-e-animacao-de-transicao-do-Ionic-Material"><a href="#Hero-e-animacao-de-transicao-do-Ionic-Material" class="headerlink" title="Hero e animação de transição do Ionic Material"></a>Hero e animação de transição do Ionic Material</h2><hr>
+<p>O fundo que surge progressivamente e sua transição característica do Material Design - normalmente após interagir com um Card - está no projeto demo:</p>
+<p><img src="demo-ionic-material-hero-bg.jpg" alt="demo-ionic-material-hero-bg"></p>
+<p>Editando o arquivo <code>exemplo-ionic-material/www/templates/profile.html</code>, notamos o trecho abaixo:</p>
+<figure class="highlight html"><figcaption><span>~dev/exemplo-ionic-material/www/templates/profile.html</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"hero slide-up"</span> <span class="attr">style</span>=<span class="string">"background-image: url('img/profile-bg.jpg');"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"content"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"avatar"</span> <span class="attr">style</span>=<span class="string">"background-image: url('img/daenerys.jpg');"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"light"</span>&gt;</span>Daenerys Targaryen<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h4</span>&gt;</span>dragon_mommy<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>De cara, já não gostei de definir o <code>background-image</code> inline. Mas tudo bem, neste vasto mundo de App Móveis, usar estilos inline as vezes não é um pecado mortal.</p>
+<p>Aposto que logo teremos a opção de adicionar a imagem via diretiva.</p>
+<p>Achei bacana que se vc inserir o <em>snippet</em> acima em outra parte do seu app, o efeito é o mesmo.<br>Inclusive, funciona para mais de um elemento por página, sem necessariamente que o elemento seja o cabeçalho da tela atual.</p>
+<p>&nbsp;</p>
+<h2 id="Botao-caracteristico-da-View-do-Ionic-Material"><a href="#Botao-caracteristico-da-View-do-Ionic-Material" class="headerlink" title="Botão característico da View do Ionic Material"></a>Botão característico da View do Ionic Material</h2><hr>
+<p>O botão abaixo é um dos pontos mais marcantes dos specs do Material Design.<br>Além da transição característica ao aparecer na página, ele também <em>responde e reage à posição do toque</em> com seu background!</p>
+<p><img src="ionic-material-editar-bota-fabcontent-redondo.jpg" alt="ionic-material-editar-bota-fabcontent-redondo"></p>
+<p>No Ionic Material utiliza-se uma abordagem bastante interessante, IMHO, pra lidar com esse botãozinho tão especial:</p>
+<p><strong>Os botões fabContent são definidos com os States da aplicação</strong>, e podem ser adicionados como uma view do estado, levando os parâmetros: <code>template</code>, uma string, e <code>controller</code>, uma função.</p>
+<p>Saca só que maneirinho:</p>
+<p>No exemplo abaixo, do estado <code>app.friends</code>, carregamos a view <code>fabContent</code>, cujo <code>template</code> é o HTML do botão, (e suas classes) e <code>controller</code> uma function de <code>$timeout</code>, responsável por adicionar a classe <code>.on</code> após 900ms em nosso botão, finalizando o efeito transitório:</p>
+<figure class="highlight javascript"><figcaption><span>~dev/exemplo-ionic-material/www/js/app.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">.state(<span class="string">'app.friends'</span>, &#123;</span><br><span class="line">  url: <span class="string">'/friends'</span>,</span><br><span class="line">  views:</span><br><span class="line">  &#123;...&#125;,</span><br><span class="line">  <span class="string">'fabContent'</span>: &#123;</span><br><span class="line">    template: <span class="string">'&lt;button id="fab-friends" class="button button-fab button-fab-top-left expanded button-energized-900 spin"&gt;&lt;strong&gt;RCDevLabs&lt;/strong&gt;&lt;/button&gt;'</span>,</span><br><span class="line">    controller: <span class="function"><span class="keyword">function</span> (<span class="params">$timeout</span>) </span>&#123;</span><br><span class="line">      $timeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">document</span>.getElementById(<span class="string">'fab-friends'</span>).classList.toggle(<span class="string">'on'</span>);</span><br><span class="line">      &#125;, <span class="number">900</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>Para editar o botão redondinho do Material Design no Ionic Material, basta editar o view fabContent, alterado o <code>template</code> na declaração do State() da tela desejada.</strong></p>
+</blockquote>
+<p>As classes para o botão fabContent são: <code>.button-fab-top-right</code>, <code>.button-fab-top-left</code>, <code>button-fab-bottom-right</code> e <code>.button-fab-bottom left</code>. Elas controlam a posição, sendo superior direito, esquerdo e inferior direito e esquerdo respectivamente.</p>
+<p><img src="editando-titulo-da-view-e-texto-do-botao-material-ionic.jpg" alt="editando-titulo-da-view-e-texto-do-botao-material-ionic">[Demonstrando como controlar o conteúdo do botão Material no app.js, e editar o texto do Title da View no friends.html]</p>
+<p>&nbsp;</p>
+<h3 id="Input-e-Labels-do-Material-Design-com-Ionic-Material"><a href="#Input-e-Labels-do-Material-Design-com-Ionic-Material" class="headerlink" title="Input e Labels do Material Design com Ionic Material"></a>Input e Labels do Material Design com Ionic Material</h3><hr>
+<p>Logo na tela de Login temos um exemplo de form com Material Design style :)</p>
+<p>Para utilizar o elemento, chamado <code>input-md</code>, é bem simples. Basta inserir na view:</p>
+<figure class="highlight html"><figcaption><span>~dev/exemplo-ionic-material/www/templates/login.html</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"list"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ion-md-input</span> <span class="attr">placeholder</span>=<span class="string">"Username"</span> <span class="attr">highlight-color</span>=<span class="string">"balanced"</span> <span class="attr">type</span>=<span class="string">"text"</span>&gt;</span><span class="tag">&lt;/<span class="name">ion-md-input</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ion-md-input</span> <span class="attr">placeholder</span>=<span class="string">"Password"</span> <span class="attr">highlight-color</span>=<span class="string">"energized"</span> <span class="attr">type</span>=<span class="string">"password"</span>&gt;</span><span class="tag">&lt;/<span class="name">ion-md-input</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Meio triste, porém, que para utilizar esses inputs, é necessário injetar <code>ionMdInput</code> (além do <code>ionic-material</code>, claro) nas dependencias do app:</p>
+<figure class="highlight javascript"><figcaption><span>~dev/exemplo-ionic-material/www/js/app.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">angular.module(<span class="string">'starter'</span>, [<span class="string">'ionic'</span>, <span class="string">'starter.controllers'</span>, <span class="string">'ionic-material'</span>, <span class="string">'ionMdInput'</span>])</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>e inserir o script e o css: <code>ion-md-input.min.js</code> e <code>ion-md-input.min.css</code><br>&nbsp;</p>
+<h3 id="Itens-e-outras-classes-CSS-do-Ionic"><a href="#Itens-e-outras-classes-CSS-do-Ionic" class="headerlink" title="Itens e outras classes CSS do Ionic"></a>Itens e outras classes CSS do Ionic</h3><hr>
+<p>Uma das vantagens do Ionic Material é que ele <strong>extende as classes originais do Ionic Framework</strong>. Isso quer dizer que, exceto alguns elementos específicos, a maioria dos elementos oferecidos originalmente já estão preparados para o Material Design.</p>
+<p>Veja no exemplo abaixo o elemento Item, inserido usando a classe <code>.item</code><br><img src="item-css-ionic-material-ionic-framework.jpg" alt="item-css-ionic-material-ionic-framework"></p>
+<figure class="highlight html"><figcaption><span>~dev/exemplo-ionic-material/www/templates/friends.html</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"list animate-fade-slide-in-right"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#/app/profile"</span> <span class="attr">class</span>=<span class="string">"item item-avatar item-icon-right"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"img/jon-snow.jpg"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Jon Snow<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Da illest illegitimate<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">"icon ion-chatbubble muted"</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Bom, os principais benefícios do framework, segundo seus criadores são:</p>
+<ul>
+<li>Interact for ink effects (Interação para efeitos de tinta)</li>
+<li>Extends Ionic classes (Extende as classes do Ionic)</li>
+<li>Integrates with directives (Integra com as diretivas)</li>
+<li>Fully themeable (Preparado para customizar o tema)</li>
+</ul>
+<p>Isso significa que a curva de aprendizado deve ser quase nula, bastando sacar algumas diretivas e classes adicionais, porém esperando que os elementos já utilizados normalmente em projetos Ionic sejam adaptados automaticamente para o Material Design.</p>
+<p>&nbsp;</p>
+<h2 id="Noffa-Romulo-que-legal-entao-posso-sair-usando-em-meus-projetos"><a href="#Noffa-Romulo-que-legal-entao-posso-sair-usando-em-meus-projetos" class="headerlink" title="Noffa Romulo, que legal, então posso sair usando em meus projetos?"></a>Noffa Romulo, que legal, então posso sair usando em meus projetos?</h2><hr>
+<p>Fico feliz que vc tenha perguntado :)</p>
+<p>Eu gostei bastante da proposta e resultado do Ionic Material.<br>Isso, porém, não é o suficiente para que eu o indique - por enquanto.</p>
+<p>Acho que o projeto ainda está um tanto crú, e foi lançado um pouco antecipadamente por jogada de posicionamento no mercado:<br>Se esperassem mais, ia acabar surgindo outro.</p>
+<p>O futuro, porém, parece bastante promissor. Imagino que nas próximas semanas deva sair uma versão mais estável e que permita trabalhar com mais confiança no Ionic Material.</p>
+<p>Por enquanto, #ficaADica para quem quiser ou precisar usar Material Design em seus projetos de apps Híbridos: Independente da versão, o Ionic Material é bastante fácil de implementar e utilizar.</p>
+<p>Herda as classes existentes, e disponibiliza o diferencial para que possamos utilizar os specs - segundo eles, cuidadosamente seguidos - do Google para a tendência do Material Design.</p>
+</div>
+
+      <div class="bottom-panel">
+        <ul class="social-likes" data-url="/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/">
+          <li class="facebook" title="like"></li>
+          <li class="twitter" title="twitte"></li>
+          <li class="plusone" title="google"></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="widget post-comment">
+      <h2 class="title">Comments</h2>
+      <section id="comments">
+        <div id="disqus_thread">
+          <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+      </session>
+    </div>
+    
+  </div>
+
+  <div class="widgetarea">
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Artigos Recentes</h3>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2019/05/01/realidade-aumentada-facil-e-rapida-com-ar-js-gincana-de-pascoa-com-ar/">Realidade Aumentada facil e rapida com AR.js - Gincana de Pascoa com AR</a></h3>
+        <span class="link-date">01 May 2019</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2018/12/03/ambiente-docker-para-desenvolvimento-nodejs-rapidinha/">Ambiente Docker para desenvolvimento NodeJS - Rapidinha</a></h3>
+        <span class="link-date">03 Dec 2018</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/11/07/removendo-linhas-extras-irritantes-em-arquivos-transferidos-via-ftp/">Removendo linhas extras irritantes em arquivos transferidos via FTP</a></h3>
+        <span class="link-date">07 Nov 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/">Testando o pré-release do Ionic Material: Material Design em seu App Híbrido</a></h3>
+        <span class="link-date">26 Jun 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/25/porque-meu-app-nao-carrega-dados-externos-lidando-com-cors-e-origins-externas/">Porque meu APP não carrega dados externos? (Lidando com CORS e Origins Externas)</a></h3>
+        <span class="link-date">25 Jun 2015</span>
+      </div>
+    </li>
+  
+</ul>
+
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Blogs & Links</h3>
+
+	<li><a href=https://www.hastedesign.com.br/blog/>Haste Design Blog</a></li>
+	
+	<li><a href=https://forma.hastedesign.com.br/blog/>Forma Haste Blog</a></li>
+	
+	<li><a href=http://blog.da2k.com.br/>Da2k Blog | @fdaciuk</a></li>
+	
+	<li><a href=http://nomadev.com.br/>Novadev | @osuissa</a></li>
+	
+	<li><a href=http://www.vitorbritto.com.br/blog/>Vitor Britto | @vitorbritto</a></li>
+	
+	<li><a href=http://udgwebdev.com/>UnderGround WebDev</a></li>
+	
+	<li><a href=https://andrebaltieri.wordpress.com/>@andrebaltieri</a></li>
+	
+	<li><a href=http://jcemer.com/>@jcemer</a></li>
+	
+</ul>
+
+
+    
+      
+
+
+<div class="tags widget">
+  <h3 class="title">Tags</h3>
+  <div style="text-align:center">
+    
+    <a class="button" href="/tags/1postperday/">1postperday</a>
+    
+    <a class="button" href="/tags/javascript/">Javascript</a>
+    
+    <a class="button" href="/tags/gulp/">Gulp</a>
+    
+    <a class="button" href="/tags/serie-google-maps/">Série Google Maps</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJS</a>
+    
+    <a class="button" href="/tags/workflow/">Workflow</a>
+    
+    <a class="button" href="/tags/rest/">REST</a>
+    
+    <a class="button" href="/tags/stylus/">Stylus</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJs</a>
+    
+    <a class="button" href="/tags/api/">API</a>
+    
+    <a class="button" href="/tags/app/">APP</a>
+    
+    <a class="button" href="/tags/rapidinha/">Rapidinha</a>
+    
+    <a class="button" href="/tags/mobile/">Mobile</a>
+    
+    <a class="button" href="/tags/static-generators/">Static Generators</a>
+    
+    <a class="button" href="/tags/docker/">Docker</a>
+    
+  </div>
+  
+  <div class="load-more">
+    <a class="various" href="#fbox-tagcloud">Ver Todas</a>
+  </div>
+  
+</div>
+
+
+<div class="tagcloud" id="fbox-tagcloud" style="margin:10px; display:none; overflow: hidden"><a href="/tags/1postperday/" style="font-size: 24px;">1postperday</a> <a href="/tags/api/" style="font-size: 14px;">API</a> <a href="/tags/app/" style="font-size: 14px;">APP</a> <a href="/tags/angularjs/" style="font-size: 12px;">AngularJs</a> <a href="/tags/app/" style="font-size: 12px;">App</a> <a href="/tags/autenticacao/" style="font-size: 12px;">Autenticação</a> <a href="/tags/cors/" style="font-size: 12px;">CORS</a> <a href="/tags/css/" style="font-size: 12px;">CSS</a> <a href="/tags/css/" style="font-size: 12px;">Css</a> <a href="/tags/docker/" style="font-size: 12px;">Docker</a> <a href="/tags/expressjs/" style="font-size: 12px;">ExpressJs</a> <a href="/tags/gulp/" style="font-size: 20px;">Gulp</a> <a href="/tags/html/" style="font-size: 12px;">Html</a> <a href="/tags/hibridos/" style="font-size: 12px;">Híbridos</a> <a href="/tags/ionic/" style="font-size: 12px;">Ionic</a> <a href="/tags/ionic-framewokr/" style="font-size: 12px;">Ionic Framewokr</a> <a href="/tags/jwt/" style="font-size: 12px;">JWT</a> <a href="/tags/javascript/" style="font-size: 22px;">Javascript</a> <a href="/tags/material-design/" style="font-size: 12px;">Material Design</a> <a href="/tags/mobile/" style="font-size: 14px;">Mobile</a> <a href="/tags/nodejs/" style="font-size: 16px;">NodeJS</a> <a href="/tags/nodejs/" style="font-size: 14px;">NodeJs</a> <a href="/tags/php/" style="font-size: 12px;">PHP</a> <a href="/tags/phonegap/" style="font-size: 12px;">Phonegap</a> <a href="/tags/produtividade/" style="font-size: 12px;">Produtividade</a> <a href="/tags/pre-processadores/" style="font-size: 12px;">Pré-Processadores</a> <a href="/tags/rest/" style="font-size: 16px;">REST</a> <a href="/tags/rapidinha/" style="font-size: 14px;">Rapidinha</a> <a href="/tags/realtime/" style="font-size: 12px;">Realtime</a> <a href="/tags/svg/" style="font-size: 12px;">SVG</a> <a href="/tags/socket-io/" style="font-size: 12px;">Socket.io</a> <a href="/tags/spritesheet/" style="font-size: 12px;">SpriteSheet</a> <a href="/tags/static-generators/" style="font-size: 12px;">Static Generators</a> <a href="/tags/stylus/" style="font-size: 14px;">Stylus</a> <a href="/tags/serie-google-maps/" style="font-size: 18px;">Série Google Maps</a> <a href="/tags/wordcamp/" style="font-size: 12px;">WordCamp</a> <a href="/tags/wordpress/" style="font-size: 12px;">WordPress</a> <a href="/tags/workshop/" style="font-size: 12px;">WorkShop</a> <a href="/tags/workflow/" style="font-size: 16px;">Workflow</a> <a href="/tags/workspace/" style="font-size: 12px;">Workspace</a> <a href="/tags/dicas-sublime-ftp/" style="font-size: 12px;">dicas, sublime, ftp</a> <a href="/tags/erros/" style="font-size: 12px;">erros</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 12px;">python</a> <a href="/tags/rapidinha/" style="font-size: 12px;">rapidinha</a></div>
+
+    
+      <div class="widget maillist">
+  <h3 class="title">Receba novos posts por e-mail</h3>
+<!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
+<div id="mc_embed_signup">
+<form action="//github.us7.list-manage.com/subscribe/post?u=e1c4a7465492a27974a725fdb&amp;id=2d0762fdb8" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+	<label for="mce-EMAIL"></label>
+	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="seu@email.com.br" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_e1c4a7465492a27974a725fdb_2d0762fdb8" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Inscrever" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+<!--End mc_embed_signup-->
+</div>
+    
+
+  </div>
+</div>
+
+
+  </div>
+  <div class="footer">
+  <div class="container">
+    
+    &copy; 2022 romuloctba All Rights Reserved
+    
+  </div>
+  <div class="container">
+      <div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Declaração</h2>
+    <div>
+        <p>
+            A informação publicada neste veiculo NÃO necessariamente reflete a opnião de qualquer pessoa que não seja o autor.
+            <br> Clientes ou empregadores do autor não tem parte na autoria ou co-autoria de artigos.
+            <br> Todo código ou exemplo de dados mostrado é criado especificamente para estudo, e jamais será cópia ou oriundo de dados reais de produção.
+        </p>
+    </div>
+</div>
+      
+<div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Disclaimer</h2>
+    <div>
+        <p>
+            The information here published is NOT necessarly the opinion of anyone but the author. <br>
+            Author's clients or employers are not part of this site, nor do they participate in the authoring or co-authoring of the content in any ways.<br>
+            All code or data samples here shown are created for study purposes and are not from nor copies from real production data.
+        </p>
+    </div>
+</div>
+      
+
+  </div>
+  <!-- end footer -->
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54535787-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <!-- disqus -->
+
+<script>
+  var disqus_shortname = 'rcdevlabs';
+  
+  var disqus_url = 'http://rcdevlabs.github.io/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+  $('.imgLiquid').imgLiquid({fill:true, fadeInTime:500});
+});
+</script>
+
+
+<!-- fancybox -->
+<link rel="stylesheet" href="/package/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/package/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript">
+(function($){
+  $(".fancybox").fancybox();
+  $(".various").fancybox({
+    maxWidth  : 800,
+    maxHeight : 600,
+    fitToView : false,
+    width   : '70%',
+    height    : '70%',
+    autoSize  : true,
+    closeClick  : false,
+    openEffect  : 'none',
+    closeEffect : 'none'
+  });
+})(jQuery);
+(function( $ ) {
+    $(function() {
+        $( '[data-js="google-search-form"]' ).on( 'submit', function( e ) {
+            e.preventDefault();
+            var inputVal = $( '[data-js="google-search-input"]' ).val();
+            window.location.href = $( this ).attr( 'data-action' ) + ' ' + inputVal;
+        });
+    });
+})( jQuery );
+$(function() {
+
+    var $sidebar   = $(".widget.maillist"), 
+        $window    = $(window),
+        offset     = $sidebar.offset(),
+        topPadding = 55;
+
+    $window.scroll(function() {
+        if ($window.scrollTop() > offset.top) {
+            $sidebar.stop().animate({
+                marginTop: $window.scrollTop() - offset.top + topPadding
+            }, 100);
+        } else {
+            $sidebar.stop().animate({
+                marginTop: 0
+            });
+        }
+    });
+    
+});
+</script>
+
+</body>
+</html>

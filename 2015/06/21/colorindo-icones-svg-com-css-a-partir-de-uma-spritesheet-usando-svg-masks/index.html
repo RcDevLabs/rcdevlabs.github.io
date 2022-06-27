@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta name="generator" content="RcDev Labs">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Colorindo icones svg com css, à partir de uma spritesheet usando svg Masks | RcDev Labs</title>
+
+  <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="/css/awe.css">
+  <link rel="stylesheet" type="text/css" href="/css/social-likes.css">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="/js/imgLiquid-min.js"></script>
+  <script src="/js/social-likes.min.js"></script>
+</head>
+
+<body>
+  <div class="main-container">
+    
+
+<div class="box profile">
+  <div class="heading" style="background: #3e5354 url(/rcdevlabs.jpg) no-repeat;">
+    <div class="profile-img">
+      <a href="http://rcdevlabs.github.io/"><img src="https://avatars3.githubusercontent.com/u/2955932?v=3&s=460" width="154" height="150" alt="image description"></a>
+    </div>
+    <strong class="user"><a href="/">RcDev Labs</a></strong>
+    <span class="locate">Curitiba, Brasil</span>
+  </div>
+  <div class="setting">
+    <a href="http://rcdevlabs.github.io/" class="btn-profile">GitHub</a>
+   <!-- <a href="/" class="btn-photos">Photos</a> -->
+   <div class="search">
+  <form class="theSearch" action=""
+    method="get"
+    data-action="https://google.com.br/search?q=site:rcdevlabs.github.io"
+    accept-charset="utf-8"
+    data-js="google-search-form">
+    <input type="search" name="q" results="0" placeholder="Pesquise no blog" data-js="google-search-input">
+  </form>
+</div>
+    <a href="http://twitter.com/romulo_ctba" class="btn-follow">Twitter</a>
+    <a href="http://rcdevlabs.github.io/atom.xml" class="btn-follow">RSS</a>
+  </div>
+</div>
+
+    
+<div class="two-columns post-page">
+  <div class="content">
+
+    <div class="post box nocover">
+      <em class="date"><span>21</span>Jun</em>
+      <h2 class="post-title"><a href="/2015/06/21/colorindo-icones-svg-com-css-a-partir-de-uma-spritesheet-usando-svg-masks/">Colorindo icones svg com css, à partir de uma spritesheet usando svg Masks</a></h2>
+      <div class="post-content"><p><img src="./colorindo-icones-svg-com-css-a-partir-de-uma-spritesheet-usando-svg-masks.jpg" alt="colorindo-icones-svg-com-css-a-partir-de-uma-spritesheet-usando-svg-masks"></p>
+<p>Este post é uma montanha russa: Para usarmos ícones SVG coloridos, vamos criar uma aplicativo Desktop com base num projeto OpenSource HTML para slicear uma spritesheet SVG! Vem ver:</p>
+<h2 id="Analisando-a-demanda"><a href="#Analisando-a-demanda" class="headerlink" title="Analisando a demanda:"></a>Analisando a demanda:</h2><hr>
+<p>Tive um problema em um projeto recente, onde o Designer enviou o layout em .PSD, mas os ícones eram todos smart objects rasterizados!<br>Isso quer dizer que eu poderia ter salvado eles como .png ou .jpg e inserido como <code>background-image</code> ou mesmo <code>&lt;img src=&quot;&quot;&gt;</code>.</p>
+<p>O problema é que isso simplesmente não parece certo.</p>
+<p>Aí, acabei usando os icones to <a href="http://flaticon.com" target="_blank" rel="noopener">FlatIcon</a>, mas - conforme eu esperava - o Designer reclamou. :P</p>
+<p>Bom, só ai que eu percebi que havia um .svg nos arquivos que ele me enviou. À questão é que o arquivo svg era um sprite de quase uma centena de icones.</p>
+<p>Bom, na verdade não era um SVG, era um .Ai que eu converti para SVG… vai sacando :P</p>
+<h3 id="Qual-melhor-forma-de-trabalhar-com-SVG-Sprites"><a href="#Qual-melhor-forma-de-trabalhar-com-SVG-Sprites" class="headerlink" title="Qual melhor forma de trabalhar com SVG Sprites?"></a>Qual melhor forma de trabalhar com SVG Sprites?</h3><p>Bom, acho que não serei eu a dar a resposta absoluta, a MELHOR forma…<br>Mas funcionou legal o aproach de <strong>svg Masks</strong> e filters para colorir os ícones, inseridos com css background e background-position.</p>
+<p>Para pegar a localização exata dos icones dentro da SpriteSheet, usei o Sprite-Cow.<br>Ele é uma solução online, mas de código aberto.</p>
+<p><strong>Veja, abaixo, como é o Serviço online do SpriteCow:</strong><br><img src="./spritecow-original.JPG" alt="Sprite-Cow.com"></p>
+<h3 id="Criando-um-APP-Desktop-para-slicear-os-icones"><a href="#Criando-um-APP-Desktop-para-slicear-os-icones" class="headerlink" title="Criando um APP Desktop para slicear os icones"></a>Criando um APP Desktop para slicear os icones</h3><p>Para tornar mais prático o fluxo de trabalho, aproveitei que o sprite-cow tem (código aberto no Github)[<a href="https://github.com/jakearchibald/sprite-cow]" target="_blank" rel="noopener">https://github.com/jakearchibald/sprite-cow]</a>, e decidi empacotar o app em uma Aplicação Desktop!</p>
+<p>Oque fiz foi baixar o source deles, fazer algumas pequenas alterações e <em>empacotei</em> com nw.js</p>
+<blockquote>
+<p>Para empacotar o spritecow em um executável, fazemos o processo do nw.js na pasta <code>/www</code></p>
+</blockquote>
+<p><a href="https://github.com/romuloctba/FatiadorRcDev" target="_blank" rel="noopener">Acesse o repositório já modificado que usei para empacotar AQUI</a></p>
+<p>Após empacotamento com NW.js, temos um executável que nos permite abrir a nossa versão modificada do SpriteCow diretamente na área de trabalho.</p>
+<p><img src="./aplicativo-desktop-empacotado-com-nw-js-html5.JPG" alt="aplicativo-desktop-empacotado-com-nw-js-html5"></p>
+<h3 id="Criando-um-instalador-profissional-com-Winrar"><a href="#Criando-um-instalador-profissional-com-Winrar" class="headerlink" title="Criando um instalador profissional com Winrar"></a>Criando um instalador profissional com Winrar</h3><p>Não vou entrar em muitos detalhes deste processo, pois é legal que seja surpresa :) Usei o Winrar para criar um instalador customizado que, além de compactar os arquivos necessários pra rodar o executável, faz a extração para program files, bem como cria atalhos com ícones, e o próprio instalador tem um ícone customizável.</p>
+<p>Você pode baixar e conferir o resultado,  <a href="https://drive.google.com/file/d/0B-qICzBejuRyNGhZWXZ1eXJodjA/view?usp=sharing" target="_blank" rel="noopener">Baixando o instalador para Windows Aqui</a></p>
+<p>Confira como ficou o instalador e o fluxo de instalação:</p>
+<p><strong>O instalador desktop, criado com o Winrar:</strong><br><img src="instalador-desktop-criado-com-winrar.jpg" alt="Instalador Desktop Criado com Winrar"></p>
+<p><strong>A primeira tela do instalador, que é a tela da Licença/Termos de Serviço</strong><br><img src="tela-termos-de-servico-do-instalador-desktop-gerado-com-winrar.jpg" alt="tela-termos-de-servico-do-instalador-desktop-gerado-com-winrar"></p>
+<p><strong>Tela de instalação, onde o instalador oferece para extrair na program/files</strong><br><img src="tela-do-instalador-desktop-gerado-com-winrar.jpg" alt="tela-do-instalador-desktop-gerado-com-winrar"></p>
+<p><strong>Atalho automático na área de trabalho, com ícone personalizado:</strong><br><img src="atalho-na-area-de-trabalho-do-instalador-gerado-com-winrar.jpg" alt="atalho-na-area-de-trabalho-do-instalador-gerado-com-winrar"></p>
+<h2 id="Usando-o-Fatiador-para-pegar-os-sprites"><a href="#Usando-o-Fatiador-para-pegar-os-sprites" class="headerlink" title="Usando o Fatiador para pegar os sprites"></a>Usando o Fatiador para pegar os sprites</h2><hr>
+<p>Abrindo o arquivo SVG com o nosso recém criado Aplicativo Desktop, temos uma simples interface que nos ajudará à selecionar o ícone desejado.<br>Ao selecioná-lo, o código CSS é gerado abaixo.</p>
+<p><img src="usando-o-fatiador-para-pegar-o-sprite.jpg" alt="usando-o-fatiador-para-pegar-o-sprite"></p>
+<h2 id="Colorindo-os-Sprites-SVG"><a href="#Colorindo-os-Sprites-SVG" class="headerlink" title="Colorindo os Sprites SVG"></a>Colorindo os Sprites SVG</h2><hr>
+<p>Para Colorir SVG que está sendo inserido via CSS não podemos simplesmente usar o atributo <code>color</code>, nem mesmo o <code>stroke</code> ou <code>path</code>.</p>
+<p>Pelo fato do arquivo estar sendo inserido via <code>url()</code>, em nosso CSS, ao invés de ‘embedado’ direto no HTML, propriedades que <strong>modifiquem o svg em sí</strong> não são aceitas.</p>
+<p>Por isso vamos usar SVG MASKs.</p>
+<h3 id="O-que-e-uma-Mascara-MASK"><a href="#O-que-e-uma-Mascara-MASK" class="headerlink" title="O que é uma Mascara? (MASK)"></a>O que é uma Mascara? (MASK)</h3><p>Uma máscara é um conceito já antigo no design. É uma representação de espaço que será preservado ou excluído. Uma máscara nada mais é do que uma seleção.</p>
+<p>Então se temos uma máscara no formato do ícone SVG, temos uma seleção naquele formato.</p>
+<p>O que precisamos fazer, é pintar essa seleção. Pintar <strong>o background</strong> dessa seleção. </p>
+<p>Saca só:</p>
+<p>O código de um sprite selecionado é mais ou menos assim:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.sprite</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: <span class="built_in">url</span>(<span class="string">'../lib/images/icones.svg'</span>) no-repeat -<span class="number">156px</span> -<span class="number">93px</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">23px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">22px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Vamos alterar o código acima. Primeiro, um nome específico para o ícone. Depois, o <code>background</code> vira <code>mask</code> e <code>-webkit-mask</code>.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.iconeDash</span> &#123;</span><br><span class="line">  <span class="attribute">mask</span>: <span class="built_in">url</span>(<span class="string">'../lib/images/icones.svg'</span>) no-repeat -<span class="number">156px</span> -<span class="number">93px</span>;</span><br><span class="line">  <span class="attribute">-webkit-mask</span>: <span class="built_in">url</span>(<span class="string">'../lib/images/icones.svg'</span>) no-repeat -<span class="number">156px</span> -<span class="number">93px</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">23px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">22px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Agora podemos estilizar ele usando classes de cor. </p>
+<p>Essas classes de cor serão, nada mais, que classes com o <code>background-color</code> setado para a cor desejada.</p>
+<p>Aproveito, também, para definir umas regras que pertencerão à todos os ícones (na classe <code>.icone</code>. A classe <code>.redIcon</code> é um exemplo de como colorir:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.icone</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">text-index</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">margin-bottom</span>: -<span class="number">5px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.redIcon</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Portanto, acima, temos a classe <code>.icone</code> que serve de parâmetro para todos os ícones, e a classe <code>.redIcon</code> que contém a propriedade <code>background-color</code> que dará cor ao elemento.</p>
+<p>Para usarmos nosso ícone, nosso HTML será assim:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"icone iconeDash redIcon"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Dessa forma, o ícone aparecerá vermelho em nossa página.</p>
+<p>Mas é importante lembrar que <strong>não pintamos o ícone</strong>.</p>
+<p>Como usamos MASKS, o formato do ícone, no arquivo SVG, é usado como máscara. Por isso a cor de fundo do elemento que tem a máscara aplicada funciona como parâmetro de colorir ;)</p>
+<p>Então se usarmos, ao invés de <code>.redIcon</code> , uma classe que contenha uma foto como background, o resultado será um ícone com a textura da foto escolhida. ;)</p>
+<p>Essa técnica de máscaras nos permite um leque imenso de opções, mas que ficarão para comentários ou próximos posts.</p>
+<p>Por hoje é isso, obrigado por ter vindo :)</p>
+</div>
+
+      <div class="bottom-panel">
+        <ul class="social-likes" data-url="/2015/06/21/colorindo-icones-svg-com-css-a-partir-de-uma-spritesheet-usando-svg-masks/">
+          <li class="facebook" title="like"></li>
+          <li class="twitter" title="twitte"></li>
+          <li class="plusone" title="google"></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="widget post-comment">
+      <h2 class="title">Comments</h2>
+      <section id="comments">
+        <div id="disqus_thread">
+          <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+      </session>
+    </div>
+    
+  </div>
+
+  <div class="widgetarea">
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Artigos Recentes</h3>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2019/05/01/realidade-aumentada-facil-e-rapida-com-ar-js-gincana-de-pascoa-com-ar/">Realidade Aumentada facil e rapida com AR.js - Gincana de Pascoa com AR</a></h3>
+        <span class="link-date">01 May 2019</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2018/12/03/ambiente-docker-para-desenvolvimento-nodejs-rapidinha/">Ambiente Docker para desenvolvimento NodeJS - Rapidinha</a></h3>
+        <span class="link-date">03 Dec 2018</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/11/07/removendo-linhas-extras-irritantes-em-arquivos-transferidos-via-ftp/">Removendo linhas extras irritantes em arquivos transferidos via FTP</a></h3>
+        <span class="link-date">07 Nov 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/">Testando o pré-release do Ionic Material: Material Design em seu App Híbrido</a></h3>
+        <span class="link-date">26 Jun 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/25/porque-meu-app-nao-carrega-dados-externos-lidando-com-cors-e-origins-externas/">Porque meu APP não carrega dados externos? (Lidando com CORS e Origins Externas)</a></h3>
+        <span class="link-date">25 Jun 2015</span>
+      </div>
+    </li>
+  
+</ul>
+
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Blogs & Links</h3>
+
+	<li><a href=https://www.hastedesign.com.br/blog/>Haste Design Blog</a></li>
+	
+	<li><a href=https://forma.hastedesign.com.br/blog/>Forma Haste Blog</a></li>
+	
+	<li><a href=http://blog.da2k.com.br/>Da2k Blog | @fdaciuk</a></li>
+	
+	<li><a href=http://nomadev.com.br/>Novadev | @osuissa</a></li>
+	
+	<li><a href=http://www.vitorbritto.com.br/blog/>Vitor Britto | @vitorbritto</a></li>
+	
+	<li><a href=http://udgwebdev.com/>UnderGround WebDev</a></li>
+	
+	<li><a href=https://andrebaltieri.wordpress.com/>@andrebaltieri</a></li>
+	
+	<li><a href=http://jcemer.com/>@jcemer</a></li>
+	
+</ul>
+
+
+    
+      
+
+
+<div class="tags widget">
+  <h3 class="title">Tags</h3>
+  <div style="text-align:center">
+    
+    <a class="button" href="/tags/1postperday/">1postperday</a>
+    
+    <a class="button" href="/tags/javascript/">Javascript</a>
+    
+    <a class="button" href="/tags/gulp/">Gulp</a>
+    
+    <a class="button" href="/tags/serie-google-maps/">Série Google Maps</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJS</a>
+    
+    <a class="button" href="/tags/workflow/">Workflow</a>
+    
+    <a class="button" href="/tags/rest/">REST</a>
+    
+    <a class="button" href="/tags/stylus/">Stylus</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJs</a>
+    
+    <a class="button" href="/tags/api/">API</a>
+    
+    <a class="button" href="/tags/app/">APP</a>
+    
+    <a class="button" href="/tags/rapidinha/">Rapidinha</a>
+    
+    <a class="button" href="/tags/mobile/">Mobile</a>
+    
+    <a class="button" href="/tags/static-generators/">Static Generators</a>
+    
+    <a class="button" href="/tags/docker/">Docker</a>
+    
+  </div>
+  
+  <div class="load-more">
+    <a class="various" href="#fbox-tagcloud">Ver Todas</a>
+  </div>
+  
+</div>
+
+
+<div class="tagcloud" id="fbox-tagcloud" style="margin:10px; display:none; overflow: hidden"><a href="/tags/1postperday/" style="font-size: 24px;">1postperday</a> <a href="/tags/api/" style="font-size: 14px;">API</a> <a href="/tags/app/" style="font-size: 14px;">APP</a> <a href="/tags/angularjs/" style="font-size: 12px;">AngularJs</a> <a href="/tags/app/" style="font-size: 12px;">App</a> <a href="/tags/autenticacao/" style="font-size: 12px;">Autenticação</a> <a href="/tags/cors/" style="font-size: 12px;">CORS</a> <a href="/tags/css/" style="font-size: 12px;">CSS</a> <a href="/tags/css/" style="font-size: 12px;">Css</a> <a href="/tags/docker/" style="font-size: 12px;">Docker</a> <a href="/tags/expressjs/" style="font-size: 12px;">ExpressJs</a> <a href="/tags/gulp/" style="font-size: 20px;">Gulp</a> <a href="/tags/html/" style="font-size: 12px;">Html</a> <a href="/tags/hibridos/" style="font-size: 12px;">Híbridos</a> <a href="/tags/ionic/" style="font-size: 12px;">Ionic</a> <a href="/tags/ionic-framewokr/" style="font-size: 12px;">Ionic Framewokr</a> <a href="/tags/jwt/" style="font-size: 12px;">JWT</a> <a href="/tags/javascript/" style="font-size: 22px;">Javascript</a> <a href="/tags/material-design/" style="font-size: 12px;">Material Design</a> <a href="/tags/mobile/" style="font-size: 14px;">Mobile</a> <a href="/tags/nodejs/" style="font-size: 16px;">NodeJS</a> <a href="/tags/nodejs/" style="font-size: 14px;">NodeJs</a> <a href="/tags/php/" style="font-size: 12px;">PHP</a> <a href="/tags/phonegap/" style="font-size: 12px;">Phonegap</a> <a href="/tags/produtividade/" style="font-size: 12px;">Produtividade</a> <a href="/tags/pre-processadores/" style="font-size: 12px;">Pré-Processadores</a> <a href="/tags/rest/" style="font-size: 16px;">REST</a> <a href="/tags/rapidinha/" style="font-size: 14px;">Rapidinha</a> <a href="/tags/realtime/" style="font-size: 12px;">Realtime</a> <a href="/tags/svg/" style="font-size: 12px;">SVG</a> <a href="/tags/socket-io/" style="font-size: 12px;">Socket.io</a> <a href="/tags/spritesheet/" style="font-size: 12px;">SpriteSheet</a> <a href="/tags/static-generators/" style="font-size: 12px;">Static Generators</a> <a href="/tags/stylus/" style="font-size: 14px;">Stylus</a> <a href="/tags/serie-google-maps/" style="font-size: 18px;">Série Google Maps</a> <a href="/tags/wordcamp/" style="font-size: 12px;">WordCamp</a> <a href="/tags/wordpress/" style="font-size: 12px;">WordPress</a> <a href="/tags/workshop/" style="font-size: 12px;">WorkShop</a> <a href="/tags/workflow/" style="font-size: 16px;">Workflow</a> <a href="/tags/workspace/" style="font-size: 12px;">Workspace</a> <a href="/tags/dicas-sublime-ftp/" style="font-size: 12px;">dicas, sublime, ftp</a> <a href="/tags/erros/" style="font-size: 12px;">erros</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 12px;">python</a> <a href="/tags/rapidinha/" style="font-size: 12px;">rapidinha</a></div>
+
+    
+      <div class="widget maillist">
+  <h3 class="title">Receba novos posts por e-mail</h3>
+<!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
+<div id="mc_embed_signup">
+<form action="//github.us7.list-manage.com/subscribe/post?u=e1c4a7465492a27974a725fdb&amp;id=2d0762fdb8" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+	<label for="mce-EMAIL"></label>
+	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="seu@email.com.br" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_e1c4a7465492a27974a725fdb_2d0762fdb8" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Inscrever" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+<!--End mc_embed_signup-->
+</div>
+    
+
+  </div>
+</div>
+
+
+  </div>
+  <div class="footer">
+  <div class="container">
+    
+    &copy; 2022 romuloctba All Rights Reserved
+    
+  </div>
+  <div class="container">
+      <div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Declaração</h2>
+    <div>
+        <p>
+            A informação publicada neste veiculo NÃO necessariamente reflete a opnião de qualquer pessoa que não seja o autor.
+            <br> Clientes ou empregadores do autor não tem parte na autoria ou co-autoria de artigos.
+            <br> Todo código ou exemplo de dados mostrado é criado especificamente para estudo, e jamais será cópia ou oriundo de dados reais de produção.
+        </p>
+    </div>
+</div>
+      
+<div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Disclaimer</h2>
+    <div>
+        <p>
+            The information here published is NOT necessarly the opinion of anyone but the author. <br>
+            Author's clients or employers are not part of this site, nor do they participate in the authoring or co-authoring of the content in any ways.<br>
+            All code or data samples here shown are created for study purposes and are not from nor copies from real production data.
+        </p>
+    </div>
+</div>
+      
+
+  </div>
+  <!-- end footer -->
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54535787-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <!-- disqus -->
+
+<script>
+  var disqus_shortname = 'rcdevlabs';
+  
+  var disqus_url = 'http://rcdevlabs.github.io/2015/06/21/colorindo-icones-svg-com-css-a-partir-de-uma-spritesheet-usando-svg-masks/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+  $('.imgLiquid').imgLiquid({fill:true, fadeInTime:500});
+});
+</script>
+
+
+<!-- fancybox -->
+<link rel="stylesheet" href="/package/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/package/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript">
+(function($){
+  $(".fancybox").fancybox();
+  $(".various").fancybox({
+    maxWidth  : 800,
+    maxHeight : 600,
+    fitToView : false,
+    width   : '70%',
+    height    : '70%',
+    autoSize  : true,
+    closeClick  : false,
+    openEffect  : 'none',
+    closeEffect : 'none'
+  });
+})(jQuery);
+(function( $ ) {
+    $(function() {
+        $( '[data-js="google-search-form"]' ).on( 'submit', function( e ) {
+            e.preventDefault();
+            var inputVal = $( '[data-js="google-search-input"]' ).val();
+            window.location.href = $( this ).attr( 'data-action' ) + ' ' + inputVal;
+        });
+    });
+})( jQuery );
+$(function() {
+
+    var $sidebar   = $(".widget.maillist"), 
+        $window    = $(window),
+        offset     = $sidebar.offset(),
+        topPadding = 55;
+
+    $window.scroll(function() {
+        if ($window.scrollTop() > offset.top) {
+            $sidebar.stop().animate({
+                marginTop: $window.scrollTop() - offset.top + topPadding
+            }, 100);
+        } else {
+            $sidebar.stop().animate({
+                marginTop: 0
+            });
+        }
+    });
+    
+});
+</script>
+
+</body>
+</html>

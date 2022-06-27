@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta name="generator" content="RcDev Labs">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Como criar uma API RESTfull em NodeJS e autenticar usando JSON Web Token JWT? | RcDev Labs</title>
+
+  <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="/css/awe.css">
+  <link rel="stylesheet" type="text/css" href="/css/social-likes.css">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="/js/imgLiquid-min.js"></script>
+  <script src="/js/social-likes.min.js"></script>
+</head>
+
+<body>
+  <div class="main-container">
+    
+
+<div class="box profile">
+  <div class="heading" style="background: #3e5354 url(/rcdevlabs.jpg) no-repeat;">
+    <div class="profile-img">
+      <a href="http://rcdevlabs.github.io/"><img src="https://avatars3.githubusercontent.com/u/2955932?v=3&s=460" width="154" height="150" alt="image description"></a>
+    </div>
+    <strong class="user"><a href="/">RcDev Labs</a></strong>
+    <span class="locate">Curitiba, Brasil</span>
+  </div>
+  <div class="setting">
+    <a href="http://rcdevlabs.github.io/" class="btn-profile">GitHub</a>
+   <!-- <a href="/" class="btn-photos">Photos</a> -->
+   <div class="search">
+  <form class="theSearch" action=""
+    method="get"
+    data-action="https://google.com.br/search?q=site:rcdevlabs.github.io"
+    accept-charset="utf-8"
+    data-js="google-search-form">
+    <input type="search" name="q" results="0" placeholder="Pesquise no blog" data-js="google-search-input">
+  </form>
+</div>
+    <a href="http://twitter.com/romulo_ctba" class="btn-follow">Twitter</a>
+    <a href="http://rcdevlabs.github.io/atom.xml" class="btn-follow">RSS</a>
+  </div>
+</div>
+
+    
+<div class="two-columns post-page">
+  <div class="content">
+
+    <div class="post box nocover">
+      <em class="date"><span>12</span>Feb</em>
+      <h2 class="post-title"><a href="/2015/02/12/como-criar-uma-api-restfull-em-nodejs-e-autenticar-usando-json-web-token-jwt/">Como criar uma API RESTfull em NodeJS e autenticar usando JSON Web Token JWT?</a></h2>
+      <div class="post-content"><p><img src="/api-rest-autenticacao-json-web-token.jpg" alt="api-rest-autenticacao-json-web-token"></p>
+<p>Eu sempre tive uma treta séria com autenticação. Quando precisei autenticar em uma API REST, então, aí ferrou! Mas existe uma luz ao fim do túnel, e ela se chama JSON Web Token, ou JWT.</p>
+<p>Não vou entrar em detalhes da minha briga com métodos de autenticar - no momento, mas acredite quando digo que testei e usei vários. Eis o por que do JWT.</p>
+<h3 id="Analisando-a-Demanda"><a href="#Analisando-a-Demanda" class="headerlink" title="Analisando a Demanda:"></a>Analisando a Demanda:</h3><ul>
+<li><p><strong>Necessidade</strong>: Gerenciar rotas protegidas por login e níveis de usuário de uma <strong>API REST</strong> em NodeJS.</p>
+</li>
+<li><p><strong>Requisitos</strong>: Não depender de sessão (rest é sessionless, lembra?), permitir identificar o usuário (e seu nível), não utilizar Providers de terceiros, integrar com qualquer plataforma frontend.</p>
+</li>
+</ul>
+<hr>
+
+<h3 id="JSON-Web-Token-o-que-e-JWT"><a href="#JSON-Web-Token-o-que-e-JWT" class="headerlink" title="JSON Web Token: o que é JWT?"></a>JSON Web Token: o que é JWT?</h3><p>JWT pronuncia-se ‘JõT’.</p>
+<p>É um jeito simples de encaminhar informações que podem ser confiadas, pois são assinadas e confirmadas. </p>
+<p>Isso é um JWT:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjEzODY4OTkxMzEsImlzcyI6ImppcmE6MTU0ODk1OTUiLCJxc2giOiI4MDYzZmY0Y2ExZTQxZGY3YmM5MGM4YWI2ZDBmNjIwN2Q0OTFjZjZkYWQ3YzY2ZWE3OTdiNDYxNGI3MTkyMmU5IiwiaWF0IjoxMzg2ODk4OTUxfQ.uKqU9dTB6gKwG6jQCuXYAiMNdfNRw98Hw_IWuA5MaMo</span><br></pre></td></tr></table></figure>
+<p>São 3 partes, separadas por um <code>.</code>, encodadas por base64 individualmente:</p>
+<p><code>&lt;base64-encoded header&gt;.&lt;base64-encoded claims&gt;.&lt;base64-encoded assinatura&gt;</code></p>
+<p>Mas <strong>atenção</strong>: JWT não encripta o payload, apenas o assina. O que isso quer dizer é que <strong>você não deve enviar informações confidenciais por JWT</strong>. Apenas informações que devem ser verificadas/confiadas.</p>
+<p>Por exemplo: Não é uma boa idéia passar uma senha por JWT, mas enviar o ID do usuário APÓS o login, vai permitir que ele faça requisições autenticadas :D, saca só:</p>
+<h3 id="Fluxo-de-uso-de-JWT-para-um-client"><a href="#Fluxo-de-uso-de-JWT-para-um-client" class="headerlink" title="Fluxo de uso de JWT para um client"></a>Fluxo de uso de JWT para um <strong>client</strong></h3><ol>
+<li><p>Quero acessar uma rota <em>protegida</em>, tipo <code>/users</code></p>
+</li>
+<li><p>Faço o login, enviando (de forma segura, por https) usuário e senha.</p>
+</li>
+<li><p>Login com sucesso, recebo o ‘TOKEN’. Guardo pra usar depois ;)</p>
+</li>
+<li><p>Faço a requisição que eu queria na <code>/users</code> porém, com o <em>http Header</em> <code>x-access-token : meutokenaqui</code></p>
+</li>
+<li><p>Com o token enviado, o servidor me identifica e autoriza (ou não) meu acesso, retornando a resposta à minha requisição.</p>
+</li>
+</ol>
+<h3 id="Fluxo-de-uso-de-JWT-para-o-SERVER"><a href="#Fluxo-de-uso-de-JWT-para-o-SERVER" class="headerlink" title="Fluxo de uso de JWT para o SERVER"></a>Fluxo de uso de JWT para o <strong>SERVER</strong></h3><ol>
+<li><p>Se tentarem acessar uma rota <strong>protegida</strong> sem token, não autoriza.</p>
+</li>
+<li><p>Se tentar acessar com um token, verifica se é válido. Se for, consegue identificar o usuário pelo TOKEN e libera o acesso.</p>
+</li>
+<li><p>Quando um usuário faz login, geramos um token, para ele poder fazer requisições autenticadas.</p>
+</li>
+</ol>
+<p>Nossa, Rômulo, que legal, cara! Agora me diz, <strong>como eu faço isso?</strong></p>
+<hr>
+
+<h3 id="Como-fazer-a-autenticacao-de-uma-API-REST-com-Json-Web-Token-em-NodeJs"><a href="#Como-fazer-a-autenticacao-de-uma-API-REST-com-Json-Web-Token-em-NodeJs" class="headerlink" title="Como fazer a autenticação de uma API REST com Json Web Token em NodeJs?"></a>Como fazer a autenticação de uma API REST com Json Web Token em NodeJs?</h3><p>Bom, pra explicar legal mesmo a gente vai começar junto, e de mãos dadas, iremos até o fim :P (aperta o cinto, porque vai ser longa a jornada)</p>
+<p>O resultado de nossa empreitada esta <a href="https://github.com/romuloctba/blog-rest-api-nodejs-json-web-token" target="_blank" rel="noopener">neste repositório do github</a></p>
+<p>À partir de agora, serei seu guia pelo lindo mundo das APIs com NodeJS, e faremos:</p>
+<ol>
+<li><p>Um servidorzinho</p>
+</li>
+<li><p>Algumas rotas: POST E GET de usuarios, POST de login</p>
+</li>
+<li><p>Conexão com o MongoDB do Mongolabs</p>
+</li>
+<li><p>Criar usuários</p>
+</li>
+<li><p>Encriptar senhas</p>
+</li>
+<li><p><strong>Implementar JWT</strong> durante o login</p>
+</li>
+<li><p>Passar middleware que tornará a rota passível de autenticação. E vai conferir o JWT</p>
+</li>
+</ol>
+<p>Vamos lá?</p>
+<h2 id="0-Requisitos"><a href="#0-Requisitos" class="headerlink" title="0) Requisitos:"></a>0) Requisitos:</h2><p><a href="http://nodejs.org" target="_blank" rel="noopener">NodeJs</a><br><a href="http://getpostman.com" target="_blank" rel="noopener">POSTMAN</a>, para testar a API e métodos GET e POST<br><a href="https://mongolab.com/" target="_blank" rel="noopener">MongoLabs</a> um db gratuito resolve</p>
+<h2 id="1-Servidor-em-NodeJs"><a href="#1-Servidor-em-NodeJs" class="headerlink" title="1) Servidor em NodeJs."></a>1) Servidor em NodeJs.</h2><p>Já com o Node instalado, vamos criar uma nova pasta.<br>Nela, crie um arquivo chamado <code>package.json</code>, insira:</p>
+<figure class="highlight json"><figcaption><span>[package.json]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"teste-api-jwt"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"server.js"</span>,</span><br><span class="line">  <span class="attr">"dependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"express"</span>: <span class="string">"^4.11.2"</span>,</span><br><span class="line">    <span class="attr">"body-parser"</span>: <span class="string">"^1.11.0"</span>,</span><br><span class="line">    <span class="attr">"mongoose"</span>: <span class="string">"^3.8.23"</span>,</span><br><span class="line">    <span class="attr">"bcrypt-nodejs"</span>: <span class="string">"0.0.3"</span>,</span><br><span class="line">    <span class="attr">"jwt-simple"</span>: <span class="string">"^0.2.0"</span>,</span><br><span class="line">    <span class="attr">"moment"</span>: <span class="string">"^2.9.0"</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Já pode acessar a pasta pelo terminal, e instalar as dependências, com o comando:</p>
+<figure class="highlight bash"><figcaption><span>[com o terminal, na mesma pasta do package.json, execute o comando:]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
+<p>Enquanto você espera instalar, veja o que cada item faz:<br>O <code>express</code> é o framework para App. Vai gerenciar nossas rotas e middlewares.<br>O <code>body-parser</code>, antigamente incluso no express, vai parsear nossas requisições, permitindo que usemos urls complexas e trabalhar com formulários.<br>O <code>mongoose</code> é o ORM que vai interagir com o MongoDb pra gente.<br>O <code>bcrypt-nodejs</code> vai encriptar nossa senha. <em>NUNCA</em> salve a senha sem encriptar.<br>O <code>jwt-simple</code> vai gerar e conferir nossos JSON Web Token (ou você achou que ia fazer todo aquele processo acima na unha? hehe)<br>O <code>moment</code> vai nos ajudar a trabalhar com data de expiração do JWT.</p>
+<h3 id="Agora-criemos-o-server-js"><a href="#Agora-criemos-o-server-js" class="headerlink" title="Agora, criemos o server.js"></a>Agora, criemos o server.js</h3><figure class="highlight javascript"><figcaption><span>[server.js][crie na mesma pasta do package.json]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>)</span><br><span class="line">  , app = express()</span><br><span class="line">  , bodyParser = <span class="built_in">require</span>(<span class="string">'body-parser'</span>)</span><br><span class="line">  , mongoose = <span class="built_in">require</span>(<span class="string">'mongoose'</span>)</span><br><span class="line">  , jwt = <span class="built_in">require</span>(<span class="string">'jwt-simple'</span>);</span><br><span class="line">  <span class="keyword">var</span> db = <span class="string">''</span>;<span class="comment">//coloque a url do db aqui</span></span><br><span class="line">  app.use(bodyParser.urlencoded(&#123; <span class="attr">extended</span>: <span class="literal">true</span> &#125;));</span><br><span class="line">  app.use(bodyParser.json());</span><br><span class="line">  <span class="keyword">var</span> port = process.env.PORT || <span class="number">8080</span>;</span><br><span class="line">  <span class="keyword">var</span> router = express.Router();</span><br><span class="line">  app.use(<span class="string">'/api'</span>, router);</span><br><span class="line">  <span class="comment">/*Aqui criaremos as rotas*/</span></span><br><span class="line">  mongoose.connect(db);</span><br><span class="line">  app.listen(port);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'conectado a porta '</span> + port);</span><br></pre></td></tr></table></figure>
+<p>Note que a <code>var db</code> é a url do nosso banco de dados. Vc pode criar uma conta grátis no <a href="https://mongolab.com/signup/" target="_blank" rel="noopener">MongoLab</a>, acessá-la, clicar em <strong>create database</strong> nomeie <code>teste-jwt</code> deixando com a opção <strong>single node</strong> (gratis).<br>Após criada, clique nela, aí em <strong>create user</strong> e crie um usuário para o nosso DB.<br>A url deve ser algo como <code>mongodb://usuario:senha@ds053668.mongolab.com:53668/teste-jwt</code></p>
+<p>Após colocar a url na <code>var db</code>, salve o arquivo, acesse a pasta com o terminal e rode:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ node server</span><br><span class="line">conectado a porta 8080</span><br></pre></td></tr></table></figure></p>
+<p>Sinal que deu boa ^_^</p>
+<h3 id="2-Criando-algumas-rotas"><a href="#2-Criando-algumas-rotas" class="headerlink" title="2) Criando algumas rotas"></a>2) Criando algumas rotas</h3><p>Logo abaixo de <code>/*Aqui criaremos as rotas*/</code>, insira:</p>
+<figure class="highlight javascript"><figcaption><span>[server.js][insira abaixo do comentário]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"><span class="comment">/*Aqui criaremos as rotas*/</span></span><br><span class="line"><span class="keyword">var</span> rotas = <span class="built_in">require</span>(<span class="string">'./rotas'</span>)</span><br><span class="line">  router.route(<span class="string">'/usuarios'</span>)</span><br><span class="line">    .get(rotas.getUsuarios)</span><br><span class="line">    .post(rotas.postUsuarios);</span><br><span class="line">  router.route(<span class="string">'/login'</span>)</span><br><span class="line">    .post(rotas.login);</span><br><span class="line"></span><br><span class="line">  mongoose.connect(db);</span><br><span class="line">(...)</span><br></pre></td></tr></table></figure>
+<p>Crie um arquivo chamado <code>rotas.js</code> na mesma pasta.</p>
+<figure class="highlight javascript"><figcaption><span>[rotas.js][crie o arquivo na mesma pasta]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  getUsuarios: <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</span><br><span class="line">    res.json(&#123;<span class="attr">message</span>: <span class="string">"rota para GET do /usuarios"</span>&#125;)</span><br><span class="line">  &#125;,</span><br><span class="line">  postUsuarios: <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</span><br><span class="line">    res.json(&#123;<span class="attr">message</span>: <span class="string">"rota para POST do /usuarios"</span>&#125;)</span><br><span class="line">  &#125;,</span><br><span class="line">  login: <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</span><br><span class="line">  res.json(&#123;message; <span class="string">'rota de login'</span>&#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Salvando tudo, você pode executar <code>node server</code> novamente, fazer um get para <a href="http://localhost:8080/api/usuarios" target="_blank" rel="noopener">http://localhost:8080/api/usuarios</a> e depois um post para conferir se funcionou<br>(Pra isso, use algo como o <a href="http://www.getpostman.com/" target="_blank" rel="noopener">postman (clique para baixar)</a>) ou faz no curl se for macho(a).</p>
+<h2 id="3-Criando-o-Model-usuario"><a href="#3-Criando-o-Model-usuario" class="headerlink" title="3) Criando o Model usuário"></a>3) Criando o Model usuário</h2><p>Crie o arquivo <code>ModelUsuario.js</code>, na mesma pasta.</p>
+<figure class="highlight javascript"><figcaption><span>[ModelUsuario.js] [Crie o arquivo]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mongoose = <span class="built_in">require</span>(<span class="string">'mongoose'</span>);</span><br><span class="line"><span class="keyword">var</span> bcrypt = <span class="built_in">require</span>(<span class="string">'bcrypt-nodejs'</span>);</span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="keyword">var</span> UsuarioSchema = <span class="keyword">new</span> mongoose.Schema(&#123;</span><br><span class="line">  username: &#123;</span><br><span class="line">    type: <span class="built_in">String</span>,</span><br><span class="line">    unique: <span class="literal">true</span>,</span><br><span class="line">    required: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  password: &#123;</span><br><span class="line">    type: <span class="built_in">String</span>,</span><br><span class="line">    required: <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//2</span></span><br><span class="line">UsuarioSchema.pre(<span class="string">'save'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">next</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> user = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">if</span> (!user.isModified(<span class="string">'password'</span>)) <span class="keyword">return</span> next();</span><br><span class="line">  bcrypt.genSalt(<span class="number">5</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, salt</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="keyword">return</span> next(err);</span><br><span class="line">    bcrypt.hash(user.password, salt, <span class="literal">null</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, hash</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (err) <span class="keyword">return</span> next(err);</span><br><span class="line">      user.password = hash;</span><br><span class="line">      next();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//3</span></span><br><span class="line">UsuarioSchema.methods.verificaSenha = <span class="function"><span class="keyword">function</span>(<span class="params">password, next</span>) </span>&#123;</span><br><span class="line">  bcrypt.compare(password, <span class="keyword">this</span>.password, <span class="function"><span class="keyword">function</span>(<span class="params">err, isMatch</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="keyword">return</span> next(err);</span><br><span class="line">    next(isMatch);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">module</span>.exports = mongoose.model(<span class="string">'Usuario'</span>, UsuarioSchema);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>…</p>
+</blockquote>
+<blockquote>
+<p>…Vish.</p>
+</blockquote>
+<p>Acima temos <strong>3 coisas acontecendo</strong>. Nesse arquivo, usamos o mongoose e o bcrypt.</p>
+<ol>
+<li><p><strong>var UsuarioSchema</strong><br>Primeiro, <code>var UsuarioSchema</code> definimos a estrutura, com os campo <code>username</code> e <code>password</code>.</p>
+</li>
+<li><p><strong>UsuarioSchema.pre(‘save’….</strong><br>Depois, setamos uma função <code>.pre(&#39;save&#39;)</code> nessa var que criamos: <code>UsuarioSchema.pre(&#39;save&#39;, function(......</code>.<br>Toda vez que formos salvar, essa função <code>.pre()</code> verifica:</p>
+<ul>
+<li><strong>SE</strong>(if) o password <strong>não</strong> foi alterado. Se ele <strong>não</strong> foi alterado, retorna <code>next()</code>, ou seja: continua o <em>fluxo do save()</em>.<br>Se acontecer outra coisa com o password (criado, alterado..) ele gera o <em>salt</em> com <code>bcrypt.genSalt()</code>. Se der boa, ele usa o <code>bcrypt.hash()</code> e encripta nosso password com o <em>salt</em> q ele gerou. Se der erro, retorna <code>next(err)</code>. Se não, chama o <code>next()</code></li>
+</ul>
+</li>
+<li><p><strong>UsuarioSchema.methods.verificaSenha = function(senha, next){}</strong><br>Aí estamos criando um metodo chamado verificaSenha(), que recebe a senha, usa o <code>bcrypt.compare()</code>.  Retorna next(isMatch) se der certo.</p>
+</li>
+</ol>
+<p>E por último module.exports exporta o model com o nome ‘Usuario’.</p>
+<p>Pra facilitar estamos colocando tudo na mesma pasta. O ideal, seria ter uma pasta <code>/model</code>, mas não vamos fazer isso nesse artigo.</p>
+<p>Agora já temos nosso model, precisamos criar a funçaõ que cria um novo usuário… aff tá cansando né?</p>
+<h2 id="O-controller-criaUsuario"><a href="#O-controller-criaUsuario" class="headerlink" title="O controller criaUsuario()"></a>O controller criaUsuario()</h2><p>Esse cara vai criar nossos usuários. Basicamente ele pega os campos <code>username</code> e <code>password</code>, que receberemos na rota, e insere no banco de dados.</p>
+<p>Crie o arquivo <strong>controllerCriaUsuario.js</strong></p>
+<figure class="highlight javascript"><figcaption><span>[controllerCriaUsuario.js][Crie, na mesma pasta]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Model = <span class="built_in">require</span>(<span class="string">'./ModelUsuario'</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</span><br><span class="line">      <span class="keyword">var</span> data = <span class="keyword">new</span> Model(&#123;</span><br><span class="line">        username: req.body.username,</span><br><span class="line">        password: req.body.password</span><br><span class="line">        &#125;);</span><br><span class="line">        data.save(<span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (err)</span><br><span class="line">            res.send(err);</span><br><span class="line">          res.json(&#123; <span class="attr">message</span>: <span class="string">'Novo Usuário'</span>, <span class="attr">data</span>: data &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure>
+<p>Maneiro. Aí estamos apenas gerando um <code>new Model</code> e depois dando um <code>.save()</code> nele. Se der tudo certo, recebemos as informações do novo usuario.</p>
+<p>Vamos <em>rapidinho</em> alí no <code>rotas.js</code> pra usar esse controller na postUsuarios!</p>
+<figure class="highlight javascript"><figcaption><span>[rotas.js][altere apenas a postUsuarios]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(...),</span><br><span class="line">postUsuarios: <span class="built_in">require</span>(<span class="string">'./controllerCriaUsuario'</span>),</span><br><span class="line">(...)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>Agora podemos criar nosso usuário com senha encriptada</strong></p>
+</blockquote>
+<p>rode <code>node server</code>.</p>
+<p>Usando o postman, ou outro, faça um <strong>POST</strong> para <a href="http://localhost:8080/api/usuarios" target="_blank" rel="noopener">http://localhost:8080/api/usuarios</a> envie username e password devidamente preenchidos:<br><img src="/criando-usuario-nodejs-mongodb-express-api-rest.JPG" alt="criando-usuario-nodejs-mongodb-express-api-rest"></p>
+<p>Aeeee conseguimos! Muito legal né? Um servidor express com rotas, criando usuário e salvando no DB com a senha encriptada!</p>
+<blockquote>
+<p><strong>Precisamos agora, fazer o login. E, ao fazer o login, criar o TOKEN</strong></p>
+</blockquote>
+<h2 id="4-O-Controller-de-Login-com-gerador-de-Token"><a href="#4-O-Controller-de-Login-com-gerador-de-Token" class="headerlink" title="4) O Controller de Login com gerador de Token"></a>4) O Controller de Login com gerador de Token</h2><p>Crie o arquivo <strong>controllerLogin.js</strong>:</p>
+<figure class="highlight javascript"><figcaption><span>[controllerLogin.js][Crie o arquivo]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Usuario = <span class="built_in">require</span>(<span class="string">'./ModelUsuario'</span>);</span><br><span class="line">  , jwt = <span class="built_in">require</span>(<span class="string">'jwt-simple'</span>)</span><br><span class="line">  , moment = <span class="built_in">require</span>(<span class="string">'moment'</span>)</span><br><span class="line">  , segredo = <span class="string">'seusegredodetoken'</span></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> username = req.body.username || <span class="string">''</span>;</span><br><span class="line">  <span class="keyword">var</span> password = req.body.password || <span class="string">''</span>;</span><br><span class="line">  <span class="keyword">if</span> (username == <span class="string">''</span> || password == <span class="string">''</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> res.send(<span class="number">401</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//1</span></span><br><span class="line">  Usuario.findOne(&#123;<span class="attr">username</span>: username&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">err, user</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) &#123;</span><br><span class="line">      <span class="keyword">return</span> res.end(<span class="number">401</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//2</span></span><br><span class="line">    user.verificaSenha(password, <span class="function"><span class="keyword">function</span>(<span class="params">isMatch</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (!isMatch) &#123;</span><br><span class="line">        <span class="keyword">return</span> res.send(<span class="number">401</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    <span class="comment">//3</span></span><br><span class="line">    <span class="keyword">var</span> expires = moment().add(<span class="number">7</span>,<span class="string">'days'</span>).valueOf();</span><br><span class="line">    <span class="keyword">var</span> token = jwt.encode(&#123;</span><br><span class="line">      iss: user.id,</span><br><span class="line">      exp: expires</span><br><span class="line">    &#125;, segredo);</span><br><span class="line">    <span class="comment">//4</span></span><br><span class="line">     <span class="keyword">return</span> res.json(&#123;</span><br><span class="line">      token : token,</span><br><span class="line">      expires: expires,</span><br><span class="line">      user: user.toJSON()</span><br><span class="line">      &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Vamos pedir que a nossa rota <code>(/login)</code> rode-o:</p>
+<figure class="highlight javascript"><figcaption><span>[rotas.js][altere apenas a login]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(...),</span><br><span class="line">login: <span class="built_in">require</span>(<span class="string">'./controllerLogin'</span>),</span><br><span class="line">(...)</span><br></pre></td></tr></table></figure>
+<p>Reinicie o servidor com<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ node server</span><br></pre></td></tr></table></figure></p>
+<p>Agora mude a url para <a href="http://localhost:8080/api/login" target="_blank" rel="noopener">http://localhost:8080/api/login</a> e post seu username e password.</p>
+<p>Viu? Que massa? Autenticamos e recebemos o token! Dividi o código acima em 3 partes principais.</p>
+<p>Antes, da //1, setamos as dependencias que usaremos neste arquivo com os require. Depois usamos um <strong>SE</strong> o <code>req.body.username</code> ou o <code>req.body.password</code>forem vazios, <code>res.send(401)</code>. Se tiverem preenchidos, prosseguimos para:</p>
+<ol>
+<li><p><strong>Usuario.findOne()</strong><br>Buscamos por usuários com os dados informados. Se der erro, <code>res.end(401)</code>. Se não der erro, continua, retornando o resultado como <code>user</code>.</p>
+</li>
+<li><p><strong>user.verificaSenha</strong> lembra do método que criamos no <code>ModelUsuario</code>? pois é. Se ele não retornar o parâmetro isMatch, <code>res.end(401)</code> neles!</p>
+</li>
+<li><p><strong>var expires</strong>: usamos o <code>moment</code> pra dizer ‘daqui a 7 dias’ e <strong>var token</strong>, onde criamos o token com <code>jwt.encode()</code>. Note a variável <code>segredo</code> definida no começo do arquivo. Vamos precisar dela mais pra frente :P</p>
+</li>
+</ol>
+<h2 id="5-ULTIMA-PARTE-O-saudoso-Middleware-para-conferir-o-token-e-fazer-a-seguranca-das-rotas"><a href="#5-ULTIMA-PARTE-O-saudoso-Middleware-para-conferir-o-token-e-fazer-a-seguranca-das-rotas" class="headerlink" title="5) ULTIMA PARTE: O saudoso Middleware para conferir o token e fazer a segurança das rotas"></a>5) ULTIMA PARTE: O saudoso Middleware para conferir o token e fazer a segurança das rotas</h2><p>Vamos criar um <strong>middleware de nível route</strong> para interceptar as requisições nas rotas protegidas e conferir o TOKEN. Basicamente, ele vai testar o token, se der certo, chama <code>next()</code>, senão: <code>res.end(401)</code> neles!</p>
+<p>Crie o arquivo <strong>validarJWT.js</strong></p>
+<figure class="highlight javascript"><figcaption><span>[validarJWT.js][Crie o arquivo]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> model = <span class="built_in">require</span>(<span class="string">'./ModelUsuario'</span>)</span><br><span class="line">  , jwt = <span class="built_in">require</span>(<span class="string">'jwt-simple'</span>)</span><br><span class="line">  , segredo = <span class="string">'seusegredodetoken'</span>;</span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> token = (req.body &amp;&amp; req.body.access_token) || (req.query &amp;&amp; req.query.access_token) || req.headers[<span class="string">'x-access-token'</span>];</span><br><span class="line"><span class="comment">//1</span></span><br><span class="line">  <span class="keyword">if</span> (token) &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> decoded = jwt.decode(token, segredo);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'decodando '</span> + decoded);</span><br><span class="line">   <span class="comment">//2</span></span><br><span class="line">    <span class="keyword">if</span> (decoded.exp &lt;= <span class="built_in">Date</span>.now()) &#123;</span><br><span class="line">      res.json(<span class="number">400</span>, &#123;<span class="attr">error</span>: <span class="string">'Acesso Expirado, faça login novamente'</span>&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//3</span></span><br><span class="line">    model.findOne(&#123; <span class="attr">_id</span>: decoded.iss &#125;, <span class="function"><span class="keyword">function</span>(<span class="params">err, user</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(err)</span><br><span class="line">        res.status(<span class="number">500</span>).json(&#123;<span class="attr">message</span>: <span class="string">"erro ao procurar usuario do token."</span>&#125;)</span><br><span class="line">      req.user = user;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'achei usuario '</span> + req.user)</span><br><span class="line">      <span class="keyword">return</span> next();</span><br><span class="line">    &#125;);</span><br><span class="line">  <span class="comment">//4</span></span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    <span class="keyword">return</span> res.status(<span class="number">401</span>).json(&#123;<span class="attr">message</span>: <span class="string">'Erro: Seu token é inválido'</span>&#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  res.json(<span class="number">401</span>, &#123;<span class="attr">message</span>: <span class="string">'Token não encontrado ou informado'</span>&#125;)</span><br><span class="line">&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>No //1 <strong>SE</strong> existir um token, rodamos a funçaõ <code>jwt.decode()</code>.</p>
+<p>No //2 , usamos o resultado do <code>jwt.decode()</code> para verificar se o token expirou.</p>
+<p>no //3 pesquisamos no MongoDB pelo _id que veio no JWT</p>
+<p>no //4 ficamos de olho por erros, caso aconteça, 401 neles.</p>
+<p>Agora iremos <strong>inserir o validarJWT nas rotas à proteger</strong> isso será feito em nosso <strong><code>server.js</code></strong>. Iremos proteger apenas a rota <code>.get()</code> do <code>/usuarios</code>:</p>
+<figure class="highlight javascript"><figcaption><span>[server.js][Insira o middleware validarJWT.js nas rotas protegidas]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"> router.route(<span class="string">'/usuarios'</span>)</span><br><span class="line">    .get(<span class="built_in">require</span>(<span class="string">'./validarJWT'</span>), rotas.getUsuarios) <span class="comment">//alteramos esta</span></span><br><span class="line">    .post(rotas.postUsuarios);</span><br><span class="line">(...)</span><br></pre></td></tr></table></figure>
+<p>Novamente não é boa prática usar o <code>require</code> como parâmetro de função. Pelo bem do fluxo do tutorial e arquivo final, estou fazendo, mas o ideal seria criar <code>var validarJWT = require(&#39;./validarJWT&#39;)</code>….</p>
+<p>Anyway, reinicie o server, faça um <code>GET</code> para <a href="http://localhost:8080/api/usuarios" target="_blank" rel="noopener">http://localhost:8080/api/usuarios</a> . Viu: Ele disse “TOKEN NAO ENCONTRADO”</p>
+<h3 id="Tudo-pronto-Vamos-usar-nosso-token-D"><a href="#Tudo-pronto-Vamos-usar-nosso-token-D" class="headerlink" title="Tudo pronto!!! Vamos usar nosso token :D"></a>Tudo pronto!!! Vamos usar nosso token :D</h3><p>Dessa vez não precisa nem reiniciar o server. Faça um <code>POST</code> para <a href="http://localhost:8080/api/login" target="_blank" rel="noopener">http://localhost:8080/api/login</a> com seu <code>username</code> e <code>password</code>.</p>
+<figure class="highlight json"><figcaption><span>[resposta do login]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"token"</span>: <span class="string">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI1NGRjM2RkODU5ZTQwNmZjMWE3YWJiOGIiLCJleHAiOjE0MjQzMjgxMzI0NzN9._RcLvHkjttELVpeNtYuCdn3ZkojwSKLA42V6ChZLi4s"</span>,</span><br><span class="line">    <span class="attr">"expires"</span>: <span class="number">1424328132473</span>,</span><br><span class="line">    <span class="attr">"user"</span>: &#123;</span><br><span class="line">        <span class="attr">"_id"</span>: <span class="string">"54dc3dd859e406fc1a7abb8b"</span>,</span><br><span class="line">        <span class="attr">"username"</span>: <span class="string">"rcdev"</span>,</span><br><span class="line">        <span class="attr">"password"</span>: <span class="string">"$2a$05$mXgWbp14wuvDmj3pX0NFBOgIeSyIACAmEOmYgr/41gUManjIVYJ9."</span>,</span><br><span class="line">        <span class="attr">"__v"</span>: <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Vamos copiar o <strong>token</strong> (sim, ele inteiro) e adicionar como header <code>x-access-token</code>em nossa próxima requisição.</p>
+<p>Faça um <code>GET</code> para <code>/api/usuarios</code> novamente, dessa vez com o <strong>token</strong> recebido como header chamada <code>x-access-token</code>:</p>
+<p><img src="/token-sucesso.JPG" alt="token-sucesso"></p>
+<blockquote>
+<p>Parabéns e obrigado à você que acompanhou até aqui :P</p>
+</blockquote>
+<p>Espero poder ter ajudado. Se tiver dicas, dúvidas ou observações, por favor <em>comente</em> :)</p>
+<p>O resultado de nossa empreitada esta <a href="https://github.com/romuloctba/blog-rest-api-nodejs-json-web-token" target="_blank" rel="noopener">neste repositório do github</a></p>
+</div>
+
+      <div class="bottom-panel">
+        <ul class="social-likes" data-url="/2015/02/12/como-criar-uma-api-restfull-em-nodejs-e-autenticar-usando-json-web-token-jwt/">
+          <li class="facebook" title="like"></li>
+          <li class="twitter" title="twitte"></li>
+          <li class="plusone" title="google"></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="widget post-comment">
+      <h2 class="title">Comments</h2>
+      <section id="comments">
+        <div id="disqus_thread">
+          <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+      </session>
+    </div>
+    
+  </div>
+
+  <div class="widgetarea">
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Artigos Recentes</h3>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2019/05/01/realidade-aumentada-facil-e-rapida-com-ar-js-gincana-de-pascoa-com-ar/">Realidade Aumentada facil e rapida com AR.js - Gincana de Pascoa com AR</a></h3>
+        <span class="link-date">01 May 2019</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2018/12/03/ambiente-docker-para-desenvolvimento-nodejs-rapidinha/">Ambiente Docker para desenvolvimento NodeJS - Rapidinha</a></h3>
+        <span class="link-date">03 Dec 2018</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/11/07/removendo-linhas-extras-irritantes-em-arquivos-transferidos-via-ftp/">Removendo linhas extras irritantes em arquivos transferidos via FTP</a></h3>
+        <span class="link-date">07 Nov 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/">Testando o pré-release do Ionic Material: Material Design em seu App Híbrido</a></h3>
+        <span class="link-date">26 Jun 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/25/porque-meu-app-nao-carrega-dados-externos-lidando-com-cors-e-origins-externas/">Porque meu APP não carrega dados externos? (Lidando com CORS e Origins Externas)</a></h3>
+        <span class="link-date">25 Jun 2015</span>
+      </div>
+    </li>
+  
+</ul>
+
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Blogs & Links</h3>
+
+	<li><a href=https://www.hastedesign.com.br/blog/>Haste Design Blog</a></li>
+	
+	<li><a href=https://forma.hastedesign.com.br/blog/>Forma Haste Blog</a></li>
+	
+	<li><a href=http://blog.da2k.com.br/>Da2k Blog | @fdaciuk</a></li>
+	
+	<li><a href=http://nomadev.com.br/>Novadev | @osuissa</a></li>
+	
+	<li><a href=http://www.vitorbritto.com.br/blog/>Vitor Britto | @vitorbritto</a></li>
+	
+	<li><a href=http://udgwebdev.com/>UnderGround WebDev</a></li>
+	
+	<li><a href=https://andrebaltieri.wordpress.com/>@andrebaltieri</a></li>
+	
+	<li><a href=http://jcemer.com/>@jcemer</a></li>
+	
+</ul>
+
+
+    
+      
+
+
+<div class="tags widget">
+  <h3 class="title">Tags</h3>
+  <div style="text-align:center">
+    
+    <a class="button" href="/tags/1postperday/">1postperday</a>
+    
+    <a class="button" href="/tags/javascript/">Javascript</a>
+    
+    <a class="button" href="/tags/gulp/">Gulp</a>
+    
+    <a class="button" href="/tags/serie-google-maps/">Série Google Maps</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJS</a>
+    
+    <a class="button" href="/tags/workflow/">Workflow</a>
+    
+    <a class="button" href="/tags/rest/">REST</a>
+    
+    <a class="button" href="/tags/stylus/">Stylus</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJs</a>
+    
+    <a class="button" href="/tags/api/">API</a>
+    
+    <a class="button" href="/tags/app/">APP</a>
+    
+    <a class="button" href="/tags/rapidinha/">Rapidinha</a>
+    
+    <a class="button" href="/tags/mobile/">Mobile</a>
+    
+    <a class="button" href="/tags/static-generators/">Static Generators</a>
+    
+    <a class="button" href="/tags/docker/">Docker</a>
+    
+  </div>
+  
+  <div class="load-more">
+    <a class="various" href="#fbox-tagcloud">Ver Todas</a>
+  </div>
+  
+</div>
+
+
+<div class="tagcloud" id="fbox-tagcloud" style="margin:10px; display:none; overflow: hidden"><a href="/tags/1postperday/" style="font-size: 24px;">1postperday</a> <a href="/tags/api/" style="font-size: 14px;">API</a> <a href="/tags/app/" style="font-size: 14px;">APP</a> <a href="/tags/angularjs/" style="font-size: 12px;">AngularJs</a> <a href="/tags/app/" style="font-size: 12px;">App</a> <a href="/tags/autenticacao/" style="font-size: 12px;">Autenticação</a> <a href="/tags/cors/" style="font-size: 12px;">CORS</a> <a href="/tags/css/" style="font-size: 12px;">CSS</a> <a href="/tags/css/" style="font-size: 12px;">Css</a> <a href="/tags/docker/" style="font-size: 12px;">Docker</a> <a href="/tags/expressjs/" style="font-size: 12px;">ExpressJs</a> <a href="/tags/gulp/" style="font-size: 20px;">Gulp</a> <a href="/tags/html/" style="font-size: 12px;">Html</a> <a href="/tags/hibridos/" style="font-size: 12px;">Híbridos</a> <a href="/tags/ionic/" style="font-size: 12px;">Ionic</a> <a href="/tags/ionic-framewokr/" style="font-size: 12px;">Ionic Framewokr</a> <a href="/tags/jwt/" style="font-size: 12px;">JWT</a> <a href="/tags/javascript/" style="font-size: 22px;">Javascript</a> <a href="/tags/material-design/" style="font-size: 12px;">Material Design</a> <a href="/tags/mobile/" style="font-size: 14px;">Mobile</a> <a href="/tags/nodejs/" style="font-size: 16px;">NodeJS</a> <a href="/tags/nodejs/" style="font-size: 14px;">NodeJs</a> <a href="/tags/php/" style="font-size: 12px;">PHP</a> <a href="/tags/phonegap/" style="font-size: 12px;">Phonegap</a> <a href="/tags/produtividade/" style="font-size: 12px;">Produtividade</a> <a href="/tags/pre-processadores/" style="font-size: 12px;">Pré-Processadores</a> <a href="/tags/rest/" style="font-size: 16px;">REST</a> <a href="/tags/rapidinha/" style="font-size: 14px;">Rapidinha</a> <a href="/tags/realtime/" style="font-size: 12px;">Realtime</a> <a href="/tags/svg/" style="font-size: 12px;">SVG</a> <a href="/tags/socket-io/" style="font-size: 12px;">Socket.io</a> <a href="/tags/spritesheet/" style="font-size: 12px;">SpriteSheet</a> <a href="/tags/static-generators/" style="font-size: 12px;">Static Generators</a> <a href="/tags/stylus/" style="font-size: 14px;">Stylus</a> <a href="/tags/serie-google-maps/" style="font-size: 18px;">Série Google Maps</a> <a href="/tags/wordcamp/" style="font-size: 12px;">WordCamp</a> <a href="/tags/wordpress/" style="font-size: 12px;">WordPress</a> <a href="/tags/workshop/" style="font-size: 12px;">WorkShop</a> <a href="/tags/workflow/" style="font-size: 16px;">Workflow</a> <a href="/tags/workspace/" style="font-size: 12px;">Workspace</a> <a href="/tags/dicas-sublime-ftp/" style="font-size: 12px;">dicas, sublime, ftp</a> <a href="/tags/erros/" style="font-size: 12px;">erros</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 12px;">python</a> <a href="/tags/rapidinha/" style="font-size: 12px;">rapidinha</a></div>
+
+    
+      <div class="widget maillist">
+  <h3 class="title">Receba novos posts por e-mail</h3>
+<!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
+<div id="mc_embed_signup">
+<form action="//github.us7.list-manage.com/subscribe/post?u=e1c4a7465492a27974a725fdb&amp;id=2d0762fdb8" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+	<label for="mce-EMAIL"></label>
+	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="seu@email.com.br" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_e1c4a7465492a27974a725fdb_2d0762fdb8" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Inscrever" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+<!--End mc_embed_signup-->
+</div>
+    
+
+  </div>
+</div>
+
+
+  </div>
+  <div class="footer">
+  <div class="container">
+    
+    &copy; 2022 romuloctba All Rights Reserved
+    
+  </div>
+  <div class="container">
+      <div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Declaração</h2>
+    <div>
+        <p>
+            A informação publicada neste veiculo NÃO necessariamente reflete a opnião de qualquer pessoa que não seja o autor.
+            <br> Clientes ou empregadores do autor não tem parte na autoria ou co-autoria de artigos.
+            <br> Todo código ou exemplo de dados mostrado é criado especificamente para estudo, e jamais será cópia ou oriundo de dados reais de produção.
+        </p>
+    </div>
+</div>
+      
+<div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Disclaimer</h2>
+    <div>
+        <p>
+            The information here published is NOT necessarly the opinion of anyone but the author. <br>
+            Author's clients or employers are not part of this site, nor do they participate in the authoring or co-authoring of the content in any ways.<br>
+            All code or data samples here shown are created for study purposes and are not from nor copies from real production data.
+        </p>
+    </div>
+</div>
+      
+
+  </div>
+  <!-- end footer -->
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54535787-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <!-- disqus -->
+
+<script>
+  var disqus_shortname = 'rcdevlabs';
+  
+  var disqus_url = 'http://rcdevlabs.github.io/2015/02/12/como-criar-uma-api-restfull-em-nodejs-e-autenticar-usando-json-web-token-jwt/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+  $('.imgLiquid').imgLiquid({fill:true, fadeInTime:500});
+});
+</script>
+
+
+<!-- fancybox -->
+<link rel="stylesheet" href="/package/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/package/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript">
+(function($){
+  $(".fancybox").fancybox();
+  $(".various").fancybox({
+    maxWidth  : 800,
+    maxHeight : 600,
+    fitToView : false,
+    width   : '70%',
+    height    : '70%',
+    autoSize  : true,
+    closeClick  : false,
+    openEffect  : 'none',
+    closeEffect : 'none'
+  });
+})(jQuery);
+(function( $ ) {
+    $(function() {
+        $( '[data-js="google-search-form"]' ).on( 'submit', function( e ) {
+            e.preventDefault();
+            var inputVal = $( '[data-js="google-search-input"]' ).val();
+            window.location.href = $( this ).attr( 'data-action' ) + ' ' + inputVal;
+        });
+    });
+})( jQuery );
+$(function() {
+
+    var $sidebar   = $(".widget.maillist"), 
+        $window    = $(window),
+        offset     = $sidebar.offset(),
+        topPadding = 55;
+
+    $window.scroll(function() {
+        if ($window.scrollTop() > offset.top) {
+            $sidebar.stop().animate({
+                marginTop: $window.scrollTop() - offset.top + topPadding
+            }, 100);
+        } else {
+            $sidebar.stop().animate({
+                marginTop: 0
+            });
+        }
+    });
+    
+});
+</script>
+
+</body>
+</html>

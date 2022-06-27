@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta name="generator" content="RcDev Labs">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Upload de arquivos em API RESTfull NodeJS | RcDev Labs</title>
+
+  <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="/css/awe.css">
+  <link rel="stylesheet" type="text/css" href="/css/social-likes.css">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="/js/imgLiquid-min.js"></script>
+  <script src="/js/social-likes.min.js"></script>
+</head>
+
+<body>
+  <div class="main-container">
+    
+
+<div class="box profile">
+  <div class="heading" style="background: #3e5354 url(/rcdevlabs.jpg) no-repeat;">
+    <div class="profile-img">
+      <a href="http://rcdevlabs.github.io/"><img src="https://avatars3.githubusercontent.com/u/2955932?v=3&s=460" width="154" height="150" alt="image description"></a>
+    </div>
+    <strong class="user"><a href="/">RcDev Labs</a></strong>
+    <span class="locate">Curitiba, Brasil</span>
+  </div>
+  <div class="setting">
+    <a href="http://rcdevlabs.github.io/" class="btn-profile">GitHub</a>
+   <!-- <a href="/" class="btn-photos">Photos</a> -->
+   <div class="search">
+  <form class="theSearch" action=""
+    method="get"
+    data-action="https://google.com.br/search?q=site:rcdevlabs.github.io"
+    accept-charset="utf-8"
+    data-js="google-search-form">
+    <input type="search" name="q" results="0" placeholder="Pesquise no blog" data-js="google-search-input">
+  </form>
+</div>
+    <a href="http://twitter.com/romulo_ctba" class="btn-follow">Twitter</a>
+    <a href="http://rcdevlabs.github.io/atom.xml" class="btn-follow">RSS</a>
+  </div>
+</div>
+
+    
+<div class="two-columns post-page">
+  <div class="content">
+
+    <div class="post box nocover">
+      <em class="date"><span>15</span>Feb</em>
+      <h2 class="post-title"><a href="/2015/02/15/upload-de-arquivos-em-api-restfull-nodejs/">Upload de arquivos em API RESTfull NodeJS</a></h2>
+      <div class="post-content"><p><img src="/upload-nodejs-rest-api-como-fazer.jpg" alt="upload-nodejs-rest-api-como-fazer"></p>
+<p>API’s REST são muito legais para CRUD, mas e quando precisa fazer um Upload? Hoje veremos como enviar arquivos para uma API REST feita com NodeJs</p>
+<p>O resultado final backend e frontend está disponível aqui: <a href="https://github.com/romuloctba/post-upload-rest-nodejs" target="_blank" rel="noopener">neste repositório</a> do github.</p>
+<h2 id="Analisando-a-demanda"><a href="#Analisando-a-demanda" class="headerlink" title="Analisando a demanda"></a>Analisando a demanda</h2><ul>
+<li>Necessidade Permitir o envio de arquivos em uma API REST, com frontend independente, que poderia ser qualquer client, ou seja: FrontEND agnóstica.</li>
+</ul>
+<h2 id="Servidor-basico"><a href="#Servidor-basico" class="headerlink" title="Servidor básico"></a>Servidor básico</h2><p>Poderiamos facilmente implementar em nossa <a href="http://rcdevlabs.github.io/2015/02/12/como-criar-uma-api-restfull-em-nodejs-e-autenticar-usando-json-web-token-jwt/">API RESTfull com autenticação JSON Web Token JWT</a>, mas para evitar confusão, vamos usar um servidor bem simples para este artigo.</p>
+<p>Primeiro, crie uma pasta para seu projeto. Depois, crie os seguintes arquivos:</p>
+<figure class="highlight json"><figcaption><span>[package.json][crie o arquivo e insira o código]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"teste-upload-nodejs"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"server.js"</span>,</span><br><span class="line">  <span class="attr">"dependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"body-parser"</span>: <span class="string">"^1.11.0"</span>,</span><br><span class="line">    <span class="attr">"connect-multiparty"</span>: <span class="string">"^1.2.5"</span>,</span><br><span class="line">    <span class="attr">"express"</span>: <span class="string">"^4.11.2"</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(Iremos usar o <code>connect-multiparty</code> para receber o arquivo.)</p>
+<p>Acesse a pasta com o terminal, e rode:<br><figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure></p>
+<p>Agora vamos criar o server. Ele é bem simples, e após o código explico o que está acontecendo:</p>
+<figure class="highlight javascript"><figcaption><span>[server.js][crie o arquivo e insira o código]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>)</span><br><span class="line">  , app = express()</span><br><span class="line">  , bodyParser = <span class="built_in">require</span>(<span class="string">'body-parser'</span>)</span><br><span class="line">  , multiparty = <span class="built_in">require</span>(<span class="string">'connect-multiparty'</span>);</span><br><span class="line">  </span><br><span class="line">  app.use(bodyParser.urlencoded(&#123; <span class="attr">extended</span>: <span class="literal">true</span> &#125;));</span><br><span class="line">  app.use(bodyParser.json());</span><br><span class="line">  <span class="keyword">var</span> port = process.env.PORT || <span class="number">8080</span>;</span><br><span class="line">  <span class="keyword">var</span> router = express.Router();</span><br><span class="line">  </span><br><span class="line">  app.use(<span class="string">'/api'</span>, router);</span><br><span class="line"> 	<span class="comment">/*insira as rotas aqui */</span></span><br><span class="line"></span><br><span class="line">  app.listen(port);</span><br><span class="line">    </span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'conectado a porta '</span> + port);</span><br></pre></td></tr></table></figure>
+<p>No início, temos os <strong> vars e <code>require()</code></strong>, aí declaramos nossos middlewares do <code>bodyParser.urlencoded()</code> e <code>bodyParser.json()</code>. São o básico para uma API REST, sendo o primeiro para usar os URL params, e o segundo para <code>.json()</code>., Aí a porta, o router e um <code>app.use(&#39;/api&#39;)</code> que define nosso base endpoint.</p>
+<p>Agora, criaremos nossa rota de upload. Insira, abaixo do comentário</p>
+<figure class="highlight javascript"><figcaption><span>[server.js][insira abaixo do comentário]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"><span class="comment">/*insira as rotas aqui */</span></span><br><span class="line">router.route(<span class="string">'/upload'</span>)</span><br><span class="line">    .post(multiparty(), <span class="built_in">require</span>(<span class="string">'./controllers/upload'</span>));</span><br><span class="line">(...)</span><br></pre></td></tr></table></figure>
+<p>Note a sintaxe do <code>.post(multiparty(), require(....</code>.<br>O que isso quer dizer, é o middleware <code>multiparty()</code> será executado antes de acessar o controller da rota, que iremos criar agora: </p>
+<h2 id="Criando-o-controller-de-Upload"><a href="#Criando-o-controller-de-Upload" class="headerlink" title="Criando o controller de Upload"></a>Criando o controller de Upload</h2><p>Crie uma pasta chamada <code>/controllers</code>.<br>Crie um arquivo <code>upload.js</code> na pasta controllers</p>
+<figure class="highlight javascript"><figcaption><span>[uploads.js] [crie arquivo na pasta CONTROLLERS]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line">  </span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</span><br><span class="line">  res.setHeader(<span class="string">"Access-Control-Allow-Origin"</span>, <span class="string">"*"</span>);</span><br><span class="line">  <span class="keyword">var</span> arquivo = req.files.file;</span><br><span class="line">  <span class="keyword">var</span> temporario = req.files.file.path;</span><br><span class="line">  <span class="keyword">var</span> novo = <span class="string">'./uploads/'</span> + req.files.file.name;</span><br><span class="line"> 	fs.rename(temporario, novo, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>)</span>&#123;</span><br><span class="line"> 		<span class="keyword">if</span>(err)&#123;</span><br><span class="line"> 			res.status(<span class="number">500</span>).json(&#123;<span class="attr">error</span>: err&#125;)</span><br><span class="line"> 		&#125;</span><br><span class="line"> 		res.json(&#123;<span class="attr">message</span>: <span class="string">"enviado com sucesso."</span>, <span class="attr">file</span>: novo&#125;);</span><br><span class="line"> 	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Antes de tudo, no começo da função, <code>res.setHeader(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);</code> vai garantir que não tenhamos problemas com CORS, deixando claro que qualquer um pode fazer requests para essa rota. Não é a melhor prática do mundo, mas pra agora, nos serve.</p>
+<p>Daí, usamos o <code>fs</code>, módulo nativo do NodeJs.<br>O <code>module.exports</code> contém nossa função.<br>Ela recebe 2 parâmetros: <code>req</code> e <code>res</code>, nossas conhecidas.</p>
+<p>Na propriedade <code>files</code> do objeto da requisição temos o nosso arquivo recebido pelo <code>multiparty</code>.</p>
+<p>Usamos a <code>fs.rename()</code> para transferir ele da pasta temporária (<code>req.files.file.path</code>) para uma nova que definimos na variável <code>var novo</code>.</p>
+<p>Se tiver erro, retorna <code>res.status(500)</code> e a mensagem em JSON.</p>
+<p>Se der tudo certo, <code>res.json()</code> com o nome do arquivo.</p>
+<h3 id="Testando-nosso-server"><a href="#Testando-nosso-server" class="headerlink" title="Testando nosso server"></a>Testando nosso server</h3><p>Para testar, vá a pasta do server com o terminar e rode<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node server</span><br></pre></td></tr></table></figure></p>
+<p>Deu certo? Show! Agora vamos fazer o frontEnd. </p>
+<h3 id="Server-pronto-vamos-ao-FrontEnd"><a href="#Server-pronto-vamos-ao-FrontEnd" class="headerlink" title="Server pronto, vamos ao FrontEnd."></a>Server pronto, vamos ao FrontEnd.</h3><p>Crie uma outra pasta qualquer e crie um arquivo <code>index.html</code> dentro dela.</p>
+<figure class="highlight html"><figcaption><span>[index.html]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"pt-BR"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Simples file upload com RestAPI<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"enviaArquivo.js"</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">id</span>=<span class="string">"arquivoInput"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">"enviar()"</span>&gt;</span>Enviar <span class="tag">&lt;/<span class="name">button</span>&gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">Retorno JSON: <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"mensagem"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Aqui, nada demais: um <code>&lt;input type=&quot;file&quot;</code> com um ID e um <code>&lt;button&gt;</code> com <code>onClick=enviar()</code>, que é a função que vamos criar agora.</p>
+<p>Crie o arquivo <code>enviaArquivo.js</code>, e insira:</p>
+<figure class="highlight javascript"><figcaption><span>[enviaArquivo.js] [Crie o arquivo e insira o código:]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">enviar</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"><span class="keyword">var</span> formData = <span class="keyword">new</span> FormData();</span><br><span class="line"><span class="keyword">var</span> arquivo = <span class="built_in">document</span>.getElementById(<span class="string">"arquivoInput"</span>).files[<span class="number">0</span>];</span><br><span class="line">formData.append(<span class="string">"file"</span>, arquivo);</span><br><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (xhr.readyState == <span class="number">4</span>) &#123;</span><br><span class="line">  	<span class="keyword">var</span> div = <span class="built_in">document</span>.getElementById(<span class="string">'mensagem'</span>);</span><br><span class="line">    <span class="keyword">var</span> resposta = xhr.responseText;</span><br><span class="line">    div.innerHTML += resposta;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  xhr.open(<span class="string">"POST"</span>, <span class="string">"http://localhost:8080/api/upload"</span>);</span><br><span class="line">  xhr.send(formData);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Aí é bem fácil:</p>
+<ol>
+<li><p><code>var formData = new FormData()</code>… aí instanciamos um novo form, inserindo com <code>append()</code> um item chamado ‘file’ que vem do <code>getElementById(&quot;arquivoInput&quot;)</code>, o ID do nosso campo de arquivo no HTML.</p>
+</li>
+<li><p>na  <code>var xhr</code> criamos um <code>new XMLHttpRequest()</code>, que é a base do <code>$ajax</code>, mas quis fazer sem JQuery esse exemplo (mandei mal? diga nos comentários!).</p>
+</li>
+<li><p>Definimos como propriedade do <code>onreadystatechange</code> do XHR que criamos uma função. Ela vai testar <strong>se</strong> <code>xhr.readyState == 4</code>. 4 significa concluído.<br><strong>Se sim</strong>, inserimos a resposta (<code>xhr.responseText</code>) no elemento <code>#mensagem</code> do nosso HTML.</p>
+</li>
+<li><p>Por último, abrimos a conexão com <code>xhr.open</code>, fazendo um <code>POST</code> para a url alí definida (no caso, <code>localhost:8080</code>). Enviamos nosso formulário com <code>xhr.send(formData)</code>.</p>
+</li>
+</ol>
+<h3 id="Importante"><a href="#Importante" class="headerlink" title="Importante!!!"></a>Importante!!!</h3><p>Não esqueça de criar a pasta <code>/uploads</code> na raíz do seu projeto, senão vc receberá o erro:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"error"</span>:&#123;<span class="attr">"errno"</span>:<span class="number">34</span>,<span class="attr">"code"</span>:<span class="string">"ENOENT"</span> .......</span><br></pre></td></tr></table></figure></p>
+<h2 id="Testando-nosso-envio-de-arquivos-com-NodeJS"><a href="#Testando-nosso-envio-de-arquivos-com-NodeJS" class="headerlink" title="Testando nosso envio de arquivos com NodeJS"></a>Testando nosso envio de arquivos com NodeJS</h2><p>Rode o servidor pelo terminal com <code>node server</code> (ou já deixou rodando? tanto faz ^_^) e abra o arquivo <code>index.html</code> na raça mesmo, com 2 cliques. Tenta enviar um arquivo….</p>
+<p>Viu a resposta? Maneiro né ^_^, enviamos nosso arquivo!</p>
+<p>Para ver o arquivo, entre na pasta <code>uploads</code>, criada agora na pasta do seu servidor. </p>
+<p>Não deixamos a pasta uploads pública, por isso não dá para acessar pela URL.</p>
+<h2 id="Deixando-a-pasta-uploads-publica"><a href="#Deixando-a-pasta-uploads-publica" class="headerlink" title="Deixando a pasta uploads pública"></a>Deixando a pasta uploads pública</h2><p>Se quiser fazer isso, basta adicionar  o seguinte, antes linha <code>app.use(&#39;/api&#39;)</code>:</p>
+<figure class="highlight javascript"><figcaption><span>[server.js] [insira a linha à seguir]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.use(<span class="string">'/enviadas'</span>, express.static(__dirname  + <span class="string">'/uploads'</span>));</span><br></pre></td></tr></table></figure>
+<p>Agora, acessando <code>localhost:8080/enviadas/NOMEDOARQUIVO.ext</code>, você pode baixar o arquivo enviado.</p>
+<h2 id="Conclusao"><a href="#Conclusao" class="headerlink" title="Conclusão"></a>Conclusão</h2><p>É isso aí amiguinhos! Nossa brincadeira de hoje é muito útil, e facilmente implementável. O FrontEnd, reforçando, era só um exemplo. Você pode fazer o envio usando XTHMLRequests <code>multipart</code> com qualquer frontend.</p>
+<p>O resultado final deste artigo, backend e frontend, está disponível aqui: <a href="https://github.com/romuloctba/post-upload-rest-nodejs" target="_blank" rel="noopener">neste repositório</a> do github.</p>
+<p>Mais pra frente faremos algo mais bonitinho :)</p>
+<p>Muito obrigado pela visita, e um grande abraço. Volte sempre. Keep Coding.</p>
+<p>Ah, lembrando que agora temos Maillist. Cadastre seu e-mail na caixinha persistente ao lado –&gt; e receba todo dia o post novo. Estou participando do #1postperday, brilhante iniciativa do <a href="http://blog.da2k.com.br" target="_blank" rel="noopener">@fdaciuk</a> e tentarei fazer juz, produzindo bastante conteúdo legal</p>
+</div>
+
+      <div class="bottom-panel">
+        <ul class="social-likes" data-url="/2015/02/15/upload-de-arquivos-em-api-restfull-nodejs/">
+          <li class="facebook" title="like"></li>
+          <li class="twitter" title="twitte"></li>
+          <li class="plusone" title="google"></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="widget post-comment">
+      <h2 class="title">Comments</h2>
+      <section id="comments">
+        <div id="disqus_thread">
+          <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+      </session>
+    </div>
+    
+  </div>
+
+  <div class="widgetarea">
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Artigos Recentes</h3>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2019/05/01/realidade-aumentada-facil-e-rapida-com-ar-js-gincana-de-pascoa-com-ar/">Realidade Aumentada facil e rapida com AR.js - Gincana de Pascoa com AR</a></h3>
+        <span class="link-date">01 May 2019</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2018/12/03/ambiente-docker-para-desenvolvimento-nodejs-rapidinha/">Ambiente Docker para desenvolvimento NodeJS - Rapidinha</a></h3>
+        <span class="link-date">03 Dec 2018</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/11/07/removendo-linhas-extras-irritantes-em-arquivos-transferidos-via-ftp/">Removendo linhas extras irritantes em arquivos transferidos via FTP</a></h3>
+        <span class="link-date">07 Nov 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/">Testando o pré-release do Ionic Material: Material Design em seu App Híbrido</a></h3>
+        <span class="link-date">26 Jun 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/25/porque-meu-app-nao-carrega-dados-externos-lidando-com-cors-e-origins-externas/">Porque meu APP não carrega dados externos? (Lidando com CORS e Origins Externas)</a></h3>
+        <span class="link-date">25 Jun 2015</span>
+      </div>
+    </li>
+  
+</ul>
+
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Blogs & Links</h3>
+
+	<li><a href=https://www.hastedesign.com.br/blog/>Haste Design Blog</a></li>
+	
+	<li><a href=https://forma.hastedesign.com.br/blog/>Forma Haste Blog</a></li>
+	
+	<li><a href=http://blog.da2k.com.br/>Da2k Blog | @fdaciuk</a></li>
+	
+	<li><a href=http://nomadev.com.br/>Novadev | @osuissa</a></li>
+	
+	<li><a href=http://www.vitorbritto.com.br/blog/>Vitor Britto | @vitorbritto</a></li>
+	
+	<li><a href=http://udgwebdev.com/>UnderGround WebDev</a></li>
+	
+	<li><a href=https://andrebaltieri.wordpress.com/>@andrebaltieri</a></li>
+	
+	<li><a href=http://jcemer.com/>@jcemer</a></li>
+	
+</ul>
+
+
+    
+      
+
+
+<div class="tags widget">
+  <h3 class="title">Tags</h3>
+  <div style="text-align:center">
+    
+    <a class="button" href="/tags/1postperday/">1postperday</a>
+    
+    <a class="button" href="/tags/javascript/">Javascript</a>
+    
+    <a class="button" href="/tags/gulp/">Gulp</a>
+    
+    <a class="button" href="/tags/serie-google-maps/">Série Google Maps</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJS</a>
+    
+    <a class="button" href="/tags/workflow/">Workflow</a>
+    
+    <a class="button" href="/tags/rest/">REST</a>
+    
+    <a class="button" href="/tags/stylus/">Stylus</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJs</a>
+    
+    <a class="button" href="/tags/api/">API</a>
+    
+    <a class="button" href="/tags/app/">APP</a>
+    
+    <a class="button" href="/tags/rapidinha/">Rapidinha</a>
+    
+    <a class="button" href="/tags/mobile/">Mobile</a>
+    
+    <a class="button" href="/tags/static-generators/">Static Generators</a>
+    
+    <a class="button" href="/tags/docker/">Docker</a>
+    
+  </div>
+  
+  <div class="load-more">
+    <a class="various" href="#fbox-tagcloud">Ver Todas</a>
+  </div>
+  
+</div>
+
+
+<div class="tagcloud" id="fbox-tagcloud" style="margin:10px; display:none; overflow: hidden"><a href="/tags/1postperday/" style="font-size: 24px;">1postperday</a> <a href="/tags/api/" style="font-size: 14px;">API</a> <a href="/tags/app/" style="font-size: 14px;">APP</a> <a href="/tags/angularjs/" style="font-size: 12px;">AngularJs</a> <a href="/tags/app/" style="font-size: 12px;">App</a> <a href="/tags/autenticacao/" style="font-size: 12px;">Autenticação</a> <a href="/tags/cors/" style="font-size: 12px;">CORS</a> <a href="/tags/css/" style="font-size: 12px;">CSS</a> <a href="/tags/css/" style="font-size: 12px;">Css</a> <a href="/tags/docker/" style="font-size: 12px;">Docker</a> <a href="/tags/expressjs/" style="font-size: 12px;">ExpressJs</a> <a href="/tags/gulp/" style="font-size: 20px;">Gulp</a> <a href="/tags/html/" style="font-size: 12px;">Html</a> <a href="/tags/hibridos/" style="font-size: 12px;">Híbridos</a> <a href="/tags/ionic/" style="font-size: 12px;">Ionic</a> <a href="/tags/ionic-framewokr/" style="font-size: 12px;">Ionic Framewokr</a> <a href="/tags/jwt/" style="font-size: 12px;">JWT</a> <a href="/tags/javascript/" style="font-size: 22px;">Javascript</a> <a href="/tags/material-design/" style="font-size: 12px;">Material Design</a> <a href="/tags/mobile/" style="font-size: 14px;">Mobile</a> <a href="/tags/nodejs/" style="font-size: 16px;">NodeJS</a> <a href="/tags/nodejs/" style="font-size: 14px;">NodeJs</a> <a href="/tags/php/" style="font-size: 12px;">PHP</a> <a href="/tags/phonegap/" style="font-size: 12px;">Phonegap</a> <a href="/tags/produtividade/" style="font-size: 12px;">Produtividade</a> <a href="/tags/pre-processadores/" style="font-size: 12px;">Pré-Processadores</a> <a href="/tags/rest/" style="font-size: 16px;">REST</a> <a href="/tags/rapidinha/" style="font-size: 14px;">Rapidinha</a> <a href="/tags/realtime/" style="font-size: 12px;">Realtime</a> <a href="/tags/svg/" style="font-size: 12px;">SVG</a> <a href="/tags/socket-io/" style="font-size: 12px;">Socket.io</a> <a href="/tags/spritesheet/" style="font-size: 12px;">SpriteSheet</a> <a href="/tags/static-generators/" style="font-size: 12px;">Static Generators</a> <a href="/tags/stylus/" style="font-size: 14px;">Stylus</a> <a href="/tags/serie-google-maps/" style="font-size: 18px;">Série Google Maps</a> <a href="/tags/wordcamp/" style="font-size: 12px;">WordCamp</a> <a href="/tags/wordpress/" style="font-size: 12px;">WordPress</a> <a href="/tags/workshop/" style="font-size: 12px;">WorkShop</a> <a href="/tags/workflow/" style="font-size: 16px;">Workflow</a> <a href="/tags/workspace/" style="font-size: 12px;">Workspace</a> <a href="/tags/dicas-sublime-ftp/" style="font-size: 12px;">dicas, sublime, ftp</a> <a href="/tags/erros/" style="font-size: 12px;">erros</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 12px;">python</a> <a href="/tags/rapidinha/" style="font-size: 12px;">rapidinha</a></div>
+
+    
+      <div class="widget maillist">
+  <h3 class="title">Receba novos posts por e-mail</h3>
+<!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
+<div id="mc_embed_signup">
+<form action="//github.us7.list-manage.com/subscribe/post?u=e1c4a7465492a27974a725fdb&amp;id=2d0762fdb8" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+	<label for="mce-EMAIL"></label>
+	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="seu@email.com.br" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_e1c4a7465492a27974a725fdb_2d0762fdb8" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Inscrever" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+<!--End mc_embed_signup-->
+</div>
+    
+
+  </div>
+</div>
+
+
+  </div>
+  <div class="footer">
+  <div class="container">
+    
+    &copy; 2022 romuloctba All Rights Reserved
+    
+  </div>
+  <div class="container">
+      <div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Declaração</h2>
+    <div>
+        <p>
+            A informação publicada neste veiculo NÃO necessariamente reflete a opnião de qualquer pessoa que não seja o autor.
+            <br> Clientes ou empregadores do autor não tem parte na autoria ou co-autoria de artigos.
+            <br> Todo código ou exemplo de dados mostrado é criado especificamente para estudo, e jamais será cópia ou oriundo de dados reais de produção.
+        </p>
+    </div>
+</div>
+      
+<div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Disclaimer</h2>
+    <div>
+        <p>
+            The information here published is NOT necessarly the opinion of anyone but the author. <br>
+            Author's clients or employers are not part of this site, nor do they participate in the authoring or co-authoring of the content in any ways.<br>
+            All code or data samples here shown are created for study purposes and are not from nor copies from real production data.
+        </p>
+    </div>
+</div>
+      
+
+  </div>
+  <!-- end footer -->
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54535787-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <!-- disqus -->
+
+<script>
+  var disqus_shortname = 'rcdevlabs';
+  
+  var disqus_url = 'http://rcdevlabs.github.io/2015/02/15/upload-de-arquivos-em-api-restfull-nodejs/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+  $('.imgLiquid').imgLiquid({fill:true, fadeInTime:500});
+});
+</script>
+
+
+<!-- fancybox -->
+<link rel="stylesheet" href="/package/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/package/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript">
+(function($){
+  $(".fancybox").fancybox();
+  $(".various").fancybox({
+    maxWidth  : 800,
+    maxHeight : 600,
+    fitToView : false,
+    width   : '70%',
+    height    : '70%',
+    autoSize  : true,
+    closeClick  : false,
+    openEffect  : 'none',
+    closeEffect : 'none'
+  });
+})(jQuery);
+(function( $ ) {
+    $(function() {
+        $( '[data-js="google-search-form"]' ).on( 'submit', function( e ) {
+            e.preventDefault();
+            var inputVal = $( '[data-js="google-search-input"]' ).val();
+            window.location.href = $( this ).attr( 'data-action' ) + ' ' + inputVal;
+        });
+    });
+})( jQuery );
+$(function() {
+
+    var $sidebar   = $(".widget.maillist"), 
+        $window    = $(window),
+        offset     = $sidebar.offset(),
+        topPadding = 55;
+
+    $window.scroll(function() {
+        if ($window.scrollTop() > offset.top) {
+            $sidebar.stop().animate({
+                marginTop: $window.scrollTop() - offset.top + topPadding
+            }, 100);
+        } else {
+            $sidebar.stop().animate({
+                marginTop: 0
+            });
+        }
+    });
+    
+});
+</script>
+
+</body>
+</html>

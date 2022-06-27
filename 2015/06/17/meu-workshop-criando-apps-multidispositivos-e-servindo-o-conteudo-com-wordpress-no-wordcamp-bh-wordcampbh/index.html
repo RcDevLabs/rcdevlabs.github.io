@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta name="generator" content="RcDev Labs">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WorkShop: Criando Apps Multidispositivos e Servindo o conteúdo com Wordpress, no WordCamp BH #wordcampbh | RcDev Labs</title>
+
+  <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="/css/awe.css">
+  <link rel="stylesheet" type="text/css" href="/css/social-likes.css">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="/js/imgLiquid-min.js"></script>
+  <script src="/js/social-likes.min.js"></script>
+</head>
+
+<body>
+  <div class="main-container">
+    
+
+<div class="box profile">
+  <div class="heading" style="background: #3e5354 url(/rcdevlabs.jpg) no-repeat;">
+    <div class="profile-img">
+      <a href="http://rcdevlabs.github.io/"><img src="https://avatars3.githubusercontent.com/u/2955932?v=3&s=460" width="154" height="150" alt="image description"></a>
+    </div>
+    <strong class="user"><a href="/">RcDev Labs</a></strong>
+    <span class="locate">Curitiba, Brasil</span>
+  </div>
+  <div class="setting">
+    <a href="http://rcdevlabs.github.io/" class="btn-profile">GitHub</a>
+   <!-- <a href="/" class="btn-photos">Photos</a> -->
+   <div class="search">
+  <form class="theSearch" action=""
+    method="get"
+    data-action="https://google.com.br/search?q=site:rcdevlabs.github.io"
+    accept-charset="utf-8"
+    data-js="google-search-form">
+    <input type="search" name="q" results="0" placeholder="Pesquise no blog" data-js="google-search-input">
+  </form>
+</div>
+    <a href="http://twitter.com/romulo_ctba" class="btn-follow">Twitter</a>
+    <a href="http://rcdevlabs.github.io/atom.xml" class="btn-follow">RSS</a>
+  </div>
+</div>
+
+    
+<div class="two-columns post-page">
+  <div class="content">
+
+    <div class="post box nocover">
+      <em class="date"><span>17</span>Jun</em>
+      <h2 class="post-title"><a href="/2015/06/17/meu-workshop-criando-apps-multidispositivos-e-servindo-o-conteudo-com-wordpress-no-wordcamp-bh-wordcampbh/">WorkShop: Criando Apps Multidispositivos e Servindo o conteúdo com Wordpress, no WordCamp BH #wordcampbh</a></h2>
+      <div class="post-content"><p><img src="/meu-workshop-criando-apps-multidispositivos-e-servindo-o-conteudo-com-wordpress-no-wordcamp-bh-wordcampbh.jpg" alt="meu-workshop-criando-apps-multidispositivos-e-servindo-o-conteudo-com-wordpress-no-wordcamp-bh-wordcampbh"></p>
+<p>Neste dia 13 de Junho foi realizado o <a href="belohorizonte.wordcamp.org">WordCamp Belo Horizonte 2015</a>, no teatro Ney Soares - da UniBH.</p>
+<p>Neste post quero fazer um resumo do WorkShop que tive a alegria de ministrar no evento, chamado: “Criando Apps Multidispositivos e Servindo o conteúdo com Wordpress”.</p>
+<hr>
+<blockquote>
+<p>Aliás, tiro um minuto pra agradecer à organização do WordCamp BH e à Digital Ocean, que presenteou todos os participantes com <strong>U$$40</strong> de bônus na DO!! Tendo em vista que vai uns U$5 por Mês, temos aí praticamente 8 meses de servidor VPS grátis <em>-</em> Valeu, galere!</p>
+</blockquote>
+<hr>
+<h2 id="WordPress-como-API-REST"><a href="#WordPress-como-API-REST" class="headerlink" title="WordPress como API REST?"></a>WordPress como API REST?</h2><p>Para meus queridos leitores e Javascripters, a idéia de usar WordPress para servir a API pode soar um tanto estranha. “Por que não Node?”, diriam alguns.</p>
+<p>A questão é que em grande parte das vezes, WordPress já é o sistema de gerenciamento de conteúdo do site do seu cliente.</p>
+<p>Além de que, como dizem os colegas do #WordpressBrasil no Slack, <strong>“WordPress Instala até em geladeira”</strong>… Qualquer host compartilhado (inclusive muitos gratuitos) suporta o nosso amigo WP. Não precisamos de acesso root ou ssh para instalar pacotes e dependências especificas. O bom e velho LAMP ou WAMP resolve qualquer parada. (E sim, WordPress roda lindamente com nGinx!)</p>
+<p>Agora, sem querer definir como a solução ideal para 100% dos casos, é seguro dizer que a agilidade alcançada no método de criação de APIs com WordPress é muito útil para MVPs e outras situações em que não se tem à disposição muito tempo ou recursos.</p>
+<p>Sem mais delongas, vamos ver como funciona essa belezinha.</p>
+<hr>
+<h2 id="1-2-3-e-pronto"><a href="#1-2-3-e-pronto" class="headerlink" title="1, 2, 3 e pronto!"></a>1, 2, 3 e pronto!</h2><p>No WorkShop, quis apresentar meu método “1, 2, 3” de criação de Apps Multi-Dispositivos, sendo que os passos são:</p>
+<ol>
+<li>Backend/Arquitetura da Informação e API REST</li>
+<li>FrontEnd/Consumo dos dados</li>
+<li>Empacotar e lançar!</li>
+</ol>
+<p>Essa abstração demonstra como é simples o caminho de lançamento de um aplicativo que pode ser usado em diversos dispositivos.</p>
+<h3 id="Passo-1-Criando-a-API"><a href="#Passo-1-Criando-a-API" class="headerlink" title="Passo 1: Criando a API."></a>Passo 1: Criando a API.</h3><p>No método que usa WordPress, fazemos a API com a ajuda do CMS e um plugin especial, chamado <a href="http://wp-api.org" target="_blank" rel="noopener">WP-API</a>, mas <strong>atenção: no repositório oficial chama-se WP REST API</strong>.</p>
+<p>A estruturação do Conteúdo pode ser feita através dos nativos Custom Post Types e Custom Fields, com, ou sem, ajuda de plugins.</p>
+<p>No WorkShop recomendei o <a href="https://wordpress.org/plugins/types/" target="_blank" rel="noopener">Types</a>, por uma questão de agilidade. Com ele, em alguns clicks, criamos os Post Types e Custom Fields, mas poderia ser tudo feito ‘na unha’, ou com outro plugin.</p>
+<p>Ao terminar essa fase, temos disponível o caminho <code>urldosite.com.br/wp-json</code>, que expõe os endpoints disponíveis, como o que usaremos no teste: /posts.</p>
+<p><strong>Pra quem nunca trabalhou com JSON</strong>, recomendei MANTER A CALMA e a cabeça aberta. hehe. Ah, e também usar este <a href="http://json.parser.online.fr/" target="_blank" rel="noopener">Json Parser</a>, que ajuda MUITO a entender a estrutura e conteúdo do JSON que nossa API nos retorna.</p>
+<h3 id="Passo-2-Consumindo-os-Dados-da-API"><a href="#Passo-2-Consumindo-os-Dados-da-API" class="headerlink" title="Passo 2: Consumindo os Dados da API"></a>Passo 2: Consumindo os Dados da API</h3><p>Apesar de ser possível utilizar qualquer método para consumir os dados, gosto de apresentar o <a href="http://ionicframework.com" target="_blank" rel="noopener">Ionic Framework</a> para quem ainda não conhece.</p>
+<p>Ele traz o melhor do Cordova/Phonegap e AngularJS com vários <em>tweaks</em> para mobile development. Além de um cli fora do normal de bem feito, que nos permite desenvolver em Live Reload e servidor com entrada externa.</p>
+<p>Com o <em>$http</em> do AngularJS, consumimos a api, deixando os dados retornados no endpoint <strong>/posts</strong> na variável $scope.data.</p>
+<p>Dessa forma, com o ng-repeat, fazemos um loop nela, que nos permite listar o título de cada um dos posts. Veja só como fazemos em nosso controller:</p>
+<figure class="highlight javascript"><figcaption><span>[nomeDoApp/www/js/controllers.js]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">'starter.controllers'</span>, [])</span><br><span class="line"><span class="comment">//vamos editar apenas este controller:</span></span><br><span class="line">.controller(<span class="string">'DashCtrl'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">$scope, $http</span>) </span>&#123;</span><br><span class="line">    $http.get(<span class="string">'http://localhost/MeuWordPress/wp-json/posts'</span>)</span><br><span class="line">      .success(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">        $scope.posts = data; </span><br><span class="line">      &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">//...</span></span><br></pre></td></tr></table></figure>
+<p>Agora, basta executar o Loop com Ng-repeat no HTML:</p>
+<figure class="highlight html"><figcaption><span>[nomeDoApp/www/templates/tabs-dash.html]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- (após o &lt;ion-content class="padding"&gt;) --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-repeat</span>=<span class="string">"post in posts"</span>&gt;</span></span><br><span class="line">      &#123;&#123;post.title&#125;&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Com apenas isso, temos o exemplo mais simplista possível de consumo da API REST.</p>
+<h2 id="3-Empacotar-e-Publicar"><a href="#3-Empacotar-e-Publicar" class="headerlink" title="3. Empacotar e Publicar"></a>3. Empacotar e Publicar</h2><p>No WorkShop, indiquei algumas formas de Empacotar nossa aplicação, como:</p>
+<ul>
+<li>Phonegap Build, ou o próprio Ionic para empacotar para Android, iOS e Windows Phone.</li>
+<li>nw.js e sua versão GUI para Desktop (Linux, Windows ou Mac)</li>
+<li>Os SDKs específicos dos fabricantes de SmartTvs, que nos permitem empacotar aplicações para televisão</li>
+</ul>
+<hr>
+<h2 id="Resultado"><a href="#Resultado" class="headerlink" title="Resultado:"></a>Resultado:</h2><p>Apesar do tempo reduzido ter nos levado à um exemplo bem simplista, temos tudo necessário para criar aplicações incríveis de forma facílima e prática.</p>
+<p>Vimos como criar a API sem nenhuma linha de código (lol :P), e como consumir de forma fácil.</p>
+<p>À partir daí, temos um imenso leque de possibilidades, onde o limite vai ser a criatividade de cada um.</p>
+<h3 id="A-Colinha-CheatSheet-do-Wokshop-Criando-Apps-Multi-Dispositivos-e-servindo-o-conteudo-com-WordPress"><a href="#A-Colinha-CheatSheet-do-Wokshop-Criando-Apps-Multi-Dispositivos-e-servindo-o-conteudo-com-WordPress" class="headerlink" title="A Colinha: CheatSheet do Wokshop Criando Apps Multi Dispositivos e servindo o conteúdo com WordPress:"></a>A Colinha: CheatSheet do Wokshop Criando Apps Multi Dispositivos e servindo o conteúdo com WordPress:</h3><p><iframe src="//pt.slideshare.net/slideshow/embed_code/key/7pql4vRNiRJNB0" width="100%" height="460" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//pt.slideshare.net/romulozoch/cheatsheet-workshop-criando-apps-multidispositivos-e-servindo-contedo-com-wordpress" title="Cheatsheet - Workshop ­ Criando APPs Multi­dispositivos e servindo conteúdo com WordPress" target="_blank">Cheatsheet - Workshop ­ Criando APPs Multi­dispositivos e servindo conteúdo com WordPress</a> </strong> from <strong><a href="//www.slideshare.net/romulozoch" target="_blank">Rômulo Zoch</a></strong> </div></p>
+<h3 id="E-no-final…"><a href="#E-no-final…" class="headerlink" title="E no final…."></a>E no final….</h3><p>O evento foi muito maneiro e a organização excelente, mas isso, claro, não impediu alguns probleminhas. </p>
+<p>Eu fui sortudo e me deparei com o Wifi estragado na sala de Workshops, o que acabou gerando transferência para um andar inferior, e tomou bastante tempo, diminuindo um pouco o tempo hábil que havia planejado para este WorkShop.</p>
+<p>Como reparação para nossos queridos WordCampers, ofereci à quem me mandou e-mail um convite/link para o Hangout Especial, que farei como Bônus para quem participou.<br>Nele, veremos na prática bastante além do básicos dos passos 1, 2 e 3, e faremos uma App com guia de receitas, distribuida para Mobile e Desktop. (Com instalador!)</p>
+<p>Então quem esteve no WorkShop e mandou e-mail vai poder não só revisar o conteúdo, como tirar eventuais dúvidas que surgiram ao longo da semana, e aprender algumas outras técnicas interessantes para o nosso processo de criação de Apps Multi dispositivos, com conteúdo servido via WordPress.</p>
+<p>(aguardem o link, hoje dia 17/06 ainda não enviei)</p>
+<p>:)</p>
+<hr>
+<h2 id="Agradecimentos"><a href="#Agradecimentos" class="headerlink" title="Agradecimentos:"></a>Agradecimentos:</h2><p>Quero agradecer à organização do WordCamp BH - em especial ao Valério Souza - pelo convite, e à todos que foram prestigiar o evento e também meu WorkShop.</p>
+<p><strong>Agradecimento super especial</strong><br>Para o grande mestre <a href="http://blog.da2k.com.br/" target="_blank" rel="noopener">Daciuk</a> que me ajudou demás com o meu netbook após o problema da internet, e ao excelentíssimo sr. @nicholas_io, que me permitiu utilizar o seu lindo Mac Book para apresentação (Nunca mais lavo minha mão :O)</p>
+<p>Também à todos que mandaram feedback para mim ou para organização, e à todos que puderem aproveitar o que eu passei, de forma prática em suas vidas.</p>
+</div>
+
+      <div class="bottom-panel">
+        <ul class="social-likes" data-url="/2015/06/17/meu-workshop-criando-apps-multidispositivos-e-servindo-o-conteudo-com-wordpress-no-wordcamp-bh-wordcampbh/">
+          <li class="facebook" title="like"></li>
+          <li class="twitter" title="twitte"></li>
+          <li class="plusone" title="google"></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="widget post-comment">
+      <h2 class="title">Comments</h2>
+      <section id="comments">
+        <div id="disqus_thread">
+          <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+      </session>
+    </div>
+    
+  </div>
+
+  <div class="widgetarea">
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Artigos Recentes</h3>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2019/05/01/realidade-aumentada-facil-e-rapida-com-ar-js-gincana-de-pascoa-com-ar/">Realidade Aumentada facil e rapida com AR.js - Gincana de Pascoa com AR</a></h3>
+        <span class="link-date">01 May 2019</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2018/12/03/ambiente-docker-para-desenvolvimento-nodejs-rapidinha/">Ambiente Docker para desenvolvimento NodeJS - Rapidinha</a></h3>
+        <span class="link-date">03 Dec 2018</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/11/07/removendo-linhas-extras-irritantes-em-arquivos-transferidos-via-ftp/">Removendo linhas extras irritantes em arquivos transferidos via FTP</a></h3>
+        <span class="link-date">07 Nov 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/">Testando o pré-release do Ionic Material: Material Design em seu App Híbrido</a></h3>
+        <span class="link-date">26 Jun 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/25/porque-meu-app-nao-carrega-dados-externos-lidando-com-cors-e-origins-externas/">Porque meu APP não carrega dados externos? (Lidando com CORS e Origins Externas)</a></h3>
+        <span class="link-date">25 Jun 2015</span>
+      </div>
+    </li>
+  
+</ul>
+
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Blogs & Links</h3>
+
+	<li><a href=https://www.hastedesign.com.br/blog/>Haste Design Blog</a></li>
+	
+	<li><a href=https://forma.hastedesign.com.br/blog/>Forma Haste Blog</a></li>
+	
+	<li><a href=http://blog.da2k.com.br/>Da2k Blog | @fdaciuk</a></li>
+	
+	<li><a href=http://nomadev.com.br/>Novadev | @osuissa</a></li>
+	
+	<li><a href=http://www.vitorbritto.com.br/blog/>Vitor Britto | @vitorbritto</a></li>
+	
+	<li><a href=http://udgwebdev.com/>UnderGround WebDev</a></li>
+	
+	<li><a href=https://andrebaltieri.wordpress.com/>@andrebaltieri</a></li>
+	
+	<li><a href=http://jcemer.com/>@jcemer</a></li>
+	
+</ul>
+
+
+    
+      
+
+
+<div class="tags widget">
+  <h3 class="title">Tags</h3>
+  <div style="text-align:center">
+    
+    <a class="button" href="/tags/1postperday/">1postperday</a>
+    
+    <a class="button" href="/tags/javascript/">Javascript</a>
+    
+    <a class="button" href="/tags/gulp/">Gulp</a>
+    
+    <a class="button" href="/tags/serie-google-maps/">Série Google Maps</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJS</a>
+    
+    <a class="button" href="/tags/workflow/">Workflow</a>
+    
+    <a class="button" href="/tags/rest/">REST</a>
+    
+    <a class="button" href="/tags/stylus/">Stylus</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJs</a>
+    
+    <a class="button" href="/tags/api/">API</a>
+    
+    <a class="button" href="/tags/app/">APP</a>
+    
+    <a class="button" href="/tags/rapidinha/">Rapidinha</a>
+    
+    <a class="button" href="/tags/mobile/">Mobile</a>
+    
+    <a class="button" href="/tags/static-generators/">Static Generators</a>
+    
+    <a class="button" href="/tags/docker/">Docker</a>
+    
+  </div>
+  
+  <div class="load-more">
+    <a class="various" href="#fbox-tagcloud">Ver Todas</a>
+  </div>
+  
+</div>
+
+
+<div class="tagcloud" id="fbox-tagcloud" style="margin:10px; display:none; overflow: hidden"><a href="/tags/1postperday/" style="font-size: 24px;">1postperday</a> <a href="/tags/api/" style="font-size: 14px;">API</a> <a href="/tags/app/" style="font-size: 14px;">APP</a> <a href="/tags/angularjs/" style="font-size: 12px;">AngularJs</a> <a href="/tags/app/" style="font-size: 12px;">App</a> <a href="/tags/autenticacao/" style="font-size: 12px;">Autenticação</a> <a href="/tags/cors/" style="font-size: 12px;">CORS</a> <a href="/tags/css/" style="font-size: 12px;">CSS</a> <a href="/tags/css/" style="font-size: 12px;">Css</a> <a href="/tags/docker/" style="font-size: 12px;">Docker</a> <a href="/tags/expressjs/" style="font-size: 12px;">ExpressJs</a> <a href="/tags/gulp/" style="font-size: 20px;">Gulp</a> <a href="/tags/html/" style="font-size: 12px;">Html</a> <a href="/tags/hibridos/" style="font-size: 12px;">Híbridos</a> <a href="/tags/ionic/" style="font-size: 12px;">Ionic</a> <a href="/tags/ionic-framewokr/" style="font-size: 12px;">Ionic Framewokr</a> <a href="/tags/jwt/" style="font-size: 12px;">JWT</a> <a href="/tags/javascript/" style="font-size: 22px;">Javascript</a> <a href="/tags/material-design/" style="font-size: 12px;">Material Design</a> <a href="/tags/mobile/" style="font-size: 14px;">Mobile</a> <a href="/tags/nodejs/" style="font-size: 16px;">NodeJS</a> <a href="/tags/nodejs/" style="font-size: 14px;">NodeJs</a> <a href="/tags/php/" style="font-size: 12px;">PHP</a> <a href="/tags/phonegap/" style="font-size: 12px;">Phonegap</a> <a href="/tags/produtividade/" style="font-size: 12px;">Produtividade</a> <a href="/tags/pre-processadores/" style="font-size: 12px;">Pré-Processadores</a> <a href="/tags/rest/" style="font-size: 16px;">REST</a> <a href="/tags/rapidinha/" style="font-size: 14px;">Rapidinha</a> <a href="/tags/realtime/" style="font-size: 12px;">Realtime</a> <a href="/tags/svg/" style="font-size: 12px;">SVG</a> <a href="/tags/socket-io/" style="font-size: 12px;">Socket.io</a> <a href="/tags/spritesheet/" style="font-size: 12px;">SpriteSheet</a> <a href="/tags/static-generators/" style="font-size: 12px;">Static Generators</a> <a href="/tags/stylus/" style="font-size: 14px;">Stylus</a> <a href="/tags/serie-google-maps/" style="font-size: 18px;">Série Google Maps</a> <a href="/tags/wordcamp/" style="font-size: 12px;">WordCamp</a> <a href="/tags/wordpress/" style="font-size: 12px;">WordPress</a> <a href="/tags/workshop/" style="font-size: 12px;">WorkShop</a> <a href="/tags/workflow/" style="font-size: 16px;">Workflow</a> <a href="/tags/workspace/" style="font-size: 12px;">Workspace</a> <a href="/tags/dicas-sublime-ftp/" style="font-size: 12px;">dicas, sublime, ftp</a> <a href="/tags/erros/" style="font-size: 12px;">erros</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 12px;">python</a> <a href="/tags/rapidinha/" style="font-size: 12px;">rapidinha</a></div>
+
+    
+      <div class="widget maillist">
+  <h3 class="title">Receba novos posts por e-mail</h3>
+<!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
+<div id="mc_embed_signup">
+<form action="//github.us7.list-manage.com/subscribe/post?u=e1c4a7465492a27974a725fdb&amp;id=2d0762fdb8" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+	<label for="mce-EMAIL"></label>
+	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="seu@email.com.br" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_e1c4a7465492a27974a725fdb_2d0762fdb8" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Inscrever" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+<!--End mc_embed_signup-->
+</div>
+    
+
+  </div>
+</div>
+
+
+  </div>
+  <div class="footer">
+  <div class="container">
+    
+    &copy; 2022 romuloctba All Rights Reserved
+    
+  </div>
+  <div class="container">
+      <div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Declaração</h2>
+    <div>
+        <p>
+            A informação publicada neste veiculo NÃO necessariamente reflete a opnião de qualquer pessoa que não seja o autor.
+            <br> Clientes ou empregadores do autor não tem parte na autoria ou co-autoria de artigos.
+            <br> Todo código ou exemplo de dados mostrado é criado especificamente para estudo, e jamais será cópia ou oriundo de dados reais de produção.
+        </p>
+    </div>
+</div>
+      
+<div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Disclaimer</h2>
+    <div>
+        <p>
+            The information here published is NOT necessarly the opinion of anyone but the author. <br>
+            Author's clients or employers are not part of this site, nor do they participate in the authoring or co-authoring of the content in any ways.<br>
+            All code or data samples here shown are created for study purposes and are not from nor copies from real production data.
+        </p>
+    </div>
+</div>
+      
+
+  </div>
+  <!-- end footer -->
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54535787-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <!-- disqus -->
+
+<script>
+  var disqus_shortname = 'rcdevlabs';
+  
+  var disqus_url = 'http://rcdevlabs.github.io/2015/06/17/meu-workshop-criando-apps-multidispositivos-e-servindo-o-conteudo-com-wordpress-no-wordcamp-bh-wordcampbh/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+  $('.imgLiquid').imgLiquid({fill:true, fadeInTime:500});
+});
+</script>
+
+
+<!-- fancybox -->
+<link rel="stylesheet" href="/package/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/package/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript">
+(function($){
+  $(".fancybox").fancybox();
+  $(".various").fancybox({
+    maxWidth  : 800,
+    maxHeight : 600,
+    fitToView : false,
+    width   : '70%',
+    height    : '70%',
+    autoSize  : true,
+    closeClick  : false,
+    openEffect  : 'none',
+    closeEffect : 'none'
+  });
+})(jQuery);
+(function( $ ) {
+    $(function() {
+        $( '[data-js="google-search-form"]' ).on( 'submit', function( e ) {
+            e.preventDefault();
+            var inputVal = $( '[data-js="google-search-input"]' ).val();
+            window.location.href = $( this ).attr( 'data-action' ) + ' ' + inputVal;
+        });
+    });
+})( jQuery );
+$(function() {
+
+    var $sidebar   = $(".widget.maillist"), 
+        $window    = $(window),
+        offset     = $sidebar.offset(),
+        topPadding = 55;
+
+    $window.scroll(function() {
+        if ($window.scrollTop() > offset.top) {
+            $sidebar.stop().animate({
+                marginTop: $window.scrollTop() - offset.top + topPadding
+            }, 100);
+        } else {
+            $sidebar.stop().animate({
+                marginTop: 0
+            });
+        }
+    });
+    
+});
+</script>
+
+</body>
+</html>

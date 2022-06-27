@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta name="generator" content="RcDev Labs">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Google Maps API: Parte 3 - Como converter endereços para coordenadas | RcDev Labs</title>
+
+  <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="/css/awe.css">
+  <link rel="stylesheet" type="text/css" href="/css/social-likes.css">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="/js/imgLiquid-min.js"></script>
+  <script src="/js/social-likes.min.js"></script>
+</head>
+
+<body>
+  <div class="main-container">
+    
+
+<div class="box profile">
+  <div class="heading" style="background: #3e5354 url(/rcdevlabs.jpg) no-repeat;">
+    <div class="profile-img">
+      <a href="http://rcdevlabs.github.io/"><img src="https://avatars3.githubusercontent.com/u/2955932?v=3&s=460" width="154" height="150" alt="image description"></a>
+    </div>
+    <strong class="user"><a href="/">RcDev Labs</a></strong>
+    <span class="locate">Curitiba, Brasil</span>
+  </div>
+  <div class="setting">
+    <a href="http://rcdevlabs.github.io/" class="btn-profile">GitHub</a>
+   <!-- <a href="/" class="btn-photos">Photos</a> -->
+   <div class="search">
+  <form class="theSearch" action=""
+    method="get"
+    data-action="https://google.com.br/search?q=site:rcdevlabs.github.io"
+    accept-charset="utf-8"
+    data-js="google-search-form">
+    <input type="search" name="q" results="0" placeholder="Pesquise no blog" data-js="google-search-input">
+  </form>
+</div>
+    <a href="http://twitter.com/romulo_ctba" class="btn-follow">Twitter</a>
+    <a href="http://rcdevlabs.github.io/atom.xml" class="btn-follow">RSS</a>
+  </div>
+</div>
+
+    
+<div class="two-columns post-page">
+  <div class="content">
+
+    <div class="post box nocover">
+      <em class="date"><span>19</span>Feb</em>
+      <h2 class="post-title"><a href="/2015/02/19/google-maps-api-parte-3-geocoding-como-converter-endereco-para-coordenadas/">Google Maps API: Parte 3 - Como converter endereços para coordenadas</a></h2>
+      <div class="post-content"><p><img src="/google-maps-api-parte-3-geocoding-convertendo-enderecos-em-coordenadas.jpg" alt="google-maps-api-parte-3-geocoding-convertendo-enderecos-em-coordenadas"></p>
+<p>Nas primeiras 2 partes vimos <a href="/2015/02/17/googlemaps-api-1-3-criando-um-mapa-simples/">como criar um mapa básico</a> e <a href="/2015/02/18/google-maps-api-parte-2-marcadores-personalizados/">como adicionar marcadores</a>. Hoje, veremos como converter um endereço em coordenadas, para usá-lo com oque fizemos antes (^-^)y</p>
+<p><hr></p>
+<h3 id="Todas-as-partes-da-serie-Google-Maps-API"><a href="#Todas-as-partes-da-serie-Google-Maps-API" class="headerlink" title="Todas as partes da série Google Maps API:"></a>Todas as partes da série Google Maps API:</h3><ul>
+<li><p><a href="/2015/02/17/googlemaps-api-1-3-criando-um-mapa-simples/">Parte 1 - Criando um Mapa Simples</a></p>
+</li>
+<li><p><a href="/2015/02/18/google-maps-api-parte-2-marcadores-personalizados/">Parte 2 - Adicionando Marcadores Personalizados</a></p>
+</li>
+<li><p>Esta é a Parte 3</p>
+</li>
+<li><p><a href="/2015/02/20/google-maps-api-parte-4-manipulando-o-mapa-3d-satelite-zoom-opcoes/">Parte 4 - Manipulando o Mapa com métodos</a></p>
+</li>
+<li><p><a href="/2015/02/21/google-maps-api-parte-5-autocompletar-enderecos-e-locais-com-google-places/">Parte 5 - Autocompletar locais e endereços, listar e acessar marcadores</a></p>
+</li>
+<li><p><a href="/2015/02/22/google-maps-api-parte-6-pegando-local-do-usuario-com-html5-geolocation/">Parte 6 - Pegando localização do Usuário com HTML5 Geolocation</a></p>
+</li>
+</ul>
+<hr>
+
+<h3 id="Continuando-de-onde-paramos"><a href="#Continuando-de-onde-paramos" class="headerlink" title="Continuando de onde paramos"></a>Continuando de onde paramos</h3><p>Você pode pegar o código, como ficou ao final da Parte II <a href="https://github.com/romuloctba/post-google-maps-api-rotas-localizacao-automatica/archive/e4626da3640065bda6d8b21210a411f9d5065273.zip" target="_blank" rel="noopener">clicando aqui</a>, <strong>ou continuar de onde parou.</strong></p>
+<p>Se pegar acima, não esqueça de rodar o <code>npm install</code> na pasta do projeto, com o terminal.<br>Também deve ter o Gulp e Nodejs instalados.<br>Se tiver dúvidas, <a href="/2015/02/17/googlemaps-api-1-3-criando-um-mapa-simples/">veja este post</a>.</p>
+<p><strong>Para começar a trabalhar, abra a pasta do projeto com o terminal e rode:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp</span><br></pre></td></tr></table></figure>
+<p>Isso deve abrir o browser, com liveReload. Caso não abra automaticamente, acesse <a href="http://localhost:1337" target="_blank" rel="noopener">http://localhost:1337</a></p>
+<hr>
+
+<h2 id="Enderecos-x-Coordenadas"><a href="#Enderecos-x-Coordenadas" class="headerlink" title="Endereços x Coordenadas"></a>Endereços x Coordenadas</h2><p>Na API do Google Maps existem alguns diferentes objetos que representam localização, e todos são construídos com base em coordenadas.</p>
+<p>As coordenadas cartográficas consistem em Latitude e Longitude. Veja o que significa cada uma:</p>
+<h3 id="O-que-e-“Latitude-e-Longitude”"><a href="#O-que-e-“Latitude-e-Longitude”" class="headerlink" title="O que é “Latitude e Longitude”?"></a>O que é “Latitude e Longitude”?</h3><ul>
+<li><p><strong>Latitude</strong>: É a distancia angular (medida em graus) à partir do meridiano de Greenwitch. Representada por uma linha <strong><em>vertical</em></strong> no mapa. ( | )</p>
+</li>
+<li><p><strong>Longitude</strong>: É a distância angular (medida em graus) à partir do do Equador. Representada por uma linha <strong><em>horizontal</em></strong> ( – )</p>
+</li>
+</ul>
+<p>O Brasil, por exemplo, está em latitude e longitude negativas. Isso por quê estamos à esquerda do meridiano de Greenwitch (no mapa) e abaixo da linha do Equador.</p>
+<blockquote>
+<p><strong>Para converter endereços em coordenadas, usamos o serviço Geocoder.</strong></p>
+</blockquote>
+<p>O serviço geocoder faz parte da API Google Maps, e já temos ele disponível em nosso projeto.</p>
+<h2 id="Usando-o-servico-Geocoder-da-API-Javascript-do-Google-Maps"><a href="#Usando-o-servico-Geocoder-da-API-Javascript-do-Google-Maps" class="headerlink" title="Usando o serviço Geocoder da API Javascript do Google Maps"></a>Usando o serviço Geocoder da API Javascript do Google Maps</h2><p>Vamos instanciar o geocoder juntamente com a variável <code>map</code>. </p>
+<p>Para isso, edite o arquivo <code>js/maps.js</code>. <strong>Insira a variável <code>geocoder</code></strong> na função <strong>initialize()</strong>, conforme abaixo:</p>
+<figure class="highlight javascript"><figcaption><span>maps.js (Insira na função initialize)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initialize</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  geocoder = <span class="keyword">new</span> google.maps.Geocoder();</span><br><span class="line">  map = <span class="keyword">new</span> google.maps.Map(divDoMapa, opcoes);</span><br><span class="line">&#125;</span><br><span class="line">(...)</span><br></pre></td></tr></table></figure>
+<p>Agora temos <code>geocoder</code> disponível para uso.<br>Criaremos uma função para utilízá-lo, que receberá 2 parâmetros: o <strong>endereco</strong> e a <strong>avaliacao</strong>.</p>
+<p>Essa função executará o <strong>geocode()</strong> e depois a nossa <strong>criaMarcador()</strong>, com o resultado.</p>
+<p>Adicione, ao final do arquivo <code>js/maps.js</code></p>
+<figure class="highlight javascript"><figcaption><span>maps.js (insira ao final do arquivo)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">converteEndereco</span>(<span class="params">endereco, avaliacao</span>) </span>&#123;</span><br><span class="line">  geocoder.geocode( &#123; <span class="string">'address'</span>: endereco&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">resultado, status</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (status == google.maps.GeocoderStatus.OK) &#123;</span><br><span class="line">      <span class="keyword">var</span> marcador = &#123;</span><br><span class="line">          	latitude: resultado[<span class="number">0</span>].geometry.location.k</span><br><span class="line">        , <span class="attr">longitude</span>: resultado[<span class="number">0</span>].geometry.location.D	</span><br><span class="line">        , <span class="attr">titulo</span>: <span class="string">'Novo marcador'</span></span><br><span class="line">        , <span class="attr">imagem</span>: avaliacao</span><br><span class="line">      &#125;</span><br><span class="line">       criaMarcador(marcador, map)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      alert(<span class="string">'Erro ao converter endereço: '</span> + status);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Nossa função começa chamando o método <code>geocode()</code> da nossa instância do geocoder. Este método recebe 2 parâmetros: <strong>um objeto</strong> com a query, e <strong>uma função</strong> para tratar o retorno.</p>
+<p>O objeto com a query é <code>{address: endereco}</code>.</p>
+<p>A função retorna <strong><em>status</em></strong> e <strong><em>resultado</em></strong> (<code>function(status, resultado){}</code>).</p>
+<p>Verificamos <strong>SE</strong> o <em>status == google.maps.GeocoderStatus.OK</em>. <strong>Senão</strong> (else ao final da função), já damos um <code>alert()</code> com o erro.</p>
+<p><strong>SE</strong> o <em>status == google.maps.GeocoderStatus.OK</em>, vamos criar nosso marcador!</p>
+<p>Note que o parâmetro <strong>resultado</strong>, que recebemos do geocode() é um Array.</p>
+<p>O primeiro item do array é o resultado ‘sugerido’ pelo google, portanto vamos usá-lo: <code>resultado[0]</code>.</p>
+<p><code>resultado[0].geometry.location</code> contém a latitude (<code>k</code>) e longitude (<code>D</code>), que usaremos na variável <strong>var marcador</strong>.</p>
+<p>Já fizemos isso (um marcador) no artigo anterior, a única coisa que muda é a propriedade <code>imagem</code>, que será o parâmetro <strong>avaliacao</strong>, recebido na função e as coordenadas que recebemos no resultado. </p>
+<p>Pra fechar, chamamos <code>criaMarcador()</code> com as opção que criamos.</p>
+<p>Ufa. É isso: temos uma função que <strong>recebe o endereço e avaliação</strong>, converte o endereço para <strong>coordenadas</strong> e cria um novo marcador, com a imagem que setamos como avaliação.</p>
+<p>Agora precisamos, de alguma forma, gerar os parâmetros necessários para chamar a função <code>converterEndereco()</code>.<br>Faremos isso com uma outra função, mas antes precisamos inserir um campo de texto para o endereço e um seletor, para a avaliação, no HTML:</p>
+<hr>
+
+<h2 id="Campos-de-endereco-e-de-Avaliacao-no-HTML"><a href="#Campos-de-endereco-e-de-Avaliacao-no-HTML" class="headerlink" title="Campos de endereço e de Avaliação no HTML"></a>Campos de endereço e de Avaliação no HTML</h2><p>Insira, ao lado dos <code>&lt;button&gt;</code>‘s e <em>antes</em> da <strong><code>&lt;div id=&quot;map_canvas&quot;&gt;&lt;/div&gt;</code></strong>:</p>
+<figure class="highlight html"><figcaption><span>index.html (Insira ao lado dos buttons, antes do mapa)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"endereco"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">select</span> <span class="attr">name</span>=<span class="string">"avaliacao"</span> <span class="attr">id</span>=<span class="string">"avaliacao"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"avaliacao"</span> <span class="attr">value</span>=<span class="string">"0"</span>&gt;</span>Muito Bom<span class="tag">&lt;/<span class="name">option</span>&gt;</span>	</span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"avaliacao"</span> <span class="attr">value</span>=<span class="string">"1"</span>&gt;</span>Bom<span class="tag">&lt;/<span class="name">option</span>&gt;</span>	</span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"avaliacao"</span> <span class="attr">value</span>=<span class="string">"2"</span>&gt;</span>Meh<span class="tag">&lt;/<span class="name">option</span>&gt;</span>	</span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"avaliacao"</span> <span class="attr">value</span>=<span class="string">"3"</span>&gt;</span>Ruim<span class="tag">&lt;/<span class="name">option</span>&gt;</span>	</span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">name</span>=<span class="string">"avaliacao"</span> <span class="attr">value</span>=<span class="string">"4"</span>&gt;</span>Péssimo<span class="tag">&lt;/<span class="name">option</span>&gt;</span>	</span><br><span class="line">  <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">"converte()"</span>&gt;</span>Converter<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  (...)</span><br></pre></td></tr></table></figure>
+<p>É simples: Um <code>&lt;input type=text</code> e um <code>&lt;select&gt;</code> com 4 <code>option</code>s. Note que elas têm <code>value</code> de <strong>0</strong> à <strong>4</strong>.</p>
+<p>Pensei em usar um array (que começa com 0) para selecionarmos as imagens. </p>
+<hr>
+
+<p>Vamos criar um array pra referenciar nosso objeto imagens. (Eeeei Rômulo tá virando POG issoaí já né?) Calma, gente, é apenas pra facilitar nosso exemplo!</p>
+<p>Volte ao <code>js/maps.js</code> e insira, ao final do arquivo:</p>
+<figure class="highlight javascript"><figcaption><span>maps.js (insira ao final do arquivo)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"><span class="keyword">var</span> imgArray = [imagens.muitoBom, imagens.bom, imagens.medio, imagens.ruim, imagens.pessimo]</span><br></pre></td></tr></table></figure>
+<p><code>imgArray</code> nada mais é do que um array com as opções do nosso objeto <code>var imagens</code>, que criamos no atigo anterior.</p>
+<p>Agora, criaremos a função <code>converte()</code>, que será chamada ao clicarmos no botão.</p>
+<p>Ela deve pegar os dados do <code>&lt;input&gt;</code> e do <code>&lt;select&gt;</code>, comparar com o <code>imgArray</code> e chamar a  <code>converteEndereco()</code>.</p>
+<p>Também vai <em>dar um zoom</em> no mapa pra gente.</p>
+<figure class="highlight javascript"><figcaption><span>maps.js (insira ao final do arquivo)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">converte</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> endereco = <span class="built_in">document</span>.getElementById(<span class="string">'endereco'</span>).value;</span><br><span class="line">  <span class="keyword">var</span> seletor = <span class="built_in">document</span>.getElementById(<span class="string">"avaliacao"</span>);</span><br><span class="line">  <span class="keyword">var</span> avaliacao = seletor.options[seletor.selectedIndex].value;</span><br><span class="line">  <span class="keyword">var</span> imagemMarcador = imgArray[avaliacao]</span><br><span class="line">  converteEndereco(endereco, imagemMarcador);</span><br><span class="line">  map.setZoom(<span class="number">14</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Essa função não recebe parâmetros. Ao ser chamada pega o <code>.value</code> do elemento <code>#endereco</code>, e o <code>.value</code> do nosso seletor.</p>
+<p>Define a <code>imagemMarcador</code> como p item do <code>imgArray</code>.<br>O número do item é o <code>value</code> do <code>&lt;option&gt;</code>, ou seja: número de 0 à 4.<br>Ou seja: a url da imagem desejada.</p>
+<p>Aí executa a função <code>converteEndereco()</code> com esses parâmetros e, logo depois usa método <code>setZoom()</code> para aproximar de nosso resultado.</p>
+<hr>
+
+<h2 id="Salvando-e-testando"><a href="#Salvando-e-testando" class="headerlink" title="Salvando e testando"></a>Salvando e testando</h2><p>Se você está usando o Workflow com GulpJs que configuramos no primeiro artigo da série, é só ir salvando as alterações que a página será atualizada no navegador.</p>
+<p>Primeiro, incie um mapa, clicando em “Iniciar”, depois digite um endereço, por exemplo: <em>Rua Virginia Dalabona, 422 - Curitiba - Parana</em>.</p>
+<p>Agora, selecione uma avaliação (muito bom), e clique em <code>converte</code>.</p>
+<p>Depois, mude o número: <em>Rua Virginia Dalabona, 122 - Curitiba - Parana</em>. Selecione outra avaliação (ruim) e clique em Converte novamente.</p>
+<p>Viiiiu que maneiro?</p>
+<hr>
+
+<h2 id="Conclusao"><a href="#Conclusao" class="headerlink" title="Conclusão"></a>Conclusão</h2><p>O serviço <code>Geodecoder()</code> traduz endereços em coordenadas.<br>Para isso, basta instanciá-lo em uma variável, e depois executar com <code>variavel.geocode(query, funcao)</code>, sendo query um objeto tipo <code>{address: &quot;endereco aqui&quot;}</code> e a função uma função que receberá <code>status</code> e <code>resultado</code>.</p>
+<p>Aí, dá pra brincar com o resultado.</p>
+<p>Veja o commit, com as alterações dessa parte 3 <a href="https://github.com/romuloctba/post-google-maps-api-rotas-localizacao-automatica/commit/66e99fb4b565e85980ea3ac386e57bb57eb5a3f5" target="_blank" rel="noopener">neste link</a>. Baixe o código que temos até agora <a href="https://github.com/romuloctba/post-google-maps-api-rotas-localizacao-automatica/archive/66e99fb4b565e85980ea3ac386e57bb57eb5a3f5.zip" target="_blank" rel="noopener">aqui</a>.</p>
+<h2 id="No-proximo-artigo"><a href="#No-proximo-artigo" class="headerlink" title="No próximo artigo"></a>No próximo artigo</h2><p>Na próxima parte da série <strong>Google Maps Api Javascript</strong> voltaremos a brincar com nosso <code>map</code>: </p>
+<p>Vamos manipular o mapa já criado, e experimentar alguns métodos interessantes que vão desde mudar a textura, angulo de visão aérea, zoom, etc…</p>
+<p>Fique ligado!!</p>
+<blockquote>
+<p><strong>E pra não perder os artigos, inscreva-se na MailList –&gt;<br>Uso o mailchimp, e não mando SPAM.</strong></p>
+</blockquote>
+</div>
+
+      <div class="bottom-panel">
+        <ul class="social-likes" data-url="/2015/02/19/google-maps-api-parte-3-geocoding-como-converter-endereco-para-coordenadas/">
+          <li class="facebook" title="like"></li>
+          <li class="twitter" title="twitte"></li>
+          <li class="plusone" title="google"></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="widget post-comment">
+      <h2 class="title">Comments</h2>
+      <section id="comments">
+        <div id="disqus_thread">
+          <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+      </session>
+    </div>
+    
+  </div>
+
+  <div class="widgetarea">
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Artigos Recentes</h3>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2019/05/01/realidade-aumentada-facil-e-rapida-com-ar-js-gincana-de-pascoa-com-ar/">Realidade Aumentada facil e rapida com AR.js - Gincana de Pascoa com AR</a></h3>
+        <span class="link-date">01 May 2019</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2018/12/03/ambiente-docker-para-desenvolvimento-nodejs-rapidinha/">Ambiente Docker para desenvolvimento NodeJS - Rapidinha</a></h3>
+        <span class="link-date">03 Dec 2018</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/11/07/removendo-linhas-extras-irritantes-em-arquivos-transferidos-via-ftp/">Removendo linhas extras irritantes em arquivos transferidos via FTP</a></h3>
+        <span class="link-date">07 Nov 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/">Testando o pré-release do Ionic Material: Material Design em seu App Híbrido</a></h3>
+        <span class="link-date">26 Jun 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/25/porque-meu-app-nao-carrega-dados-externos-lidando-com-cors-e-origins-externas/">Porque meu APP não carrega dados externos? (Lidando com CORS e Origins Externas)</a></h3>
+        <span class="link-date">25 Jun 2015</span>
+      </div>
+    </li>
+  
+</ul>
+
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Blogs & Links</h3>
+
+	<li><a href=https://www.hastedesign.com.br/blog/>Haste Design Blog</a></li>
+	
+	<li><a href=https://forma.hastedesign.com.br/blog/>Forma Haste Blog</a></li>
+	
+	<li><a href=http://blog.da2k.com.br/>Da2k Blog | @fdaciuk</a></li>
+	
+	<li><a href=http://nomadev.com.br/>Novadev | @osuissa</a></li>
+	
+	<li><a href=http://www.vitorbritto.com.br/blog/>Vitor Britto | @vitorbritto</a></li>
+	
+	<li><a href=http://udgwebdev.com/>UnderGround WebDev</a></li>
+	
+	<li><a href=https://andrebaltieri.wordpress.com/>@andrebaltieri</a></li>
+	
+	<li><a href=http://jcemer.com/>@jcemer</a></li>
+	
+</ul>
+
+
+    
+      
+
+
+<div class="tags widget">
+  <h3 class="title">Tags</h3>
+  <div style="text-align:center">
+    
+    <a class="button" href="/tags/1postperday/">1postperday</a>
+    
+    <a class="button" href="/tags/javascript/">Javascript</a>
+    
+    <a class="button" href="/tags/gulp/">Gulp</a>
+    
+    <a class="button" href="/tags/serie-google-maps/">Série Google Maps</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJS</a>
+    
+    <a class="button" href="/tags/workflow/">Workflow</a>
+    
+    <a class="button" href="/tags/rest/">REST</a>
+    
+    <a class="button" href="/tags/stylus/">Stylus</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJs</a>
+    
+    <a class="button" href="/tags/api/">API</a>
+    
+    <a class="button" href="/tags/app/">APP</a>
+    
+    <a class="button" href="/tags/rapidinha/">Rapidinha</a>
+    
+    <a class="button" href="/tags/mobile/">Mobile</a>
+    
+    <a class="button" href="/tags/static-generators/">Static Generators</a>
+    
+    <a class="button" href="/tags/docker/">Docker</a>
+    
+  </div>
+  
+  <div class="load-more">
+    <a class="various" href="#fbox-tagcloud">Ver Todas</a>
+  </div>
+  
+</div>
+
+
+<div class="tagcloud" id="fbox-tagcloud" style="margin:10px; display:none; overflow: hidden"><a href="/tags/1postperday/" style="font-size: 24px;">1postperday</a> <a href="/tags/api/" style="font-size: 14px;">API</a> <a href="/tags/app/" style="font-size: 14px;">APP</a> <a href="/tags/angularjs/" style="font-size: 12px;">AngularJs</a> <a href="/tags/app/" style="font-size: 12px;">App</a> <a href="/tags/autenticacao/" style="font-size: 12px;">Autenticação</a> <a href="/tags/cors/" style="font-size: 12px;">CORS</a> <a href="/tags/css/" style="font-size: 12px;">CSS</a> <a href="/tags/css/" style="font-size: 12px;">Css</a> <a href="/tags/docker/" style="font-size: 12px;">Docker</a> <a href="/tags/expressjs/" style="font-size: 12px;">ExpressJs</a> <a href="/tags/gulp/" style="font-size: 20px;">Gulp</a> <a href="/tags/html/" style="font-size: 12px;">Html</a> <a href="/tags/hibridos/" style="font-size: 12px;">Híbridos</a> <a href="/tags/ionic/" style="font-size: 12px;">Ionic</a> <a href="/tags/ionic-framewokr/" style="font-size: 12px;">Ionic Framewokr</a> <a href="/tags/jwt/" style="font-size: 12px;">JWT</a> <a href="/tags/javascript/" style="font-size: 22px;">Javascript</a> <a href="/tags/material-design/" style="font-size: 12px;">Material Design</a> <a href="/tags/mobile/" style="font-size: 14px;">Mobile</a> <a href="/tags/nodejs/" style="font-size: 16px;">NodeJS</a> <a href="/tags/nodejs/" style="font-size: 14px;">NodeJs</a> <a href="/tags/php/" style="font-size: 12px;">PHP</a> <a href="/tags/phonegap/" style="font-size: 12px;">Phonegap</a> <a href="/tags/produtividade/" style="font-size: 12px;">Produtividade</a> <a href="/tags/pre-processadores/" style="font-size: 12px;">Pré-Processadores</a> <a href="/tags/rest/" style="font-size: 16px;">REST</a> <a href="/tags/rapidinha/" style="font-size: 14px;">Rapidinha</a> <a href="/tags/realtime/" style="font-size: 12px;">Realtime</a> <a href="/tags/svg/" style="font-size: 12px;">SVG</a> <a href="/tags/socket-io/" style="font-size: 12px;">Socket.io</a> <a href="/tags/spritesheet/" style="font-size: 12px;">SpriteSheet</a> <a href="/tags/static-generators/" style="font-size: 12px;">Static Generators</a> <a href="/tags/stylus/" style="font-size: 14px;">Stylus</a> <a href="/tags/serie-google-maps/" style="font-size: 18px;">Série Google Maps</a> <a href="/tags/wordcamp/" style="font-size: 12px;">WordCamp</a> <a href="/tags/wordpress/" style="font-size: 12px;">WordPress</a> <a href="/tags/workshop/" style="font-size: 12px;">WorkShop</a> <a href="/tags/workflow/" style="font-size: 16px;">Workflow</a> <a href="/tags/workspace/" style="font-size: 12px;">Workspace</a> <a href="/tags/dicas-sublime-ftp/" style="font-size: 12px;">dicas, sublime, ftp</a> <a href="/tags/erros/" style="font-size: 12px;">erros</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 12px;">python</a> <a href="/tags/rapidinha/" style="font-size: 12px;">rapidinha</a></div>
+
+    
+      <div class="widget maillist">
+  <h3 class="title">Receba novos posts por e-mail</h3>
+<!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
+<div id="mc_embed_signup">
+<form action="//github.us7.list-manage.com/subscribe/post?u=e1c4a7465492a27974a725fdb&amp;id=2d0762fdb8" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+	<label for="mce-EMAIL"></label>
+	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="seu@email.com.br" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_e1c4a7465492a27974a725fdb_2d0762fdb8" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Inscrever" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+<!--End mc_embed_signup-->
+</div>
+    
+
+  </div>
+</div>
+
+
+  </div>
+  <div class="footer">
+  <div class="container">
+    
+    &copy; 2022 romuloctba All Rights Reserved
+    
+  </div>
+  <div class="container">
+      <div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Declaração</h2>
+    <div>
+        <p>
+            A informação publicada neste veiculo NÃO necessariamente reflete a opnião de qualquer pessoa que não seja o autor.
+            <br> Clientes ou empregadores do autor não tem parte na autoria ou co-autoria de artigos.
+            <br> Todo código ou exemplo de dados mostrado é criado especificamente para estudo, e jamais será cópia ou oriundo de dados reais de produção.
+        </p>
+    </div>
+</div>
+      
+<div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Disclaimer</h2>
+    <div>
+        <p>
+            The information here published is NOT necessarly the opinion of anyone but the author. <br>
+            Author's clients or employers are not part of this site, nor do they participate in the authoring or co-authoring of the content in any ways.<br>
+            All code or data samples here shown are created for study purposes and are not from nor copies from real production data.
+        </p>
+    </div>
+</div>
+      
+
+  </div>
+  <!-- end footer -->
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54535787-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <!-- disqus -->
+
+<script>
+  var disqus_shortname = 'rcdevlabs';
+  
+  var disqus_url = 'http://rcdevlabs.github.io/2015/02/19/google-maps-api-parte-3-geocoding-como-converter-endereco-para-coordenadas/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+  $('.imgLiquid').imgLiquid({fill:true, fadeInTime:500});
+});
+</script>
+
+
+<!-- fancybox -->
+<link rel="stylesheet" href="/package/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/package/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript">
+(function($){
+  $(".fancybox").fancybox();
+  $(".various").fancybox({
+    maxWidth  : 800,
+    maxHeight : 600,
+    fitToView : false,
+    width   : '70%',
+    height    : '70%',
+    autoSize  : true,
+    closeClick  : false,
+    openEffect  : 'none',
+    closeEffect : 'none'
+  });
+})(jQuery);
+(function( $ ) {
+    $(function() {
+        $( '[data-js="google-search-form"]' ).on( 'submit', function( e ) {
+            e.preventDefault();
+            var inputVal = $( '[data-js="google-search-input"]' ).val();
+            window.location.href = $( this ).attr( 'data-action' ) + ' ' + inputVal;
+        });
+    });
+})( jQuery );
+$(function() {
+
+    var $sidebar   = $(".widget.maillist"), 
+        $window    = $(window),
+        offset     = $sidebar.offset(),
+        topPadding = 55;
+
+    $window.scroll(function() {
+        if ($window.scrollTop() > offset.top) {
+            $sidebar.stop().animate({
+                marginTop: $window.scrollTop() - offset.top + topPadding
+            }, 100);
+        } else {
+            $sidebar.stop().animate({
+                marginTop: 0
+            });
+        }
+    });
+    
+});
+</script>
+
+</body>
+</html>

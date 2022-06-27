@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta name="generator" content="RcDev Labs">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Como você serve seu conteúdo? Que tal usar um Static Generator? | RcDev Labs</title>
+
+  <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="/css/awe.css">
+  <link rel="stylesheet" type="text/css" href="/css/social-likes.css">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="/js/imgLiquid-min.js"></script>
+  <script src="/js/social-likes.min.js"></script>
+</head>
+
+<body>
+  <div class="main-container">
+    
+
+<div class="box profile">
+  <div class="heading" style="background: #3e5354 url(/rcdevlabs.jpg) no-repeat;">
+    <div class="profile-img">
+      <a href="http://rcdevlabs.github.io/"><img src="https://avatars3.githubusercontent.com/u/2955932?v=3&s=460" width="154" height="150" alt="image description"></a>
+    </div>
+    <strong class="user"><a href="/">RcDev Labs</a></strong>
+    <span class="locate">Curitiba, Brasil</span>
+  </div>
+  <div class="setting">
+    <a href="http://rcdevlabs.github.io/" class="btn-profile">GitHub</a>
+   <!-- <a href="/" class="btn-photos">Photos</a> -->
+   <div class="search">
+  <form class="theSearch" action=""
+    method="get"
+    data-action="https://google.com.br/search?q=site:rcdevlabs.github.io"
+    accept-charset="utf-8"
+    data-js="google-search-form">
+    <input type="search" name="q" results="0" placeholder="Pesquise no blog" data-js="google-search-input">
+  </form>
+</div>
+    <a href="http://twitter.com/romulo_ctba" class="btn-follow">Twitter</a>
+    <a href="http://rcdevlabs.github.io/atom.xml" class="btn-follow">RSS</a>
+  </div>
+</div>
+
+    
+<div class="two-columns post-page">
+  <div class="content">
+
+    <div class="post box nocover">
+      <em class="date"><span>08</span>Feb</em>
+      <h2 class="post-title"><a href="/2015/02/08/Como-voce-serve-seu-conteudo/">Como você serve seu conteúdo? Que tal usar um Static Generator?</a></h2>
+      <div class="post-content"><p><img src="http://rcdevlabs.github.io/servir-conteudo-estatico.jpg" alt="Servir seu conteúdo"></p>
+<p>Para o cliente é facil! Creio que a maior parte dos desenvolvedores diria “usar um CMS”.</p>
+<p>Seja <del>com Wordpress</del> com um CMS já existente, ou um criado especificamente para o projeto, os <em>Sistemas de Gerenciamento de Conteúdo</em> são a escolha óbvia para grande parte dos clientes, em sites e blogs diversos.</p>
+<h3 id="Mas-e-quando-e-a-sua-vez"><a href="#Mas-e-quando-e-a-sua-vez" class="headerlink" title="Mas e quando é a sua vez?"></a>Mas e quando é a sua vez?</h3><p>Estou criando este blog por <del>culpa</del> influência do <a href="blog.da2k.com.br">@fdaciuk</a>, que começou o #1postperday, que tá sendo um sucesso - e com muito conteúdo de primeira!</p>
+<p>Eu não <del>me aguentei</del> quis ficar de fora, e estou criando - finalmente - este que estás lendo. Para isso, levei em conta:</p>
+<ul>
+<li><p><strong>Necessidade</strong>: Gerenciar postagens, conteúdo e visual de um Blog</p>
+</li>
+<li><p><strong>Requisitos</strong>: Fácil e rápido de prototipar e lançar, porém flexível o suficiente para receber  funcionalidades e alterações de qualquer nível</p>
+</li>
+<li><p>E <strong>o mais importante</strong>:  não precisa ser à nível de usuário final</p>
+</li>
+</ul>
+<p>Após <del>a dica do @fdaciuk</del> considerar diversas opções: de Blogger à Ghost, passando por WordPress, a escolha lógica acabou sendo <strong>usar gerador estático</strong></p>
+<hr>
+<h3 id="Geradores-Estaticos-Praticidade-leveza-e-dificuldade-na-medida-certa"><a href="#Geradores-Estaticos-Praticidade-leveza-e-dificuldade-na-medida-certa" class="headerlink" title="Geradores Estáticos: Praticidade, leveza e difículdade na medida certa"></a>Geradores Estáticos: Praticidade, leveza e difículdade na medida certa</h3><p>Pois é. Além da mão de obra para customizar e infra para usar um CMS (DB, interpretador e servidor), usar um gerador estático tem algumas vantagens:</p>
+<ul>
+<li><p><strong>Super Light</strong>: Os arquivos são processados apenas uma vez, e não renderizados no servidor em cada acesso</p>
+</li>
+<li><p><strong>Sem Bancos de Dados</strong>: Sem DBs, a segurança é mais tranquila, e a economia em processamento e infra, novamente, é total.</p>
+</li>
+<li><p><strong>Escrever com MarkDown</strong>: ‘Dificuldade na medida certa’, inclui escrever em .md. Após pegar <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank" rel="noopener">as manhas</a>, fica tudo tão prático, e você pode utilizar HTML no meio à qualquer momento ^^y</p>
+</li>
+<li><p><strong>Somente o necessário</strong>: Sem aquele monte de funcionalidades que você nem vai precisar.</p>
+</li>
+<li><p><strong>Build Fácil, Depoy mais ainda</strong>: Você pode integrar seu gerador para fazer <code>deploy</code> diretamente no seu servidor, ou no Github (como estou fazendo ), diretamente do seu terminal :)</p>
+</li>
+<li><p><strong>Divertido para devs</strong>: Pra gente, pode ser bemm mais legal que qualquer painel de controle</p>
+</li>
+<li><p><strong>Use o que quiser</strong>: Você gosta de Jade? beleza. Curte EJS? Problema seu, fique à vontade. Que tal usar Stylus? Ou Prefere Sass? Não entendeu nada? fica tranquilo que dá pra usar css e html simples também.</p>
+</li>
+<li><p><strong>Fácil de customizar -</strong> na medida certa: Cada post fica em um arquivo, apenas com seu conteúdo. O Tema é sempre modular, de pouco markup e rápido de editar.</p>
+</li>
+</ul>
+<hr>
+
+<h3 id="Alguns-Geradores-Estaticos"><a href="#Alguns-Geradores-Estaticos" class="headerlink" title="Alguns Geradores Estáticos"></a>Alguns Geradores Estáticos</h3><p>Temos diversas opções disponíveis, vou citar algumas e suas principais características:</p>
+<ul>
+<li><p><a href="http://hexo.io" target="_blank" rel="noopener">Hexo.io</a> - Este em que vos escrevo ;) Roda em NodeJs. Simples de usar, suporta plugins e oferece facílima customização</p>
+</li>
+<li><p><a href="http://hammerformac.com/" target="_blank" rel="noopener">Hammer</a> - Exclusivo para Mac - e pago - o Hammer tem algumas funções interessantes como includes e tags especiais</p>
+</li>
+<li><p><a href="http://jekyllrb.com/" target="_blank" rel="noopener">Jerkyll</a> - Roda em Ruby, suporte à diversas funções como filtros e processadores. É o gerador ‘Oficial’ do GitHub</p>
+</li>
+</ul>
+<h3 id="A-minha-opcao-Hexo-io"><a href="#A-minha-opcao-Hexo-io" class="headerlink" title="A minha opção: Hexo.io"></a>A minha opção: Hexo.io</h3><p>####<strong>Instalação</strong></p>
+<p>Por <del>dica do Daciuk</del> rodar em NodeJs e ja ter usado antes, optei pelo Hexo.io. É bem tranquilo de instalar. Tendo o Node, basta:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo</span><br><span class="line">hexo init **nome-da-pasta**</span><br></pre></td></tr></table></figure>
+<p>E toda estrutura básica é gerada.<br>Após editar as informações (Nome, autor, URL do site, etc) no arquivo <code>_config.yml</code>, podemos criar novo conteúdo, por exemplo:</p>
+<p>####<strong>Criando conteúdo:</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new &lt;tipo&gt; <span class="string">"Criando conteúdo com Hexo.io"</span></span><br></pre></td></tr></table></figure>
+<p>O parâmetro <code>&lt;tipo&gt;</code> é qualquer um dos disponíveis (e você pode criar novos facilmente!) na pasta <code>/scaffolds</code>. O padrão é <code>post</code>.</p>
+<p>O <code>hexo new post &quot;Titulo do post&quot;</code> irá criar um arquivo <em>.md</em> na pasta <code>/source/_posts</code>, onde o texto é inserido.</p>
+<p>####<strong>Gerenciando temas</strong></p>
+<p>Arquivos de tema ficam na pasta <code>/themes</code> e sua lógica é bem simples e modular. Analisando com calma o código do tema padrão fica fácil entender. E existem vários temas prontos - em sua maioria, chineses - para Hexo, que podem ser instalados via <code>git clone</code> e manterem-se atualizados, também, por controle de versão.</p>
+<p>####<strong>Gerando prévias e arquivos estáticos</strong><br>O comando <code>hexo server</code> deixará o blog disponível no <code>localhost:4000</code></p>
+<p>Para gerar os arquivos estáticos, pode-se usar o <code>hexo generate</code>, para limpar o cache, <code>hexo clean</code>.</p>
+<p>####<strong>Deploy automático</strong></p>
+<p>No próprio arquivo <code>_config.yml</code> podemos configurar como fazer o deploy. Para o github, por exemplo fica assim:</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">github</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="attr">https://github.com/SEUNOME/SEUNOME.github.io.git</span></span><br><span class="line"><span class="attr">  branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+<p>Lembrando que o repositório deve seguir os <a href="http://blog.da2k.com.br/2015/02/05/segredos-do-github-hospedando-seu-site-no-github/" target="_blank" rel="noopener">padrões necessários</a> para gh-pages.</p>
+<p>E tem <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="noopener">muitas outras opções</a> já prontinhas para deploy, como Heroku, OpenShift, Rsync…</p>
+<h3 id="Conclusao"><a href="#Conclusao" class="headerlink" title="Conclusão"></a>Conclusão</h3><p>Geradores estáticos não estão nem perto de serem uma opção indicável à leigos, porém podem  trazer imensa economia de tempo e facilitar a vida do Desenvolvedor que busca ter um Blog, ou um site rápido de divulgação para alguma Lib ou plugin. Isso tudo sem perder a capacidade d gerenciar o conteúdo, personalizar e até escrever offline.</p>
+<p>Sinto uma elegância e fluidez, proporcionada pelo carregamento puro de arquivos html. A experiência do usuário é clara, fica bem mais rápido.</p>
+<p>Bom, é isso. E por aqui inauguro o <strong>RcDevLabs</strong>, gerado comHexo.io e hospedado no Github Pages.</p>
+<p>Um grande abraço, e até a próxima!</p>
+<p>Segue aí, curte que curto de volta. troco like. #sqn hehe</p>
+</div>
+
+      <div class="bottom-panel">
+        <ul class="social-likes" data-url="/2015/02/08/Como-voce-serve-seu-conteudo/">
+          <li class="facebook" title="like"></li>
+          <li class="twitter" title="twitte"></li>
+          <li class="plusone" title="google"></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="widget post-comment">
+      <h2 class="title">Comments</h2>
+      <section id="comments">
+        <div id="disqus_thread">
+          <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+      </session>
+    </div>
+    
+  </div>
+
+  <div class="widgetarea">
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Artigos Recentes</h3>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2019/05/01/realidade-aumentada-facil-e-rapida-com-ar-js-gincana-de-pascoa-com-ar/">Realidade Aumentada facil e rapida com AR.js - Gincana de Pascoa com AR</a></h3>
+        <span class="link-date">01 May 2019</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2018/12/03/ambiente-docker-para-desenvolvimento-nodejs-rapidinha/">Ambiente Docker para desenvolvimento NodeJS - Rapidinha</a></h3>
+        <span class="link-date">03 Dec 2018</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/11/07/removendo-linhas-extras-irritantes-em-arquivos-transferidos-via-ftp/">Removendo linhas extras irritantes em arquivos transferidos via FTP</a></h3>
+        <span class="link-date">07 Nov 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/">Testando o pré-release do Ionic Material: Material Design em seu App Híbrido</a></h3>
+        <span class="link-date">26 Jun 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/25/porque-meu-app-nao-carrega-dados-externos-lidando-com-cors-e-origins-externas/">Porque meu APP não carrega dados externos? (Lidando com CORS e Origins Externas)</a></h3>
+        <span class="link-date">25 Jun 2015</span>
+      </div>
+    </li>
+  
+</ul>
+
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Blogs & Links</h3>
+
+	<li><a href=https://www.hastedesign.com.br/blog/>Haste Design Blog</a></li>
+	
+	<li><a href=https://forma.hastedesign.com.br/blog/>Forma Haste Blog</a></li>
+	
+	<li><a href=http://blog.da2k.com.br/>Da2k Blog | @fdaciuk</a></li>
+	
+	<li><a href=http://nomadev.com.br/>Novadev | @osuissa</a></li>
+	
+	<li><a href=http://www.vitorbritto.com.br/blog/>Vitor Britto | @vitorbritto</a></li>
+	
+	<li><a href=http://udgwebdev.com/>UnderGround WebDev</a></li>
+	
+	<li><a href=https://andrebaltieri.wordpress.com/>@andrebaltieri</a></li>
+	
+	<li><a href=http://jcemer.com/>@jcemer</a></li>
+	
+</ul>
+
+
+    
+      
+
+
+<div class="tags widget">
+  <h3 class="title">Tags</h3>
+  <div style="text-align:center">
+    
+    <a class="button" href="/tags/1postperday/">1postperday</a>
+    
+    <a class="button" href="/tags/javascript/">Javascript</a>
+    
+    <a class="button" href="/tags/gulp/">Gulp</a>
+    
+    <a class="button" href="/tags/serie-google-maps/">Série Google Maps</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJS</a>
+    
+    <a class="button" href="/tags/workflow/">Workflow</a>
+    
+    <a class="button" href="/tags/rest/">REST</a>
+    
+    <a class="button" href="/tags/stylus/">Stylus</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJs</a>
+    
+    <a class="button" href="/tags/api/">API</a>
+    
+    <a class="button" href="/tags/app/">APP</a>
+    
+    <a class="button" href="/tags/rapidinha/">Rapidinha</a>
+    
+    <a class="button" href="/tags/mobile/">Mobile</a>
+    
+    <a class="button" href="/tags/static-generators/">Static Generators</a>
+    
+    <a class="button" href="/tags/docker/">Docker</a>
+    
+  </div>
+  
+  <div class="load-more">
+    <a class="various" href="#fbox-tagcloud">Ver Todas</a>
+  </div>
+  
+</div>
+
+
+<div class="tagcloud" id="fbox-tagcloud" style="margin:10px; display:none; overflow: hidden"><a href="/tags/1postperday/" style="font-size: 24px;">1postperday</a> <a href="/tags/api/" style="font-size: 14px;">API</a> <a href="/tags/app/" style="font-size: 14px;">APP</a> <a href="/tags/angularjs/" style="font-size: 12px;">AngularJs</a> <a href="/tags/app/" style="font-size: 12px;">App</a> <a href="/tags/autenticacao/" style="font-size: 12px;">Autenticação</a> <a href="/tags/cors/" style="font-size: 12px;">CORS</a> <a href="/tags/css/" style="font-size: 12px;">CSS</a> <a href="/tags/css/" style="font-size: 12px;">Css</a> <a href="/tags/docker/" style="font-size: 12px;">Docker</a> <a href="/tags/expressjs/" style="font-size: 12px;">ExpressJs</a> <a href="/tags/gulp/" style="font-size: 20px;">Gulp</a> <a href="/tags/html/" style="font-size: 12px;">Html</a> <a href="/tags/hibridos/" style="font-size: 12px;">Híbridos</a> <a href="/tags/ionic/" style="font-size: 12px;">Ionic</a> <a href="/tags/ionic-framewokr/" style="font-size: 12px;">Ionic Framewokr</a> <a href="/tags/jwt/" style="font-size: 12px;">JWT</a> <a href="/tags/javascript/" style="font-size: 22px;">Javascript</a> <a href="/tags/material-design/" style="font-size: 12px;">Material Design</a> <a href="/tags/mobile/" style="font-size: 14px;">Mobile</a> <a href="/tags/nodejs/" style="font-size: 16px;">NodeJS</a> <a href="/tags/nodejs/" style="font-size: 14px;">NodeJs</a> <a href="/tags/php/" style="font-size: 12px;">PHP</a> <a href="/tags/phonegap/" style="font-size: 12px;">Phonegap</a> <a href="/tags/produtividade/" style="font-size: 12px;">Produtividade</a> <a href="/tags/pre-processadores/" style="font-size: 12px;">Pré-Processadores</a> <a href="/tags/rest/" style="font-size: 16px;">REST</a> <a href="/tags/rapidinha/" style="font-size: 14px;">Rapidinha</a> <a href="/tags/realtime/" style="font-size: 12px;">Realtime</a> <a href="/tags/svg/" style="font-size: 12px;">SVG</a> <a href="/tags/socket-io/" style="font-size: 12px;">Socket.io</a> <a href="/tags/spritesheet/" style="font-size: 12px;">SpriteSheet</a> <a href="/tags/static-generators/" style="font-size: 12px;">Static Generators</a> <a href="/tags/stylus/" style="font-size: 14px;">Stylus</a> <a href="/tags/serie-google-maps/" style="font-size: 18px;">Série Google Maps</a> <a href="/tags/wordcamp/" style="font-size: 12px;">WordCamp</a> <a href="/tags/wordpress/" style="font-size: 12px;">WordPress</a> <a href="/tags/workshop/" style="font-size: 12px;">WorkShop</a> <a href="/tags/workflow/" style="font-size: 16px;">Workflow</a> <a href="/tags/workspace/" style="font-size: 12px;">Workspace</a> <a href="/tags/dicas-sublime-ftp/" style="font-size: 12px;">dicas, sublime, ftp</a> <a href="/tags/erros/" style="font-size: 12px;">erros</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 12px;">python</a> <a href="/tags/rapidinha/" style="font-size: 12px;">rapidinha</a></div>
+
+    
+      <div class="widget maillist">
+  <h3 class="title">Receba novos posts por e-mail</h3>
+<!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
+<div id="mc_embed_signup">
+<form action="//github.us7.list-manage.com/subscribe/post?u=e1c4a7465492a27974a725fdb&amp;id=2d0762fdb8" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+	<label for="mce-EMAIL"></label>
+	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="seu@email.com.br" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_e1c4a7465492a27974a725fdb_2d0762fdb8" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Inscrever" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+<!--End mc_embed_signup-->
+</div>
+    
+
+  </div>
+</div>
+
+
+  </div>
+  <div class="footer">
+  <div class="container">
+    
+    &copy; 2022 romuloctba All Rights Reserved
+    
+  </div>
+  <div class="container">
+      <div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Declaração</h2>
+    <div>
+        <p>
+            A informação publicada neste veiculo NÃO necessariamente reflete a opnião de qualquer pessoa que não seja o autor.
+            <br> Clientes ou empregadores do autor não tem parte na autoria ou co-autoria de artigos.
+            <br> Todo código ou exemplo de dados mostrado é criado especificamente para estudo, e jamais será cópia ou oriundo de dados reais de produção.
+        </p>
+    </div>
+</div>
+      
+<div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Disclaimer</h2>
+    <div>
+        <p>
+            The information here published is NOT necessarly the opinion of anyone but the author. <br>
+            Author's clients or employers are not part of this site, nor do they participate in the authoring or co-authoring of the content in any ways.<br>
+            All code or data samples here shown are created for study purposes and are not from nor copies from real production data.
+        </p>
+    </div>
+</div>
+      
+
+  </div>
+  <!-- end footer -->
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54535787-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <!-- disqus -->
+
+<script>
+  var disqus_shortname = 'rcdevlabs';
+  
+  var disqus_url = 'http://rcdevlabs.github.io/2015/02/08/Como-voce-serve-seu-conteudo/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+  $('.imgLiquid').imgLiquid({fill:true, fadeInTime:500});
+});
+</script>
+
+
+<!-- fancybox -->
+<link rel="stylesheet" href="/package/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/package/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript">
+(function($){
+  $(".fancybox").fancybox();
+  $(".various").fancybox({
+    maxWidth  : 800,
+    maxHeight : 600,
+    fitToView : false,
+    width   : '70%',
+    height    : '70%',
+    autoSize  : true,
+    closeClick  : false,
+    openEffect  : 'none',
+    closeEffect : 'none'
+  });
+})(jQuery);
+(function( $ ) {
+    $(function() {
+        $( '[data-js="google-search-form"]' ).on( 'submit', function( e ) {
+            e.preventDefault();
+            var inputVal = $( '[data-js="google-search-input"]' ).val();
+            window.location.href = $( this ).attr( 'data-action' ) + ' ' + inputVal;
+        });
+    });
+})( jQuery );
+$(function() {
+
+    var $sidebar   = $(".widget.maillist"), 
+        $window    = $(window),
+        offset     = $sidebar.offset(),
+        topPadding = 55;
+
+    $window.scroll(function() {
+        if ($window.scrollTop() > offset.top) {
+            $sidebar.stop().animate({
+                marginTop: $window.scrollTop() - offset.top + topPadding
+            }, 100);
+        } else {
+            $sidebar.stop().animate({
+                marginTop: 0
+            });
+        }
+    });
+    
+});
+</script>
+
+</body>
+</html>

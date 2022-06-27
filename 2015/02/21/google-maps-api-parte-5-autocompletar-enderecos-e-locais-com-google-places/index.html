@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta name="generator" content="RcDev Labs">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Google Maps API - Parte 5 - Autocompletar endereços e Locais com Google Places! | RcDev Labs</title>
+
+  <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="/css/awe.css">
+  <link rel="stylesheet" type="text/css" href="/css/social-likes.css">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="/js/imgLiquid-min.js"></script>
+  <script src="/js/social-likes.min.js"></script>
+</head>
+
+<body>
+  <div class="main-container">
+    
+
+<div class="box profile">
+  <div class="heading" style="background: #3e5354 url(/rcdevlabs.jpg) no-repeat;">
+    <div class="profile-img">
+      <a href="http://rcdevlabs.github.io/"><img src="https://avatars3.githubusercontent.com/u/2955932?v=3&s=460" width="154" height="150" alt="image description"></a>
+    </div>
+    <strong class="user"><a href="/">RcDev Labs</a></strong>
+    <span class="locate">Curitiba, Brasil</span>
+  </div>
+  <div class="setting">
+    <a href="http://rcdevlabs.github.io/" class="btn-profile">GitHub</a>
+   <!-- <a href="/" class="btn-photos">Photos</a> -->
+   <div class="search">
+  <form class="theSearch" action=""
+    method="get"
+    data-action="https://google.com.br/search?q=site:rcdevlabs.github.io"
+    accept-charset="utf-8"
+    data-js="google-search-form">
+    <input type="search" name="q" results="0" placeholder="Pesquise no blog" data-js="google-search-input">
+  </form>
+</div>
+    <a href="http://twitter.com/romulo_ctba" class="btn-follow">Twitter</a>
+    <a href="http://rcdevlabs.github.io/atom.xml" class="btn-follow">RSS</a>
+  </div>
+</div>
+
+    
+<div class="two-columns post-page">
+  <div class="content">
+
+    <div class="post box nocover">
+      <em class="date"><span>21</span>Feb</em>
+      <h2 class="post-title"><a href="/2015/02/21/google-maps-api-parte-5-autocompletar-enderecos-e-locais-com-google-places/">Google Maps API - Parte 5 - Autocompletar endereços e Locais com Google Places!</a></h2>
+      <div class="post-content"><p><img src="/google-maps-api-parte-5-autocompletar-enderecos-e-locais-com-google-places.jpg" alt="google-maps-api-parte-5-autocompletar-enderecos-e-locais-com-google-places"></p>
+<p>Hoje usaremos a library Google Places para prover uma melhor experiência de usuário com um auto-completar de endereços lindão e bem fácil de implementar.</p>
+<p><hr></p>
+<h3 id="Todas-as-partes-da-serie-Google-Maps-API"><a href="#Todas-as-partes-da-serie-Google-Maps-API" class="headerlink" title="Todas as partes da série Google Maps API:"></a>Todas as partes da série Google Maps API:</h3><ul>
+<li><p><a href="/2015/02/17/googlemaps-api-1-3-criando-um-mapa-simples/">Parte 1 - Criando um Mapa Simples</a></p>
+</li>
+<li><p><a href="/2015/02/18/google-maps-api-parte-2-marcadores-personalizados/">Parte 2 - Adicionando Marcadores Personalizados</a></p>
+</li>
+<li><p><a href="/2015/02/19/google-maps-api-parte-3-geocoding-como-converter-endereco-para-coordenadas/">Parte 3 - Converter Endereços em Coordenadas com Geocoding</a></p>
+</li>
+<li><p><a href="/2015/02/20/google-maps-api-parte-4-manipulando-o-mapa-3d-satelite-zoom-opcoes/">Parte 4 - Manipulando o Mapa com métodos</a></p>
+</li>
+<li><p>Esta é a Parte 5. ;-)</p>
+</li>
+<li><p><a href="/2015/02/22/google-maps-api-parte-6-pegando-local-do-usuario-com-html5-geolocation/">Parte 6 - Pegando localização do Usuário com HTML5 Geolocation</a></p>
+</li>
+</ul>
+<hr>
+
+<h3 id="Demo-Resultado-do-artigo-de-hoje"><a href="#Demo-Resultado-do-artigo-de-hoje" class="headerlink" title="Demo: Resultado do artigo de hoje"></a>Demo: Resultado do artigo de hoje</h3><p>Ao final do artigo de hoje, devemos ter construído em nossa série Google Maps API até agora algo mais ou menos assim:<br>(clique em inciar, depois digite e avalie alguns endereços ou locais (ex: parque barigui, jardim botanico, etc))</p>
+<p></p><p data-height="439" data-theme-id="12356" data-slug-hash="MYGabM" data-default-tab="result" data-user="romuloctba" class="codepen">See the Pen <a href="http://codepen.io/romuloctba/pen/MYGabM/" target="_blank" rel="noopener">Google Maps: Autocompletar google Places + custom markers</a> by Romulo_Ctba (<a href="http://codepen.io/romuloctba" target="_blank" rel="noopener">@romuloctba</a>) on <a href="http://codepen.io" target="_blank" rel="noopener">CodePen</a>.</p><p></p>
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+
+<h3 id="Continuando-de-onde-paramos"><a href="#Continuando-de-onde-paramos" class="headerlink" title="Continuando de onde paramos"></a>Continuando de onde paramos</h3><p>Você pode pegar o código, como ficou ao final da Parte III <a href="https://github.com/romuloctba/post-google-maps-api-rotas-localizacao-automatica/archive/66e99fb4b565e85980ea3ac386e57bb57eb5a3f5.zip" target="_blank" rel="noopener">clicando aqui</a>, <strong>ou continuar de onde parou.</strong></p>
+<p>Se pegar acima, não esqueça de rodar o <code>npm install</code> na pasta do projeto, com o terminal.<br>Também deve ter o Gulp e Nodejs instalados.<br>Se tiver dúvidas, <a href="/2015/02/17/googlemaps-api-1-3-criando-um-mapa-simples/">veja este post</a>.</p>
+<p><strong>Para começar a trabalhar, abra a pasta do projeto com o terminal e rode:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp</span><br></pre></td></tr></table></figure>
+<p>Isso deve abrir o browser, com liveReload. Caso não abra automaticamente, acesse <a href="http://localhost:1337" target="_blank" rel="noopener">http://localhost:1337</a></p>
+<hr>
+
+<h2 id="API-Google-Places-O-que-e-e-como-usar"><a href="#API-Google-Places-O-que-e-e-como-usar" class="headerlink" title="API Google Places - O que é e como usar."></a>API Google Places - O que é e como usar.</h2><p>API Google Places permite consultas à locais, como endereços, empresas, pontos turísticos - e muito mais - de forma fácil e simples.</p>
+<p>Com a API do google places não é necessário informar coordenadas (Latitude e Longitude) para localizar pontos no mapa. Ela, por sí só, faz a conversão geocode , e retorna um Local (que contém diversas informações), nao apenas coordenadas. </p>
+<p>Além disso, a API do Google Places tem integração com eventos e Ações no Local.</p>
+<p>Ela é bem maneira, e nos permite expandir o nível de interação usuário x mapa de forma incrível.</p>
+<p>Google Places oferece uma api própria,  mas que pode ser incluída como library na API do Google Maps V3.</p>
+<blockquote>
+<p>A API do Google Places oferece autocomplete facílimo de implementar, que agrega muito na Experiência do Usuário.</p>
+</blockquote>
+<h3 id="Incluindo-Google-Places-em-sua-aplicacao"><a href="#Incluindo-Google-Places-em-sua-aplicacao" class="headerlink" title="Incluindo Google Places em sua aplicação"></a>Incluindo Google Places em sua aplicação</h3><p>Para incluir, adicionaremos o parâmetro  <code>&amp;libraries=places</code> na url do Javascript do google maps.<br>Edite o arquivo index.html da pasta src, alterando a url da tag <code>&lt;script&gt;</code> conforme segue:</p>
+<figure class="highlight html"><figcaption><span>index.html (altere a url da tag script)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span></span></span><br><span class="line"><span class="tag">      <span class="attr">src</span>=<span class="string">"http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">(...)</span><br></pre></td></tr></table></figure>
+<p>Agora, você pode fazer uso da biblioteca places.</p>
+<p>Iremos utilizar o autocompletar para melhorar nossa interface (que por sinal, tá bem descuidada né? hehe tento manter simples pra não confundir ninguém)</p>
+<h2 id="Google-Places-Autocompletar-enderecos-e-locais"><a href="#Google-Places-Autocompletar-enderecos-e-locais" class="headerlink" title="Google Places - Autocompletar endereços e locais"></a>Google Places - Autocompletar endereços e locais</h2><p>Vamos instanciar o google.maps.places.Autocomplete() na variável autoComplete. </p>
+<p>A google.maps.places.Autocomplete() recebe 2 parâmetros: 1. o elemento onde será criado, e 2. um objeto com opcoes.</p>
+<p>As seguintes opções estão disponíveis:</p>
+<ul>
+<li><p>componentRestrictions<br>  A única opção disponível para esta configuração é ‘country’, que recebe código do país, com 2 letras (ex: br, us, au, etc).<br>  Normalmente <strong>não usamos</strong> pois é automaticamente definido.</p>
+</li>
+<li><p>bounds<br>  Região máxima em que o local deve ser pesquisado. Recebe como valor um <code>LatLngBounds(sw?:LatLng, ne?:LatLng)</code>, conforme vimos no último artigo</p>
+</li>
+<li><p>types<br>  Esta é a option mais utilizada: define os tipos de locais que devem ser pesquisados.<br>  Veja <a href="https://developers.google.com/places/documentation/supported_types?hl=pt-br" target="_blank" rel="noopener">uma lista de tipos de local suportados aqui</a>.</p>
+</li>
+</ul>
+<p>Iremos instanciar um google.maps.Autocomplete()    em nosso input de endereço. Isso será feito <strong>dentro da function initialize()</strong>.</p>
+<p>Altere a function initialize, do arquivo js/maps.js , incluindo as linhas à seguir ao final dela (após as instancias <code>map</code> e <code>geocode</code>:</p>
+<figure class="highlight javascript"><figcaption><span>maps.js (insira ao final da funcao initialize())</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"><span class="keyword">var</span> autoCompleteInput = <span class="built_in">document</span>.getElementById(<span class="string">'endereco'</span>);</span><br><span class="line"><span class="keyword">var</span> autoCompleteOpcoes = &#123;</span><br><span class="line">  types: [<span class="string">'geocode'</span>]</span><br><span class="line">&#125;</span><br><span class="line">autocomplete = <span class="keyword">new</span> google.maps.places.Autocomplete(autoCompleteInput,autoCompleteOpcoes);</span><br><span class="line">(...)</span><br></pre></td></tr></table></figure>
+<p>Note que definimos a variável <code>autoCompleteInput</code> com o elemento do id <code>#endereco</code>, que é nosso input já existente no HTML (hoje usado para geocode).</p>
+<blockquote>
+<p><strong> Dica: Ao utilizar o places.Autocomplete(), você pode querer aumentar a largura do seu input (via css), para melhorar a visibilidade. </strong></p>
+</blockquote>
+<p>A variável <code>autoCompleteOpcoes</code> com o objeto, definindo types como geocode.</p>
+<p>Salvando, o liveReload deve atualizar sua página. Comece a digitar um endereço, e veja o autocomplete em ação.</p>
+<hr>
+
+<h2 id="Eventos-e-Metodos-do-Google-Places-Autocompletar"><a href="#Eventos-e-Metodos-do-Google-Places-Autocompletar" class="headerlink" title="Eventos e Métodos do Google Places Autocompletar"></a>Eventos e Métodos do Google Places Autocompletar</h2><p>Existem 4 métodos que podem ser usados em uma instância do google.maps.places.Autocomplete():</p>
+<ul>
+<li>getBounds()</li>
+<li>getPlace()</li>
+<li>setBound(objetoBoundsLatLng)</li>
+<li>setTypes(arrayComTiposDeLocais)</li>
+</ul>
+<p>Os 2 primeiros retornam os limites (bounds) e local encontrado, respectivamente.<br>O terceorp, define o limite, e pede um objeto Bounds, conforme vimos no artigo anterior.<br>O último método acima define o(s) tipo(s) de locais para pesquisar. Seu parãmetro é um array.</p>
+<p>O Evento que o places.Autocomplete() dispara é um só: <code>place_changed</code>. Ele é disparado toda vez que um resultado é escolhido pelo usuário (com enter, ou click). Pode ser utilizado assim:<br><code>google.maps.event.addListener(autocomplete, &#39;place_changed&#39;, funcaoAqui)</code>, mas não usaremos isso agora.</p>
+<h2 id="Usar-o-local-escolhido-no-autocompletar"><a href="#Usar-o-local-escolhido-no-autocompletar" class="headerlink" title="Usar o local escolhido no autocompletar"></a>Usar o local escolhido no autocompletar</h2><p>Para isso, usaremos o método getPlace(). Estamos colocando-o dentro de uma função, e usando para criar um marcador com a função criaMarcador (basicamente a mesma coisa que a função <code>converte()</code>, que já tinhamos. Ela, aliás, vai sair fora).</p>
+<p>Ao final do arquivo src/maps.js, insira o seguinte código:</p>
+<figure class="highlight javascript"><figcaption><span>maps.js (insira ao final do arquivo)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">novoLocal</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> local = autocomplete.getPlace();</span><br><span class="line">  <span class="keyword">var</span> seletor = <span class="built_in">document</span>.getElementById(<span class="string">"avaliacao"</span>);</span><br><span class="line">  <span class="keyword">var</span> avaliacao = seletor.options[seletor.selectedIndex].value;</span><br><span class="line">  <span class="keyword">var</span> imagemMarcador = imgArray[avaliacao];</span><br><span class="line">  <span class="keyword">var</span> marcador = &#123;</span><br><span class="line">    latitude: local.geometry.location.k</span><br><span class="line">    , <span class="attr">longitude</span>: local.geometry.location.D	</span><br><span class="line">    , <span class="attr">titulo</span>: local.name</span><br><span class="line">    , <span class="attr">imagem</span>: imagemMarcador</span><br><span class="line">  &#125;</span><br><span class="line">  criaMarcador(marcador, map);</span><br><span class="line">  map.setCenter(local.geometry.location)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="string">``</span><span class="string">` </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">E agora sete a função novoLocal() como ação do onClick do botão que fica logo após o select, no **index.html**.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Mude o texto também, que estava 'converter', para 'avaliar':</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span><span class="string">``</span>html index.html (altere o atributo onclick <span class="keyword">do</span> botão, conforme abaixo)</span><br><span class="line">(...)</span><br><span class="line">&lt;<span class="regexp">/select&gt;</span></span><br><span class="line"><span class="regexp">	&lt;button onclick="novoLocal()"&gt;Avaliar&lt;/</span>button&gt;</span><br><span class="line">(...)</span><br></pre></td></tr></table></figure>
+<p>Agora você pode criar marcadores avaliados com base nos places do autocompletar!</p>
+<p>Experimente digitar alguns pontos turísticos da sua cidade.<br>Se quiser brincar com Curitiba, recomendo avaliar: parque Barigui, Jardim Botanico, Passeio Publico, Aeropoto Afonso Pena.</p>
+<p>Veja como digitar algumas letras logo tráz resultado!</p>
+<h2 id="Lendo-e-listando-os-marcadores-criados"><a href="#Lendo-e-listando-os-marcadores-criados" class="headerlink" title="Lendo e listando os marcadores criados"></a>Lendo e listando os marcadores criados</h2><p>Para fechar por hoje, iremos ler o array <code>marcadores</code>, criando um botão para cada marcador, de modo que possamos acessá-los com 1 click:</p>
+<p>Coloque ao final do maps.js</p>
+<figure class="highlight javascript"><figcaption><span>maps.js (adicione, ao final do arquivo)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">listaMarcadores</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> qtdMarcadores = marcadores.length;</span><br><span class="line">  <span class="keyword">var</span> listaDeMarcadores = <span class="built_in">document</span>.getElementById(<span class="string">'listaDeMarcadores'</span>);</span><br><span class="line">  listaDeMarcadores.innerHTML = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; qtdMarcadores; i++) &#123;</span><br><span class="line">    <span class="keyword">var</span> btn = <span class="built_in">document</span>.createElement(<span class="string">'button'</span>);</span><br><span class="line">    btn.setAttribute(<span class="string">"onclick"</span>,<span class="string">"map.setCenter(marcadores["</span>+i+<span class="string">"].position);map.setZoom(20);"</span>)</span><br><span class="line">    btn.appendChild(<span class="built_in">document</span>.createTextNode(marcadores[i].title));</span><br><span class="line">    listaDeMarcadores.appendChild(btn);		</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Com essa função, chamada listaMarcadores(), primeiro vemos quantos temos com <code>marcadores.length</code>, na variavel <code>qtdMarcadores</code>. </p>
+<p>Aí, pegamos um elemento com id #listaDeMarcadores, limpamos seu conteúdo com <code>innerHtml = &quot;&quot;</code>,. (Jájá vamos criar esse elemento, calma)</p>
+<p>Nosso <code>for()</code> vai executar para cada item do marcador, criando um <code>&lt;button&gt;</code> com <code>createElement()</code>.</p>
+<p>Aí definimoss o <code>onClick</code> deste button para executar o método do objeto mapa <code>setCenter()</code> para a propriedade position do marcador ‘da vez’.</p>
+<p>Por último, inserimos com <code>createTextNode()</code> o título do marcador como texto do botão, e inserimos o botão ao final.</p>
+<h3 id="“Chamando”-a-funcao-listaMarcadores"><a href="#“Chamando”-a-funcao-listaMarcadores" class="headerlink" title="“Chamando” a função listaMarcadores()"></a>“Chamando” a função listaMarcadores()</h3><p>Iremos executar a função que cria o botão logo após criar um novo marcador, portanto iremos inserir <code>listaMarcadores()</code> ao final <strong>da função criaMarcador</strong>.</p>
+<p>A função <code>criaMarcador() deve ficar assim: (incluir APENAS</code>listaMarcadores()`)</p>
+<figure class="highlight javascript"><figcaption><span>maps.js (a função criaMarcador() deve ficar assim:)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> criaMarcador = <span class="function"><span class="keyword">function</span>(<span class="params">marcador, mapa</span>) </span>&#123;</span><br><span class="line">  (...)</span><br><span class="line">  map.setCenter(novoMarcador.position)</span><br><span class="line">  listaMarcadores();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Criando-a-div-que-recebe-os-botoes"><a href="#Criando-a-div-que-recebe-os-botoes" class="headerlink" title="Criando a div que recebe os botões"></a>Criando a div que recebe os botões</h3><p>No index.html, vamos criar a div com o id #listaDeMarcadores, que receberá os botões criados pela função listaMarcadores().</p>
+<figure class="highlight html"><figcaption><span>index.html (insira logo após a div com id map_canvas)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(...)</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"map_canvas"</span> <span class="attr">style</span>=<span class="string">"width:600px; height:300px"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"listaDeMarcadores"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">(...)</span><br></pre></td></tr></table></figure>
+<h3 id="Apagando-codigo-obsoleto-limpando-um-pouco-o-projeto"><a href="#Apagando-codigo-obsoleto-limpando-um-pouco-o-projeto" class="headerlink" title="Apagando código obsoleto - limpando um pouco o projeto."></a>Apagando código obsoleto - limpando um pouco o projeto.</h3><p>Para nosso código ficar menos bagunçado possível - lembre que estamos sacrificando algumas best pratices (quando inevitável), em pról da didática - devemos excluir duas funções que não serão mais usadas:</p>
+<ol>
+<li><p>Exclua <strong>toda</strong> a <strong>function adiciona()</strong> no maps.js</p>
+</li>
+<li><p>Exclua <strong>toda</strong> a <strong>function converte()</strong> no maps.js (agora usamos ela na novoLocal(), né)</p>
+</li>
+<li><p>Exclua o <code>&lt;button&gt;</code> com o texto <code>adiciona!</code>, pois ele não é mais necessário (index.html)</p>
+</li>
+</ol>
+<h2 id="Testando-nosso-codigo"><a href="#Testando-nosso-codigo" class="headerlink" title="Testando nosso código"></a>Testando nosso código</h2><p>Com a task <code>gulp</code> já rodando, e seu navegador aberto, clique em <code>inciar</code>. Agora, digite uns pontos turísticos de sua cidade, ou de curitiba, avalie cada um deles, e clique em <code>avaliar</code>.</p>
+<p>Após criar alguns, navegue entre eles nos botões abaixo do mapa!</p>
+<h2 id="Conclusao"><a href="#Conclusao" class="headerlink" title="Conclusão"></a>Conclusão</h2><p>Esse autocompletar do google places é Melzinho na Chupeta mesmo!</p>
+<p>Imagine o tanto de coisas bacanas que da pra fazer, como filtrar por <code>types</code>/tipos de locais….</p>
+<p>No próximo artigo, veremos como chamar o <code>StreetView</code> e descobrir o que é POV (hehehe), entre outras coisinhas legais.</p>
+<p>Ah, para ver o que foi alterado em nosso projeto, <a href="https://github.com/romuloctba/post-google-maps-api-rotas-localizacao-automatica/commit/37babe6adc3a633ec6436f4c28272414356048bc" target="_blank" rel="noopener">acesse este commit no github</a> ou <a href="https://github.com/romuloctba/post-google-maps-api-rotas-localizacao-automatica/archive/37babe6adc3a633ec6436f4c28272414356048bc.zip" target="_blank" rel="noopener">clique aqui para baixar</a></p>
+</div>
+
+      <div class="bottom-panel">
+        <ul class="social-likes" data-url="/2015/02/21/google-maps-api-parte-5-autocompletar-enderecos-e-locais-com-google-places/">
+          <li class="facebook" title="like"></li>
+          <li class="twitter" title="twitte"></li>
+          <li class="plusone" title="google"></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="widget post-comment">
+      <h2 class="title">Comments</h2>
+      <section id="comments">
+        <div id="disqus_thread">
+          <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+      </session>
+    </div>
+    
+  </div>
+
+  <div class="widgetarea">
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Artigos Recentes</h3>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2019/05/01/realidade-aumentada-facil-e-rapida-com-ar-js-gincana-de-pascoa-com-ar/">Realidade Aumentada facil e rapida com AR.js - Gincana de Pascoa com AR</a></h3>
+        <span class="link-date">01 May 2019</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2018/12/03/ambiente-docker-para-desenvolvimento-nodejs-rapidinha/">Ambiente Docker para desenvolvimento NodeJS - Rapidinha</a></h3>
+        <span class="link-date">03 Dec 2018</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/11/07/removendo-linhas-extras-irritantes-em-arquivos-transferidos-via-ftp/">Removendo linhas extras irritantes em arquivos transferidos via FTP</a></h3>
+        <span class="link-date">07 Nov 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/">Testando o pré-release do Ionic Material: Material Design em seu App Híbrido</a></h3>
+        <span class="link-date">26 Jun 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/25/porque-meu-app-nao-carrega-dados-externos-lidando-com-cors-e-origins-externas/">Porque meu APP não carrega dados externos? (Lidando com CORS e Origins Externas)</a></h3>
+        <span class="link-date">25 Jun 2015</span>
+      </div>
+    </li>
+  
+</ul>
+
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Blogs & Links</h3>
+
+	<li><a href=https://www.hastedesign.com.br/blog/>Haste Design Blog</a></li>
+	
+	<li><a href=https://forma.hastedesign.com.br/blog/>Forma Haste Blog</a></li>
+	
+	<li><a href=http://blog.da2k.com.br/>Da2k Blog | @fdaciuk</a></li>
+	
+	<li><a href=http://nomadev.com.br/>Novadev | @osuissa</a></li>
+	
+	<li><a href=http://www.vitorbritto.com.br/blog/>Vitor Britto | @vitorbritto</a></li>
+	
+	<li><a href=http://udgwebdev.com/>UnderGround WebDev</a></li>
+	
+	<li><a href=https://andrebaltieri.wordpress.com/>@andrebaltieri</a></li>
+	
+	<li><a href=http://jcemer.com/>@jcemer</a></li>
+	
+</ul>
+
+
+    
+      
+
+
+<div class="tags widget">
+  <h3 class="title">Tags</h3>
+  <div style="text-align:center">
+    
+    <a class="button" href="/tags/1postperday/">1postperday</a>
+    
+    <a class="button" href="/tags/javascript/">Javascript</a>
+    
+    <a class="button" href="/tags/gulp/">Gulp</a>
+    
+    <a class="button" href="/tags/serie-google-maps/">Série Google Maps</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJS</a>
+    
+    <a class="button" href="/tags/workflow/">Workflow</a>
+    
+    <a class="button" href="/tags/rest/">REST</a>
+    
+    <a class="button" href="/tags/stylus/">Stylus</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJs</a>
+    
+    <a class="button" href="/tags/api/">API</a>
+    
+    <a class="button" href="/tags/app/">APP</a>
+    
+    <a class="button" href="/tags/rapidinha/">Rapidinha</a>
+    
+    <a class="button" href="/tags/mobile/">Mobile</a>
+    
+    <a class="button" href="/tags/static-generators/">Static Generators</a>
+    
+    <a class="button" href="/tags/docker/">Docker</a>
+    
+  </div>
+  
+  <div class="load-more">
+    <a class="various" href="#fbox-tagcloud">Ver Todas</a>
+  </div>
+  
+</div>
+
+
+<div class="tagcloud" id="fbox-tagcloud" style="margin:10px; display:none; overflow: hidden"><a href="/tags/1postperday/" style="font-size: 24px;">1postperday</a> <a href="/tags/api/" style="font-size: 14px;">API</a> <a href="/tags/app/" style="font-size: 14px;">APP</a> <a href="/tags/angularjs/" style="font-size: 12px;">AngularJs</a> <a href="/tags/app/" style="font-size: 12px;">App</a> <a href="/tags/autenticacao/" style="font-size: 12px;">Autenticação</a> <a href="/tags/cors/" style="font-size: 12px;">CORS</a> <a href="/tags/css/" style="font-size: 12px;">CSS</a> <a href="/tags/css/" style="font-size: 12px;">Css</a> <a href="/tags/docker/" style="font-size: 12px;">Docker</a> <a href="/tags/expressjs/" style="font-size: 12px;">ExpressJs</a> <a href="/tags/gulp/" style="font-size: 20px;">Gulp</a> <a href="/tags/html/" style="font-size: 12px;">Html</a> <a href="/tags/hibridos/" style="font-size: 12px;">Híbridos</a> <a href="/tags/ionic/" style="font-size: 12px;">Ionic</a> <a href="/tags/ionic-framewokr/" style="font-size: 12px;">Ionic Framewokr</a> <a href="/tags/jwt/" style="font-size: 12px;">JWT</a> <a href="/tags/javascript/" style="font-size: 22px;">Javascript</a> <a href="/tags/material-design/" style="font-size: 12px;">Material Design</a> <a href="/tags/mobile/" style="font-size: 14px;">Mobile</a> <a href="/tags/nodejs/" style="font-size: 16px;">NodeJS</a> <a href="/tags/nodejs/" style="font-size: 14px;">NodeJs</a> <a href="/tags/php/" style="font-size: 12px;">PHP</a> <a href="/tags/phonegap/" style="font-size: 12px;">Phonegap</a> <a href="/tags/produtividade/" style="font-size: 12px;">Produtividade</a> <a href="/tags/pre-processadores/" style="font-size: 12px;">Pré-Processadores</a> <a href="/tags/rest/" style="font-size: 16px;">REST</a> <a href="/tags/rapidinha/" style="font-size: 14px;">Rapidinha</a> <a href="/tags/realtime/" style="font-size: 12px;">Realtime</a> <a href="/tags/svg/" style="font-size: 12px;">SVG</a> <a href="/tags/socket-io/" style="font-size: 12px;">Socket.io</a> <a href="/tags/spritesheet/" style="font-size: 12px;">SpriteSheet</a> <a href="/tags/static-generators/" style="font-size: 12px;">Static Generators</a> <a href="/tags/stylus/" style="font-size: 14px;">Stylus</a> <a href="/tags/serie-google-maps/" style="font-size: 18px;">Série Google Maps</a> <a href="/tags/wordcamp/" style="font-size: 12px;">WordCamp</a> <a href="/tags/wordpress/" style="font-size: 12px;">WordPress</a> <a href="/tags/workshop/" style="font-size: 12px;">WorkShop</a> <a href="/tags/workflow/" style="font-size: 16px;">Workflow</a> <a href="/tags/workspace/" style="font-size: 12px;">Workspace</a> <a href="/tags/dicas-sublime-ftp/" style="font-size: 12px;">dicas, sublime, ftp</a> <a href="/tags/erros/" style="font-size: 12px;">erros</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 12px;">python</a> <a href="/tags/rapidinha/" style="font-size: 12px;">rapidinha</a></div>
+
+    
+      <div class="widget maillist">
+  <h3 class="title">Receba novos posts por e-mail</h3>
+<!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
+<div id="mc_embed_signup">
+<form action="//github.us7.list-manage.com/subscribe/post?u=e1c4a7465492a27974a725fdb&amp;id=2d0762fdb8" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+	<label for="mce-EMAIL"></label>
+	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="seu@email.com.br" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_e1c4a7465492a27974a725fdb_2d0762fdb8" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Inscrever" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+<!--End mc_embed_signup-->
+</div>
+    
+
+  </div>
+</div>
+
+
+  </div>
+  <div class="footer">
+  <div class="container">
+    
+    &copy; 2022 romuloctba All Rights Reserved
+    
+  </div>
+  <div class="container">
+      <div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Declaração</h2>
+    <div>
+        <p>
+            A informação publicada neste veiculo NÃO necessariamente reflete a opnião de qualquer pessoa que não seja o autor.
+            <br> Clientes ou empregadores do autor não tem parte na autoria ou co-autoria de artigos.
+            <br> Todo código ou exemplo de dados mostrado é criado especificamente para estudo, e jamais será cópia ou oriundo de dados reais de produção.
+        </p>
+    </div>
+</div>
+      
+<div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Disclaimer</h2>
+    <div>
+        <p>
+            The information here published is NOT necessarly the opinion of anyone but the author. <br>
+            Author's clients or employers are not part of this site, nor do they participate in the authoring or co-authoring of the content in any ways.<br>
+            All code or data samples here shown are created for study purposes and are not from nor copies from real production data.
+        </p>
+    </div>
+</div>
+      
+
+  </div>
+  <!-- end footer -->
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54535787-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <!-- disqus -->
+
+<script>
+  var disqus_shortname = 'rcdevlabs';
+  
+  var disqus_url = 'http://rcdevlabs.github.io/2015/02/21/google-maps-api-parte-5-autocompletar-enderecos-e-locais-com-google-places/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+  $('.imgLiquid').imgLiquid({fill:true, fadeInTime:500});
+});
+</script>
+
+
+<!-- fancybox -->
+<link rel="stylesheet" href="/package/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/package/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript">
+(function($){
+  $(".fancybox").fancybox();
+  $(".various").fancybox({
+    maxWidth  : 800,
+    maxHeight : 600,
+    fitToView : false,
+    width   : '70%',
+    height    : '70%',
+    autoSize  : true,
+    closeClick  : false,
+    openEffect  : 'none',
+    closeEffect : 'none'
+  });
+})(jQuery);
+(function( $ ) {
+    $(function() {
+        $( '[data-js="google-search-form"]' ).on( 'submit', function( e ) {
+            e.preventDefault();
+            var inputVal = $( '[data-js="google-search-input"]' ).val();
+            window.location.href = $( this ).attr( 'data-action' ) + ' ' + inputVal;
+        });
+    });
+})( jQuery );
+$(function() {
+
+    var $sidebar   = $(".widget.maillist"), 
+        $window    = $(window),
+        offset     = $sidebar.offset(),
+        topPadding = 55;
+
+    $window.scroll(function() {
+        if ($window.scrollTop() > offset.top) {
+            $sidebar.stop().animate({
+                marginTop: $window.scrollTop() - offset.top + topPadding
+            }, 100);
+        } else {
+            $sidebar.stop().animate({
+                marginTop: 0
+            });
+        }
+    });
+    
+});
+</script>
+
+</body>
+</html>
