@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta name="generator" content="RcDev Labs">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yarn 3: Monorepo com Zero-Install | RcDev Labs</title>
+
+  <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="/css/awe.css">
+  <link rel="stylesheet" type="text/css" href="/css/social-likes.css">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="/js/imgLiquid-min.js"></script>
+  <script src="/js/social-likes.min.js"></script>
+</head>
+
+<body>
+  <div class="main-container">
+    
+
+<div class="box profile">
+  <div class="heading" style="background: #3e5354 url(/rcdevlabs.jpg) no-repeat;">
+    <div class="profile-img">
+      <a href="http://rcdevlabs.github.io/"><img src="https://avatars3.githubusercontent.com/u/2955932?v=3&s=460" width="154" height="150" alt="image description"></a>
+    </div>
+    <strong class="user"><a href="/">RcDev Labs</a></strong>
+    <span class="locate">Curitiba, Brasil</span>
+  </div>
+  <div class="setting">
+    <a href="http://rcdevlabs.github.io/" class="btn-profile">GitHub</a>
+   <!-- <a href="/" class="btn-photos">Photos</a> -->
+   <div class="search">
+  <form class="theSearch" action=""
+    method="get"
+    data-action="https://google.com.br/search?q=site:rcdevlabs.github.io"
+    accept-charset="utf-8"
+    data-js="google-search-form">
+    <input type="search" name="q" results="0" placeholder="Pesquise no blog" data-js="google-search-input">
+  </form>
+</div>
+    <a href="http://twitter.com/romulozoch" class="btn-follow">Twitter</a>
+    <a href="http://rcdevlabs.github.io/atom.xml" class="btn-follow">RSS</a>
+  </div>
+</div>
+
+    
+<div class="two-columns post-page">
+  <div class="content">
+
+    <div class="post box nocover">
+      <em class="date"><span>27</span>Aug  2022</em>
+      <h2 class="post-title"><a href="/2022/08/27/yarn-3-monorepo-com-zero-install/">Yarn 3: Monorepo com Zero-Install</a></h2>
+      <div class="post-content"><p><img src="yarn-3-monorepo-com-zero-install.jpg" alt="yarn-3-monorepo-com-zero-install"></p>
+<h1 id="A-demanda"><a href="#A-demanda" class="headerlink" title="A demanda"></a>A demanda</h1><ol>
+<li>Criando um MonoRepo com Yarn Workspaces.</li>
+</ol>
+<p>A primeira vez que utilizei Worskspaces do Yarn foi por conta do <a href="https://twitter.com/ohager" target="_blank" rel="noopener">@ohager5</a>, que criou o  nosso projeto <a href="https://github.com/Burst-Busters/bVotal" target="_blank" rel="noopener">BVotal</a>, no hackathon que participamos:</p>
+<p>No bVotal havia 2 services e 2 fronts (um dashboard, um para o usuário).<br>Com o uso de workspaces, ficaram todos no mesmo repositório, e com um pouco de <em>gitflow</em>, trabalhamos ao mesmo tempo, e com muito mais agilidade do que se fosse necessário ficar <em>pullando changes</em> de cada proj o tempo todo, conforme novos commits iam sendo adicionados em cada service, ou front.</p>
+<p>Foi uma forma legal de trabalharmos no mesmo repositório e também compartilhando as dependências.</p>
+<h3 id="Passo-1-Yarn"><a href="#Passo-1-Yarn" class="headerlink" title="Passo 1. Yarn"></a>Passo 1. Yarn</h3><ul>
+<li>Estou usando Node 18</li>
+</ul>
+<p>Vamos garantir que estamos com a versão mais recente do yarn instalada.</p>
+<p>Se não tiver yarn, instale:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install --global yarn</span><br></pre></td></tr></table></figure></p>
+<p>Se tiver, atualize:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ corepack enable</span><br><span class="line">$ yarn set version stable</span><br></pre></td></tr></table></figure></p>
+<h3 id="Passo-2-Criando-o-Workspace"><a href="#Passo-2-Criando-o-Workspace" class="headerlink" title="Passo 2. Criando o Workspace"></a>Passo 2. Criando o Workspace</h3><p>Escolha uma pasta pro projeto.<br>Vamos criar como um workspace, onde teremos subprojetos que <strong><em>compartilham as dependências</em></strong> instaladas.</p>
+<p>Também é interessante que tudo que precisamos para o projeto ficará no mesmo Repositorio GIT.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">├── README.md</span><br><span class="line">├── package.json</span><br><span class="line">├── packages</span><br><span class="line">|  ├── Service1</span><br><span class="line">|  ├── Service2</span><br><span class="line">|  ├── AlgumaLib</span><br><span class="line">|  ├── Front01</span><br><span class="line">|  ├── Front02</span><br><span class="line">└── yarn.lock</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>Inicie um novo projeto Yarn 2</p>
+<figure class="highlight plain"><figcaption><span>terminal</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yarn init -2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Edite o <code>package.json</code> para incluir a propriedade <code>workspaces</code>. O meu ficou assim:</p>
+<figure class="highlight json"><figcaption><span>package.json</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"yarn-2-rcdevlabs-blog"</span>,</span><br><span class="line">  <span class="attr">"packageManager"</span>: <span class="string">"yarn@3.2.2"</span>,</span><br><span class="line">  <span class="attr">"workspaces"</span>: [</span><br><span class="line">    <span class="string">"packages/*"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Basicamente estamos dizendo: “Olha, senhor Yarn…. Esse projetão tem vários wokspaces, e eles ficam na pasta packages.”</p>
+</li>
+<li><p>crie o diretório packages</p>
+<figure class="highlight plain"><figcaption><span>terminal</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir packages</span><br><span class="line">$ touch packages/.gitkeep</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>Aqui podemos realizar o primeiro commit do projeto.<br>A partir de agora, criaremos nossas aplicações (services, bff, frontend) na pasta <code>packages</code><br>(o .gitkeep foi adicionado apenas para seu commit ficar bonitinho)</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git add .</span><br><span class="line">$ git commit -m &quot;chore(base): basic project-repo structure&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Pode notar que não teremos pasta <em>node_modules</em> no projeto!</p>
+</blockquote>
+<h2 id="quick-note-sobre-zero-installs"><a href="#quick-note-sobre-zero-installs" class="headerlink" title="quick note sobre zero-installs"></a>quick note sobre zero-installs</h2><p><strong>Atenção</strong>: Veja que a pasta .yarn tem <em>uma pá de coisa</em> e está sendo enviada ao GIT, mas tá tudo bem.<br>Isso é uma feature do Yarn PnP - Plug n Play - chamada “Zero-Install”.</p>
+<p>A idéia é que dê pra rodar o projeto logo após clonar, sem precisar baixar as dependências. Ousado.</p>
+<blockquote>
+<p>Pode notar que não teremos pasta <em>node_modules</em> no projeto!<br>Leia mais sobre o <a href="https://yarnpkg.com/features/zero-installs" target="_blank" rel="noopener">Zero-Installs Aqui</a></p>
+</blockquote>
+<hr>
+<h2 id="Passo-3-Crie-novos-componentes-do-seu-projeto"><a href="#Passo-3-Crie-novos-componentes-do-seu-projeto" class="headerlink" title="Passo 3: Crie novos componentes do seu projeto"></a>Passo 3: Crie novos componentes do seu projeto</h2><ul>
+<li>Como exemplo,  vamos criar uma novo service usando  <a href="https://nestjs.com" target="_blank" rel="noopener">NestJs</a><figure class="highlight plain"><figcaption><span>terminal</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npx @nestjs/cli new packages/hello-service --skip-git</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>Lembrando de adicionar o <code>--skip-git</code>, pois nosso repositório GIT já existe, e fica fora do BFF.</p>
+<ul>
+<li><p>adicione a sessão <strong>scripts</strong> ao package.json, e vamos criar um atalho para rodar o modo desenvolvimento do NestJs.</p>
+<figure class="highlight json"><figcaption><span>package.json</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"yarn-2-rcdevlabs-blog"</span>,</span><br><span class="line">  <span class="attr">"packageManager"</span>: <span class="string">"yarn@3.2.2"</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"hsvc:dev"</span>: <span class="string">"yarn workspace hello-service start:dev"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"workspaces"</span>: [</span><br><span class="line">    <span class="string">"packages/*"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Vamos ver se está rodando.</p>
+</li>
+<li>Vamos mandar instalar as dependencias<ul>
+<li>passando o parametro <code>workspace [name]</code> antes do comando.</li>
+</ul>
+</li>
+<li>e depois rodar o script que criamos.<figure class="highlight plain"><figcaption><span>terminal</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ yarn workspace hello-service install</span><br><span class="line">$ yarn hsvc:dev</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p> <a href="http://localhost:3000](http://localhost:3000)" target="_blank" rel="noopener">http://localhost:3000](http://localhost:3000)</a><br> conferir o “Hello Word” do NestJs.</p>
+</blockquote>
+<p>O segundo commit traz o service<br><figure class="highlight plain"><figcaption><span>terminal</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git add packages</span><br><span class="line">$ git commit -m &quot;feat(hello): new nestjs project as hello service package&quot;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Ops<br>Para funcionar com o intelisense, precisamos instalar algumas dependencias no nosso projeto yarn. Os comandos abaixo instalam, como devDependencies, no projeto-raíz:<br><figure class="highlight plain"><figcaption><span>terminal</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ yarn add -D typescript</span><br><span class="line">$ yarn add -D prettier</span><br><span class="line">$ yarn add -D ts-node</span><br><span class="line">$ yarn dlx @yarnpkg/sdks vscode</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>Depois, vamos criar/editar uma configuração para o nosso Workspace<br><figure class="highlight json"><figcaption><span>.vscode/settings.json</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"typescript.tsdk"</span>: <span class="string">".yarn/sdks/typescript/lib"</span>,</span><br><span class="line">  <span class="attr">"search.exclude"</span>: &#123;</span><br><span class="line">    <span class="attr">"**/.yarn"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"**/.pnp.*"</span>: <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>após essas alterações, reload a janela: ctrl/command shift p : reload window [enter].<br>Se pedir para instalar o plugin ZipFs, aceitar</p>
+</blockquote>
+<ul>
+<li><p>Se algum arquivo estiver com erro nos imports, pode ser queo Vscode esteja interpretando o arquivo com a versão errada do TS. Ajuste assim:</p>
+<figure class="highlight plain"><figcaption><span>vscode</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ctrl + shift + p</span><br><span class="line">&gt;TypeScript: Select TypeScript Version</span><br><span class="line"></span><br><span class="line">--&gt; escolha `Workspace Version`</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Uma vez que não haja mais erro, podemos commitar - mas só o que não estiver na pasta packages</p>
+<figure class="highlight plain"><figcaption><span>terminal</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git add &apos;:!packages&apos; # adiciona tudo que não está na pasta packages</span><br><span class="line">$ git commit -m &quot;chore(yarn): add ts, prettier and ts-node&quot;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Passo-4-Plug-n-Play-Zero-Install-MESMO"><a href="#Passo-4-Plug-n-Play-Zero-Install-MESMO" class="headerlink" title="Passo 4: Plug n Play Zero Install MESMO?"></a>Passo 4: Plug n Play Zero Install MESMO?</h2><ul>
+<li>Clone seu repositório em outra pasta, e rode diretamente (sem rodar install)<figure class="highlight plain"><figcaption><span>terminal</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yarn hsvc:dev</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Voila-sem-instalar-nada-tamos-rodando-o-projeto-Alegria-Q-u-a-l-i-d-a-d-e-d-e-v-i-d-a"><a href="#Voila-sem-instalar-nada-tamos-rodando-o-projeto-Alegria-Q-u-a-l-i-d-a-d-e-d-e-v-i-d-a" class="headerlink" title="Voilá, sem instalar nada, tamos rodando o projeto. Alegria.  Q u a l i d a d e   d e   v i d a!"></a>Voilá, sem instalar nada, tamos rodando o projeto. Alegria.  Q u a l i d a d e   d e   v i d a!</h2><h3 id="Conclusao"><a href="#Conclusao" class="headerlink" title="Conclusão"></a>Conclusão</h3><p>Bom, essa é a estrutura do MonoRepo usando Yarn Workspaces.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">├── README.md</span><br><span class="line">├── package.json</span><br><span class="line">├── packages</span><br><span class="line">|  ├── Service1</span><br><span class="line">|  ├── Service2</span><br><span class="line">|  ├── AlgumaLib</span><br><span class="line">|  ├── Front01</span><br><span class="line">|  ├── Front02</span><br><span class="line">└── yarn.lock</span><br><span class="line"></span><br><span class="line"># e mais os *dotfiles/folders*</span><br><span class="line">└── .editorconfig</span><br><span class="line">└── .gitignore</span><br><span class="line">└── .pnp.cjs</span><br><span class="line">└── .pnp.loader.mjs</span><br><span class="line">└── .yarn</span><br><span class="line">└── .yarnrc.yml</span><br></pre></td></tr></table></figure></p>
+<p>Utilizando a funcionalidade de <a href="https://yarnpkg.com/features/workspaces" target="_blank" rel="noopener"><em>workspaces</em> do Yarn</a> conseguimos ter todos os diferentes pacotes do nosso projeto unificados em um único repositório de projeto.</p>
+<p>Existem algumas outras características ao trabalhar com workspaces, mas cobrí-las foge do objetivo desta série.</p>
+<p>Outra feature bacaníssima do modo “Plug and Play” de pensar é a chamada <a href="https://yarnpkg.com/features/zero-installs" target="_blank" rel="noopener"><em>Zero-Installs</em></a>, onde nossas dependências são curadas e adicionadas ao GIT, não sendo necessario rodar Install após clonar o projeto.</p>
+<p>Segundo Yarn, não ocupa muito espaço, pois são salvos apenas binários das dependências, e não todo o projeto, como quando usamos a boa e velha  <code>node_modules</code>.</p>
+<p>Eventualmente pode ser necessário reinstalar uma dependência, com ou sem comittar ao GIT - por ex, se trabalhando em outro Sistema Operacional -, e há opções para isso.</p>
+<blockquote>
+<p>Image by <a href="https://br.freepik.com/fotos-gratis/cara-de-tiro-completo-tricotando-com-fio-vermelho_23404505.htm#page=2&query=knitting&position=5&from_view=search" target="_blank" rel="noopener">Freepik</a></p>
+</blockquote>
+<blockquote>
+<p>Image by <a href="https://br.freepik.com/fotos-gratis/vista-superior-do-conjunto-de-croche-com-espaco-de-copia-e-fios_12061665.htm#query=knitting&position=20&from_view=search" target="_blank" rel="noopener">Freepik</a></p>
+</blockquote>
+</div>
+
+      <div class="bottom-panel">
+        <ul class="social-likes" data-url="/2022/08/27/yarn-3-monorepo-com-zero-install/">
+          <li class="facebook" title="like"></li>
+          <li class="twitter" title="twitte"></li>
+          <li class="plusone" title="google"></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="widget post-comment">
+      <h2 class="title">Comments</h2>
+      <section id="comments">
+        <div id="disqus_thread">
+          <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+      </session>
+    </div>
+    
+  </div>
+
+  <div class="widgetarea">
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Artigos Recentes</h3>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2022/08/27/yarn-3-monorepo-com-zero-install/">Yarn 3: Monorepo com Zero-Install</a></h3>
+        <span class="link-date">27 Aug 2022</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2019/05/01/realidade-aumentada-facil-e-rapida-com-ar-js-gincana-de-pascoa-com-ar/">Realidade Aumentada facil e rapida com AR.js - Gincana de Pascoa com AR</a></h3>
+        <span class="link-date">01 May 2019</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2018/12/03/ambiente-docker-para-desenvolvimento-nodejs-rapidinha/">Ambiente Docker para desenvolvimento NodeJS - Rapidinha</a></h3>
+        <span class="link-date">03 Dec 2018</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/11/07/removendo-linhas-extras-irritantes-em-arquivos-transferidos-via-ftp/">Removendo linhas extras irritantes em arquivos transferidos via FTP</a></h3>
+        <span class="link-date">07 Nov 2015</span>
+      </div>
+    </li>
+  
+    
+    <li>
+      <div class="text-holder">
+        <h3 class="link-title"><a href="/2015/06/26/testando-o-pre-release-do-ionic-material-material-design-em-seu-app-hibrido/">Testando o pré-release do Ionic Material: Material Design em seu App Híbrido</a></h3>
+        <span class="link-date">26 Jun 2015</span>
+      </div>
+    </li>
+  
+</ul>
+
+
+    
+      
+
+<ul class="widget blogroll">
+  <h3 class="title">Blogs & Links</h3>
+
+	<li><a href=https://www.hastedesign.com.br/blog/>Haste Design Blog</a></li>
+	
+	<li><a href=https://forma.hastedesign.com.br/blog/>Forma Haste Blog</a></li>
+	
+	<li><a href=http://blog.da2k.com.br/>Da2k Blog | @fdaciuk</a></li>
+	
+	<li><a href=https://andrebaltieri.wordpress.com/>@andrebaltieri</a></li>
+	
+	<li><a href=http://jcemer.com/>@jcemer</a></li>
+	
+</ul>
+
+
+    
+      
+
+
+<div class="tags widget">
+  <h3 class="title">Tags</h3>
+  <div style="text-align:center">
+    
+    <a class="button" href="/tags/1postperday/">1postperday</a>
+    
+    <a class="button" href="/tags/javascript/">Javascript</a>
+    
+    <a class="button" href="/tags/gulp/">Gulp</a>
+    
+    <a class="button" href="/tags/serie-google-maps/">Série Google Maps</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJS</a>
+    
+    <a class="button" href="/tags/workflow/">Workflow</a>
+    
+    <a class="button" href="/tags/rest/">REST</a>
+    
+    <a class="button" href="/tags/stylus/">Stylus</a>
+    
+    <a class="button" href="/tags/nodejs/">NodeJs</a>
+    
+    <a class="button" href="/tags/rapidinha/">rapidinha</a>
+    
+    <a class="button" href="/tags/api/">API</a>
+    
+    <a class="button" href="/tags/app/">APP</a>
+    
+    <a class="button" href="/tags/rapidinha/">Rapidinha</a>
+    
+    <a class="button" href="/tags/mobile/">Mobile</a>
+    
+    <a class="button" href="/tags/static-generators/">Static Generators</a>
+    
+  </div>
+  
+  <div class="load-more">
+    <a class="various" href="#fbox-tagcloud">Ver Todas</a>
+  </div>
+  
+</div>
+
+
+<div class="tagcloud" id="fbox-tagcloud" style="margin:10px; display:none; overflow: hidden"><a href="/tags/1postperday/" style="font-size: 24px;">1postperday</a> <a href="/tags/api/" style="font-size: 14px;">API</a> <a href="/tags/app/" style="font-size: 14px;">APP</a> <a href="/tags/angularjs/" style="font-size: 12px;">AngularJs</a> <a href="/tags/app/" style="font-size: 12px;">App</a> <a href="/tags/autenticacao/" style="font-size: 12px;">Autenticação</a> <a href="/tags/cors/" style="font-size: 12px;">CORS</a> <a href="/tags/css/" style="font-size: 12px;">CSS</a> <a href="/tags/css/" style="font-size: 12px;">Css</a> <a href="/tags/docker/" style="font-size: 12px;">Docker</a> <a href="/tags/expressjs/" style="font-size: 12px;">ExpressJs</a> <a href="/tags/gulp/" style="font-size: 20px;">Gulp</a> <a href="/tags/html/" style="font-size: 12px;">Html</a> <a href="/tags/hibridos/" style="font-size: 12px;">Híbridos</a> <a href="/tags/ionic/" style="font-size: 12px;">Ionic</a> <a href="/tags/ionic-framewokr/" style="font-size: 12px;">Ionic Framewokr</a> <a href="/tags/jwt/" style="font-size: 12px;">JWT</a> <a href="/tags/javascript/" style="font-size: 22px;">Javascript</a> <a href="/tags/material-design/" style="font-size: 12px;">Material Design</a> <a href="/tags/mobile/" style="font-size: 14px;">Mobile</a> <a href="/tags/nodejs/" style="font-size: 16px;">NodeJS</a> <a href="/tags/nodejs/" style="font-size: 14px;">NodeJs</a> <a href="/tags/php/" style="font-size: 12px;">PHP</a> <a href="/tags/phonegap/" style="font-size: 12px;">Phonegap</a> <a href="/tags/produtividade/" style="font-size: 12px;">Produtividade</a> <a href="/tags/pre-processadores/" style="font-size: 12px;">Pré-Processadores</a> <a href="/tags/rest/" style="font-size: 16px;">REST</a> <a href="/tags/rapidinha/" style="font-size: 14px;">Rapidinha</a> <a href="/tags/realtime/" style="font-size: 12px;">Realtime</a> <a href="/tags/svg/" style="font-size: 12px;">SVG</a> <a href="/tags/socket-io/" style="font-size: 12px;">Socket.io</a> <a href="/tags/spritesheet/" style="font-size: 12px;">SpriteSheet</a> <a href="/tags/static-generators/" style="font-size: 12px;">Static Generators</a> <a href="/tags/stylus/" style="font-size: 14px;">Stylus</a> <a href="/tags/serie-google-maps/" style="font-size: 18px;">Série Google Maps</a> <a href="/tags/wordcamp/" style="font-size: 12px;">WordCamp</a> <a href="/tags/wordpress/" style="font-size: 12px;">WordPress</a> <a href="/tags/workshop/" style="font-size: 12px;">WorkShop</a> <a href="/tags/workflow/" style="font-size: 16px;">Workflow</a> <a href="/tags/workspace/" style="font-size: 12px;">Workspace</a> <a href="/tags/dicas-sublime-ftp/" style="font-size: 12px;">dicas, sublime, ftp</a> <a href="/tags/erros/" style="font-size: 12px;">erros</a> <a href="/tags/monorepo/" style="font-size: 12px;">monorepo</a> <a href="/tags/nodejs/" style="font-size: 12px;">nodejs</a> <a href="/tags/python/" style="font-size: 12px;">python</a> <a href="/tags/rapidinha/" style="font-size: 14px;">rapidinha</a> <a href="/tags/wokflow/" style="font-size: 12px;">wokflow</a> <a href="/tags/yarn/" style="font-size: 12px;">yarn</a></div>
+
+    
+      <div class="widget maillist">
+  <h3 class="title">Receba novos posts por e-mail</h3>
+<!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/slim-081711.css" rel="stylesheet" type="text/css">
+<div id="mc_embed_signup">
+<form action="//github.us7.list-manage.com/subscribe/post?u=e1c4a7465492a27974a725fdb&amp;id=2d0762fdb8" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+	<label for="mce-EMAIL"></label>
+	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="seu@email.com.br" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;"><input type="text" name="b_e1c4a7465492a27974a725fdb_2d0762fdb8" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Inscrever" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+<!--End mc_embed_signup-->
+</div>
+    
+
+  </div>
+</div>
+
+
+  </div>
+  <div class="footer">
+  <div class="container">
+    
+    &copy; 2022 romuloctba All Rights Reserved
+    
+  </div>
+  <div class="container">
+      <div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Declaração</h2>
+    <div>
+        <p>
+            A informação publicada neste veiculo NÃO necessariamente reflete a opnião de qualquer pessoa que não seja o autor.
+            <br> Clientes ou empregadores do autor não tem parte na autoria ou co-autoria de artigos.
+            <br> Todo código ou exemplo de dados mostrado é criado especificamente para estudo, e jamais será cópia ou oriundo de dados reais de produção.
+        </p>
+    </div>
+</div>
+      
+<div class="footer-widget footer-widget-half thin disclaimer-widget">
+    <h3 class="title">Disclaimer</h2>
+    <div>
+        <p>
+            The information here published is NOT necessarly the opinion of anyone but the author. <br>
+            Author's clients or employers are not part of this site, nor do they participate in the authoring or co-authoring of the content in any ways.<br>
+            All code or data samples here shown are created for study purposes and are not from nor copies from real production data.
+        </p>
+    </div>
+</div>
+      
+
+  </div>
+  <!-- end footer -->
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54535787-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <!-- disqus -->
+
+<script>
+  var disqus_shortname = 'rcdevlabs';
+  
+  var disqus_url = 'http://rcdevlabs.github.io/2022/08/27/yarn-3-monorepo-com-zero-install/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//go.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+  $('.imgLiquid').imgLiquid({fill:true, fadeInTime:500});
+});
+</script>
+
+
+<!-- fancybox -->
+<link rel="stylesheet" href="/package/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/package/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript">
+(function($){
+  $(".fancybox").fancybox();
+  $(".various").fancybox({
+    maxWidth  : 800,
+    maxHeight : 600,
+    fitToView : false,
+    width   : '70%',
+    height    : '70%',
+    autoSize  : true,
+    closeClick  : false,
+    openEffect  : 'none',
+    closeEffect : 'none'
+  });
+})(jQuery);
+(function( $ ) {
+    $(function() {
+        $( '[data-js="google-search-form"]' ).on( 'submit', function( e ) {
+            e.preventDefault();
+            var inputVal = $( '[data-js="google-search-input"]' ).val();
+            window.location.href = $( this ).attr( 'data-action' ) + ' ' + inputVal;
+        });
+    });
+})( jQuery );
+$(function() {
+
+    var $sidebar   = $(".widget.maillist"), 
+        $window    = $(window),
+        offset     = $sidebar.offset(),
+        topPadding = 55;
+
+    $window.scroll(function() {
+        if ($window.scrollTop() > offset.top) {
+            $sidebar.stop().animate({
+                marginTop: $window.scrollTop() - offset.top + topPadding
+            }, 100);
+        } else {
+            $sidebar.stop().animate({
+                marginTop: 0
+            });
+        }
+    });
+    
+});
+</script>
+
+</body>
+</html>
