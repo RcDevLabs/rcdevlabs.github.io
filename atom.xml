@@ -87,9 +87,9 @@
     </summary>
     
     
-      <category term="Docker" scheme="http://rcdevlabs.github.io/tags/docker/"/>
-    
       <category term="NodeJS" scheme="http://rcdevlabs.github.io/tags/nodejs/"/>
+    
+      <category term="Docker" scheme="http://rcdevlabs.github.io/tags/docker/"/>
     
       <category term="Workspace" scheme="http://rcdevlabs.github.io/tags/workspace/"/>
     
@@ -230,9 +230,9 @@
     </summary>
     
     
-      <category term="REST" scheme="http://rcdevlabs.github.io/tags/rest/"/>
-    
       <category term="Javascript" scheme="http://rcdevlabs.github.io/tags/javascript/"/>
+    
+      <category term="REST" scheme="http://rcdevlabs.github.io/tags/rest/"/>
     
       <category term="API" scheme="http://rcdevlabs.github.io/tags/api/"/>
     
@@ -267,13 +267,13 @@
     </summary>
     
     
-      <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
-    
-      <category term="1postperday" scheme="http://rcdevlabs.github.io/tags/1postperday/"/>
-    
       <category term="Javascript" scheme="http://rcdevlabs.github.io/tags/javascript/"/>
     
       <category term="Série Google Maps" scheme="http://rcdevlabs.github.io/tags/serie-google-maps/"/>
+    
+      <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
+    
+      <category term="1postperday" scheme="http://rcdevlabs.github.io/tags/1postperday/"/>
     
       <category term="rapidinha" scheme="http://rcdevlabs.github.io/tags/rapidinha/"/>
     
@@ -298,13 +298,13 @@
     </summary>
     
     
-      <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
-    
-      <category term="1postperday" scheme="http://rcdevlabs.github.io/tags/1postperday/"/>
-    
       <category term="Javascript" scheme="http://rcdevlabs.github.io/tags/javascript/"/>
     
       <category term="Série Google Maps" scheme="http://rcdevlabs.github.io/tags/serie-google-maps/"/>
+    
+      <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
+    
+      <category term="1postperday" scheme="http://rcdevlabs.github.io/tags/1postperday/"/>
     
   </entry>
   
@@ -327,13 +327,13 @@
     </summary>
     
     
-      <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
-    
-      <category term="1postperday" scheme="http://rcdevlabs.github.io/tags/1postperday/"/>
-    
       <category term="Javascript" scheme="http://rcdevlabs.github.io/tags/javascript/"/>
     
       <category term="Série Google Maps" scheme="http://rcdevlabs.github.io/tags/serie-google-maps/"/>
+    
+      <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
+    
+      <category term="1postperday" scheme="http://rcdevlabs.github.io/tags/1postperday/"/>
     
   </entry>
   
@@ -356,13 +356,13 @@
     </summary>
     
     
-      <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
-    
-      <category term="1postperday" scheme="http://rcdevlabs.github.io/tags/1postperday/"/>
-    
       <category term="Javascript" scheme="http://rcdevlabs.github.io/tags/javascript/"/>
     
       <category term="Série Google Maps" scheme="http://rcdevlabs.github.io/tags/serie-google-maps/"/>
+    
+      <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
+    
+      <category term="1postperday" scheme="http://rcdevlabs.github.io/tags/1postperday/"/>
     
   </entry>
   
@@ -386,13 +386,13 @@
     </summary>
     
     
-      <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
-    
-      <category term="1postperday" scheme="http://rcdevlabs.github.io/tags/1postperday/"/>
-    
       <category term="Javascript" scheme="http://rcdevlabs.github.io/tags/javascript/"/>
     
       <category term="Série Google Maps" scheme="http://rcdevlabs.github.io/tags/serie-google-maps/"/>
+    
+      <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
+    
+      <category term="1postperday" scheme="http://rcdevlabs.github.io/tags/1postperday/"/>
     
   </entry>
   
@@ -416,13 +416,13 @@
     </summary>
     
     
-      <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
-    
-      <category term="1postperday" scheme="http://rcdevlabs.github.io/tags/1postperday/"/>
-    
       <category term="Javascript" scheme="http://rcdevlabs.github.io/tags/javascript/"/>
     
       <category term="Série Google Maps" scheme="http://rcdevlabs.github.io/tags/serie-google-maps/"/>
+    
+      <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
+    
+      <category term="1postperday" scheme="http://rcdevlabs.github.io/tags/1postperday/"/>
     
   </entry>
   
@@ -446,15 +446,15 @@
     </summary>
     
     
-      <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
+      <category term="Javascript" scheme="http://rcdevlabs.github.io/tags/javascript/"/>
     
-      <category term="Workflow" scheme="http://rcdevlabs.github.io/tags/workflow/"/>
+      <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
     
       <category term="1postperday" scheme="http://rcdevlabs.github.io/tags/1postperday/"/>
     
-      <category term="Stylus" scheme="http://rcdevlabs.github.io/tags/stylus/"/>
+      <category term="Workflow" scheme="http://rcdevlabs.github.io/tags/workflow/"/>
     
-      <category term="Javascript" scheme="http://rcdevlabs.github.io/tags/javascript/"/>
+      <category term="Stylus" scheme="http://rcdevlabs.github.io/tags/stylus/"/>
     
   </entry>
   
@@ -538,9 +538,9 @@
     
       <category term="Gulp" scheme="http://rcdevlabs.github.io/tags/gulp/"/>
     
-      <category term="Workflow" scheme="http://rcdevlabs.github.io/tags/workflow/"/>
-    
       <category term="1postperday" scheme="http://rcdevlabs.github.io/tags/1postperday/"/>
+    
+      <category term="Workflow" scheme="http://rcdevlabs.github.io/tags/workflow/"/>
     
       <category term="Stylus" scheme="http://rcdevlabs.github.io/tags/stylus/"/>
     
@@ -600,11 +600,11 @@
     </summary>
     
     
+      <category term="Javascript" scheme="http://rcdevlabs.github.io/tags/javascript/"/>
+    
       <category term="Socket.io" scheme="http://rcdevlabs.github.io/tags/socket-io/"/>
     
       <category term="NodeJs" scheme="http://rcdevlabs.github.io/tags/nodejs/"/>
-    
-      <category term="Javascript" scheme="http://rcdevlabs.github.io/tags/javascript/"/>
     
       <category term="Realtime" scheme="http://rcdevlabs.github.io/tags/realtime/"/>
     
