@@ -60,6 +60,9 @@
 <p>A primeira vez que utilizei Worskspaces do Yarn foi por conta do <a href="https://twitter.com/ohager" target="_blank" rel="noopener">@ohager5</a>, que criou o  nosso projeto <a href="https://github.com/Burst-Busters/bVotal" target="_blank" rel="noopener">BVotal</a>, no hackathon que participamos:</p>
 <p>No bVotal havia 2 services e 2 fronts (um dashboard, um para o usuário).<br>Com o uso de workspaces, ficaram todos no mesmo repositório, e com um pouco de <em>gitflow</em>, trabalhamos ao mesmo tempo, e com muito mais agilidade do que se fosse necessário ficar <em>pullando changes</em> de cada proj o tempo todo, conforme novos commits iam sendo adicionados em cada service, ou front.</p>
 <p>Foi uma forma legal de trabalharmos no mesmo repositório e também compartilhando as dependências.</p>
+<h4 id="Resultado"><a href="#Resultado" class="headerlink" title="Resultado:"></a>Resultado:</h4><ul>
+<li>Exemplo deste post sobre Yarn Workspaces: <a href="https://github.com/romuloctba/yarn-multiple-workspaces-blog-example" target="_blank" rel="noopener">no Github</a></li>
+</ul>
 <h3 id="Passo-1-Yarn"><a href="#Passo-1-Yarn" class="headerlink" title="Passo 1. Yarn"></a>Passo 1. Yarn</h3><ul>
 <li>Estou usando Node 18</li>
 </ul>
@@ -138,7 +141,7 @@
 <p>Bom, a gente até rodou <code>yarn install</code>, mas veja que nada foi baixado. Apenas a dependência <code>@nestjs/core</code> foi buildada, a partir da própria <code>.yarn/cache</code>.</p>
 <h1 id="E-Vale-a-Pena"><a href="#E-Vale-a-Pena" class="headerlink" title="E Vale a Pena?"></a>E Vale a Pena?</h1><p>Olha, pra comparar eu usei o <code>npm install</code> no mesmo projeto, e olha só o tamanho da pasta node_modules</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ du -hs node_modules/</span><br><span class="line">339M    node_modules/</span><br></pre></td></tr></table></figure>
-<p>Levando em conta que o projeto <code>zero-installs</code> foi upado ao git com 36mb com todas as dependências, e apenas buildou o @nestjs/core localmente (aí subiu pra 154mb)… O que vc achou?</p>
+<p>Levando em conta que o projeto <code>zero-installs</code> foi upado comprimido ao git com 70mb com todas as dependências, e apenas buildou o @nestjs/core localmente… O que vc achou?</p>
 <p>Diz aí nos comentários.</p>
 <hr>
 <h2 id="Aviso-Consideracoes-de-seguranca"><a href="#Aviso-Consideracoes-de-seguranca" class="headerlink" title="Aviso: Considerações de segurança."></a>Aviso: Considerações de segurança.</h2><p>Conforme avisa o site do <a href="https://yarnpkg.com/features/zero-installs#does-it-have-security-implications" target="_blank" rel="noopener">Yarn</a>, se o projeto receber PRs de pessoas externas ao time, vale rodar um passo adicionar durante a <em>Pipeline</em>: <code>$ yarn install --check-cache</code>. Com isso, yarn baixa novamente as dependências pra conferir o checksum, emitindo um alerta caso algo suspeito.</p>
@@ -282,7 +285,7 @@
     
     <a class="button" href="/tags/mobile/">Mobile</a>
     
-    <a class="button" href="/tags/static-generators/">Static Generators</a>
+    <a class="button" href="/tags/docker/">Docker</a>
     
   </div>
   
